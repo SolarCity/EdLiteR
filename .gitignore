@@ -1,4 +1,5 @@
 ignore
+www/lib
 node_modules
 app/config/config.js
 bower_components

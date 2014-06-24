@@ -1,22 +1,27 @@
-Mobile Angular Ionic Express app
-================================
-
-This is an addon starter mobile application template using the [Ionic Framework](http://ionicframework.com/), as well as [Angular UI Router](http://angular-ui.github.io/ui-router/), [Angular-UI-Bootstrap](http://angular-ui.github.io/), [Express JS](http://expressjs.com/). 
+EdLiteR
+=======
+This is a mobile application built from a template that uses the [Ionic Framework](http://ionicframework.com/), as well as [Angular UI Router](http://angular-ui.github.io/ui-router/), [Angular-UI-Bootstrap](http://angular-ui.github.io/), [Express JS](http://expressjs.com/). 
 
 What's missing: 
 * Testing
-* Compiled JS files... ie. Gulp isn't really working yet
-* A database (if you want Neo4j as a db see [this repo](https://github.com/lazaruslarue/riffin-on-ripple) )
-* there's probably a lot of other stuff missing... submit issues when you find it
+* Compiled JS files instead of a new line in index for every new directive... ie. Gulp isn't working yet but it's there to help when ready
+* there's probably a lot of other stuff missing... submit issues when you find them
 
 Where'd it come from?
-* The ionic stuff is lifted from Ionic's blank App
-* The rest is from a library I built
+* github.com/lazaruslarue/lame-ionic-app
 
-## How to use this template mobile app
+## Deploy steps
+
+set environment variables & hooks. Upload. 
+
+## Dev steps
+
+clone it. 
+
+then: 
 
 ```bash
-$ sudo npm install -g ionic cordova gulp express nodemon
+$ npm install -g ionic cordova gulp express nodemon
 $ npm install
 $ bower install
 $ nodemon --watch
@@ -24,8 +29,7 @@ $ nodemon --watch
 Unless you have a PORT environment variable set, you'll find your app sitting at ````localhost:3000````
 
 ### To build the Ionic app:
-(this section is totally lifted from Ionic)
-cd into `myApp` and run:
+from the root of the app run:
 
 ```bash
 $ ionic platform add ios
@@ -36,9 +40,9 @@ $ ionic emulate ios
 Substitute ios for android if not on a Mac, but if you can, the ios development toolchain is a lot easier to work with until you need to do anything custom to Android.
 
 ## Issues
-I'll gladly accept pull requests that make sense and are properly documented. Alternatively, if you have any suggestions for how to make it better, open up a new issue or comment on an existing one. 
+Open up a new issue or comment on an existing one. PRs are graciously accepted
 
-## everything below here is lifted from Ionic. 
+## everything below here is lifted from the Ionic page about their APP template
 
 ## Using Sass (optional)
 

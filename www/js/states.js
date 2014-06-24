@@ -1,11 +1,7 @@
 angular.module('states',[
-  'state.one',
+  'states.home',  
+  'states.one',
 ])
-.config(function ($stateProvider, $urlRouterProvider) {
-  $stateProvider.state("/home",{
-    url: "/home",
-    template: "home"
-  });
-
-  $urlRouterProvider.otherwise('/home');
+.config(function ($urlRouterProvider) {
+   $urlRouterProvider.otherwise('/home');
 });

@@ -1,4 +1,4 @@
-angular.module('state.one',[]).config( function ($stateProvider) {
+angular.module('states.one',[]).config( function ($stateProvider) {
   $stateProvider.state("one", {
     url: "/one",
     controller: "ExampleCtrl",
