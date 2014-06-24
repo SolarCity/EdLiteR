@@ -1,8 +1,10 @@
-angular.module('exampleApp', [
+angular.module('edliter', [
   'ionic',
+  'd3',
   'ui.router',
   'ui.bootstrap',
   'states',
+  'app.factories',
   'app.services',
   'app.controllers',
   'app.directives',
@@ -19,6 +21,7 @@ angular.module('exampleApp', [
   });
 });
 
+var factories   = angular.module('app.factories',[]);
 var services    = angular.module('app.services',[]);
 var controllers = angular.module('app.controllers',[]);
-var directives  = angular.module('app.directives',[]);
+var directives  = angular.module('app.directives',['d3']);
