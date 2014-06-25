@@ -7,7 +7,7 @@
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="lib/bootswatch/superhero/bootstrap.css"/>
+    <!-- <link rel="stylesheet" href="lib/bootswatch/superhero/bootstrap.css"/> -->
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -30,9 +30,10 @@
     <script src="js/states/search.js"></script>
     <script src="js/states/plan.js"></script>
     <!-- <script src="js/controllers/ *** .js"></script> -->
-    <script src="js/controllers/HomeCtrl.js"></script>
-    <script src="js/controllers/SearchCtrl.js"></script>
-    <script src="js/controllers/PlanCtrl.js"></script>
+    <script src="js/controllers/home/HomeCtrl.js"></script>
+    <script src="js/controllers/search/SearchCtrl.js"></script>
+    <script src="js/controllers/plan/PlanCtrl.js"></script>
+    <script src="js/controllers/plan/PlanDrawingCtrl.js"></script>
     <!-- <script src="js/services/ *** .js"></script> -->
     <script src="js/services/ExampleServices.js"></script>
     <!-- <script src="js/directives/ *** .js"></script> -->
@@ -43,12 +44,12 @@
   </head>
   <!-- this is your app, named in app.js -->
   <body ng-app="edliter">
-    <ion-header-bar class="bar-stable">
-        <h1 class="title"><strong>EdLiteR for SolarCity</strong></h1>
-        <div class="buttons">
-            <button class="button">Button</button>
-        </div>
-    </ion-header-bar> 
-    <ui-view></ui-view>
+    <ion-nav-bar class="bar-positive">
+      <ion-nav-back-button class="button-clear">
+        <i class="ion-arrow-left-c">Go Back</i>
+      </ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-nav-view animation="slide-left-right"></ion-nav-view>
+</ion-nav-buttons>    
   </body>
 </html>

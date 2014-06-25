@@ -1,7 +1,6 @@
 angular.module('edliter', [
   'ionic',
   'd3',
-  'ui.router',
   'ui.bootstrap',
   'states',
   'app.factories',
