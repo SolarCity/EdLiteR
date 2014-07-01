@@ -1,3 +1,3 @@
-controllers.controller('PlanDrawingCtrl', function($scope) {
+controllers.controller('PlanDrawingCtrl', ['$scope','PanelService', function($scope, $PS, $I) {
 
-});
+}]);

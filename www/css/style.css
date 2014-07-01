@@ -2,3 +2,12 @@
 svg {
 	background-image:url('../img/de_haro_test_image.png');
 }
+
+
+polygon { 
+  /*stroke: green;*/
+  /*stroke-width: 2px;*/
+  fill: grey;
+  padding: 0;
+  margin: 0;
+}
