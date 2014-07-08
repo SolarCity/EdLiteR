@@ -1,36 +1,25 @@
 directives.directive('edlPanel', [ '$ionicGesture', 'd3', 'PanelService', function(ionicGesture, d3, ps) {
-
   return {
     restrict: "EAC",
-    scope: {corners: "=", panels: '=', panel: '='},
+    scope: {
+      panel: "=",
+    },
     link: function (scope, ele, attrs) {
-        scope.points = ps.pCorners(scope.corners[0], scope.corners[1], {h:30, w:40}, 1)
-          ele.on('$destroy', function() {
-            // remove yourself from the panelsObject
-          });
-      ionicGesture.on('touch', function(e, scope){
-        console.log(ele)
-        // ele.scope.panels.push([55,55])
+      console.log('panel in edl-panel', scope.panel);
 
+      scope.points = ps.pCorners(scope.panel[0], scope.panel[1], {h:30, w:40}, 1)
+      console.log(scope.points)
+      // remove yourself from the panelsObject
+      ele.on('$destroy', function() {
+      });
+
+      ionicGesture.on('touchstart', function(e, scope){
+        console.log(ele, arguments);
+        e.remove();
       }, ele);
-
 
     },
 
-    // controller: function ($scope) {
-
-    //   console.log(arguments)
-    //   // console.log(ps)
-    //     // scope.points = ps.pCorners(scope.corners[0], scope.corners[1], {h:30, w:40}, 1)
-    //   ionicGesture.on('touch', function(e){
-    //     console.log(arguments)
-    //     // ele.remove()
-    //     ps.testPanels.push([55,55])
-
-    //   }, ele);
-
-
-    // },
-    template: '<polygon ng-attr-points="{{points}}"></polygon>'
+    template: '<g ng-attr-transform="translate(100, 100)"><polygon ng-attr-points="{{points}}" ></polygon></g>'
   };
 }]);
