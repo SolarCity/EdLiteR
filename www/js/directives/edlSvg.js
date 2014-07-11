@@ -1,43 +1,26 @@
-directives.directive('edlSvg', [ '$ionicGesture', 'd3', 'PanelService', function(ionicGesture, d3, ps) {
+directives.directive('edlSvg', [ '$ionicGesture', 'd3', 'PanelService', 'MountPlaneService', function(ionicGesture, d3, ps, mp) {
   return {
     restrict: "EA",
-
-    scope: {
-      mounts: '='
-    },
-
-    link: function (scope, ele, attrs) {
+    transclude: true,
+    controller: function($scope, $element, $attrs) {
+      // these are injected into child directives
+      this.mapCenter   = {};
+      this.rotation    = null;
+      this.mountPlanes = $scope.mountPlanes;
+      this.scale       = $scope.scale;
+      $scope.rotate = 15
+      // make the <svg> available outisde by saving it on the PanelService
       ps.svg(d3.select('svg'));
-      console.log('mounts in edl-svg', scope.mounts);
-
-      scope.position = ps.pCorners(10, 25, {h:30, w:40}, 1);
-
-      ionicGesture.on('touch', function(e){
-        var point = e.gesture.center; // {pageX: X, pageY: Y}
-
-        scope.mounts[0].push([e.gesture.center.pageX, e.gesture.center.pageY ])
-        console.log('test')
-        scope.$apply()
-        console.log(scope.mounts)
-        // var panel = ps.svg()
-        //   .append('polygon')
-        //   .attr('points', ps.pCorners(point.pageX, point.pageY, {h:30, w:40}, 1))
-        //   .attr('edl-panel')
-
-      }, ele);
-
 
     },
-
     template:
-      '<svg style="width: 100%;"> \
-        <g edl-mount \
-          ng-repeat="mount in mounts"  \
-          mount="mount" \
+      '<div><svg style="width: 90%;"> \
+        <g z-index="40" edl-mount  \
+          ng-repeat="plane in mountPlanes"  \
+          plane="plane" \
           position="position" \
-          ng-attr-transform="translate(100, 100)" > \
-        </g>\
-      </svg>'
-
+           > \
+        </g> \
+      </svg></div>'
   };
 }]);

@@ -4,7 +4,5 @@ controllers.controller('PlanCtrl',function($scope) {
   $scope.panelSize    = null;
   $scope.scale        = 1;
 
-  $scope.mountingPlanes = [];
 
-  
 });

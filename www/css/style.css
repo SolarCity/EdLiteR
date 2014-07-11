@@ -2,8 +2,13 @@ svg {
 	background-image:url('../img/de_haro_test_image.png');
 }
 
-polygon {
+rect {
   fill: grey;
-  padding: 0;
-  margin: 0;
+	background: red;
+	stroke: black;
+	stroke-width: 3;
+}
+
+.panelrow {
+	baground-image:url('../img/de_haro_test_image.png')
 }

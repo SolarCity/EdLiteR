@@ -3,23 +3,30 @@ directives.directive('edlPanel', [ '$ionicGesture', 'd3', 'PanelService', functi
     restrict: "EAC",
     scope: {
       panel: "=",
+      rowindex: "=",
+      row: "=",
+      plane: "=",
+      skewx: "=",
+      skewy: "=",
     },
-    link: function (scope, ele, attrs) {
-      console.log('panel in edl-panel', scope.panel);
+    transclude: true,
+    require: '^edlMount',
+    link: function (scope, ele, attrs, edlMountCtrl) {
+      var corner = {}
+      corner.lat = edlMountCtrl.cornerPosition.lat + scope.rowindex*scope.panel.size.h;
+      corner.lon = edlMountCtrl.cornerPosition.lon + scope.panel.panelId*scope.panel.size.w;
 
-      scope.points = ps.pCorners(scope.panel[0], scope.panel[1], {h:30, w:40}, 1)
-      console.log(scope.points)
-      // remove yourself from the panelsObject
-      ele.on('$destroy', function() {
-      });
+      scope.x = corner.lon;
+      scope.y = corner.lat;
 
-      ionicGesture.on('touchstart', function(e, scope){
-        console.log(ele, arguments);
-        e.remove();
-      }, ele);
+      scope.height = scope.panel.size.h;
+      scope.width = scope.panel.size.w;
+
+      scope.azm = edlMountCtrl.azm;
+      scope.slope = edlMountCtrl.slope;
 
     },
+    template: '<g><rect ng-attr-x="{{x}}" ng-attr-y="{{y}}" ng-attr-width="{{width}}" ng-attr-height="{{height}}" ng-attr-transform="skewX({{skewx}}) skewY({{skewy}}) " ></rect></g>'
 
-    template: '<g ng-attr-transform="translate(100, 100)"><polygon ng-attr-points="{{points}}" ></polygon></g>'
   };
 }]);

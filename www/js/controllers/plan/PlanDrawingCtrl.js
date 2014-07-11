@@ -1,8 +1,4 @@
-controllers.controller('PlanDrawingCtrl', ['$scope','PanelService', function($scope, $PS) {
+controllers.controller('PlanDrawingCtrl', ['$scope','PanelService', 'MountPlaneService', function($scope, $PS, $MP) {
   $scope.panels = $PS.testPanels;
-  $scope.mounts = [];
-
-  $scope.mounts.push($scope.panels);
-
-
+  $scope.mountPlanes = [];
 }]);
