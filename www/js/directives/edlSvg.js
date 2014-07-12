@@ -13,6 +13,34 @@ directives.directive('edlSvg', [ '$ionicGesture', 'd3', 'PanelService', 'MountPl
       ps.svg(d3.select('svg'));
 
     },
+    link: function(scope, ele, attrs) {
+      scope.setBottomCorner = function(e) {
+        scope.bottomCorner = e.gesture.center;
+        console.log('setting bottom corner:',scope.bottomCorner);
+      }
+
+      scope.setTopCorner = function(e) {
+        scope.topCorner = e.gesture.center;
+        console.log('setting top corner:',scope.topCorner);
+      }
+
+      var cornerSetter = function(e){
+        if (!scope.bottomCorner){
+          scope.setBottomCorner(e);
+        } else if (!scope.topCorner){
+          scope.setTopCorner(e);
+        } else {
+          scope.topCorner = null;
+          scope.bottomCorner = null;
+          console.log('erasing corners');
+          scope.setBottomCorner(e);
+        }
+      }
+
+      ionicGesture.on('touch', cornerSetter, ele)
+
+
+    },
     template:
       '<div><svg style="width: 90%;"> \
         <g z-index="40" edl-mount  \

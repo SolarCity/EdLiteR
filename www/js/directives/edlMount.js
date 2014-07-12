@@ -37,25 +37,29 @@ directives.directive('edlMount', [ '$ionicGesture', 'd3', 'MountPlaneService', '
       ionicGesture.on('dragup', onDragUp, ele)
       ionicGesture.on('dragdown', onDragDown, ele)
 
-      function onDragRight() {
+      function onDragRight(e) {
         scope.plane.skewX +=1.5
         scope.skewX += 1.5;
         scope.$apply();
+        e.stopPropagation();
       };
-      function onDragLeft() {
+      function onDragLeft(e) {
         scope.plane.skewX -=1.5
         scope.skewX -= 1.5;
         scope.$apply();
+        e.stopPropagation();
       };
-      function onDragUp() {
+      function onDragUp(e) {
         scope.plane.skewY +=1.5
         scope.skewY -= 1.5;
         scope.$apply();
+        e.stopPropagation();
       };
-      function onDragDown() {
+      function onDragDown(e) {
         scope.plane.skewY +=1.5
         scope.skewY += 1.5;
         scope.$apply();
+        e.stopPropagation();
       };
     },
     template: '<g class="mplane" > \
