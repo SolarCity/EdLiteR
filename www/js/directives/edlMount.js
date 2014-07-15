@@ -7,20 +7,13 @@ directives.directive('edlMount', [ '$ionicGesture', 'd3', 'MountPlaneService', '
     transclude: true,
     controller: function ($scope, $element, $attrs) {
       var plane    = $scope.plane;
-      // this.planeId = plane.mountId;
 
-      // this.orientation     = plane.orientation;
-      // this.azm             = plane.azm;
-      // this.slope           = plane.slope;
-      // this.cornerPosition  = plane.corner;
-      // this.panelRows       = plane.panelRows;
-
+      plane.removedPanels = []; //TODO: currently stores removed {rowindex, panelId} for export only.
+      this.rotation = 0; //TODO: setup rotation
       this.planeId = plane.planeId;
-      this.skewX = plane.skewX;
-      this.skewY = plane.skewY;
       this.cornerPosition = plane.corner;
       this.azm = plane.azm
-      this.position = plane.position; // currently not used, should get updated as image is rotated
+      this.position = plane.position; // TODO: currently not used, should get updated as image is rotated
       this.slope = plane.slope;
       this.panelRows = plane.rows;
       this.orientation = plane.orientation;
@@ -29,42 +22,35 @@ directives.directive('edlMount', [ '$ionicGesture', 'd3', 'MountPlaneService', '
     },
 
     link: function (scope, ele, attrs, controller) {
-      scope.skewX = 0;
-      scope.skewY = 0;
+      scope.scalex = 0;
+      scope.scaley = 0;
 
-      ionicGesture.on('dragright', onDragRight, ele)
-      ionicGesture.on('dragleft', onDragLeft, ele)
-      ionicGesture.on('dragup', onDragUp, ele)
-      ionicGesture.on('dragdown', onDragDown, ele)
+      ionicGesture.on('doubletap', setSelected, ele);
 
-      function onDragRight(e) {
-        scope.plane.skewX +=1.5
-        scope.skewX += 1.5;
+      function setSelected(e) {
+        scope.plane.isSelected = !scope.plane.isSelected;
         scope.$apply();
         e.stopPropagation();
-      };
-      function onDragLeft(e) {
-        scope.plane.skewX -=1.5
-        scope.skewX -= 1.5;
-        scope.$apply();
+      }
+
+      ionicGesture.on('drag', movePanel, ele)
+        console.log(arguments, controller, controller.cornerPosition )
+
+
+      function movePanel(e) {
         e.stopPropagation();
-      };
-      function onDragUp(e) {
-        scope.plane.skewY +=1.5
-        scope.skewY -= 1.5;
+        scope.plane.corner.lon = e.gesture.center.pageX;
+        scope.plane.corner.lat = e.gesture.center.pageY;
         scope.$apply();
-        e.stopPropagation();
-      };
-      function onDragDown(e) {
-        scope.plane.skewY +=1.5
-        scope.skewY += 1.5;
-        scope.$apply();
-        e.stopPropagation();
+
       };
     },
-    template: '<g class="mplane" > \
+    template: '<g class="mplane" ng-class="{true:\'isSelected\'}[plane.isSelected]" ion-stop-event \
+                  ng-attr-transform="translate({{plane.corner.lon}},{{plane.corner.lat}})" > \
                 <g z-index="1" class="panelrow" ng-repeat="row in plane.panelRows" > \
-                  <g edl-panel z-index="10" ng-repeat="panel in row.panels" panel="panel" plane="plane" row="row" rowindex="row.rowId" skewy="skewY" skewx="skewX" > \
+                  <g edl-panel z-index="10" ng-repeat="panel in row.panels" panel="panel" plane="plane" row="row" \
+                  ng-class="{0:\'firstrow\'}[row.rowId]" \
+                  rowindex="row.rowId" scaley="scaley" scale="scalex" > \
                   </g> \
                 </g> \
               </g>'

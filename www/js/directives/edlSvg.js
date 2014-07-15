@@ -8,20 +8,18 @@ directives.directive('edlSvg', [ '$ionicGesture', 'd3', 'PanelService', 'MountPl
       this.rotation    = null;
       this.mountPlanes = $scope.mountPlanes;
       this.scale       = $scope.scale;
-      $scope.rotate = 15
+      this.svgRotation = $scope.svgRotation;
       // make the <svg> available outisde by saving it on the PanelService
       ps.svg(d3.select('svg'));
-
     },
     link: function(scope, ele, attrs) {
       scope.setBottomCorner = function(e) {
         scope.bottomCorner = e.gesture.center;
-        console.log('setting bottom corner:',scope.bottomCorner);
       }
-
+      console.log(  ele.css('position'))
+      // console.log(  ele.height())
       scope.setTopCorner = function(e) {
         scope.topCorner = e.gesture.center;
-        console.log('setting top corner:',scope.topCorner);
       }
 
       var cornerSetter = function(e){
@@ -39,15 +37,16 @@ directives.directive('edlSvg', [ '$ionicGesture', 'd3', 'PanelService', 'MountPl
 
       ionicGesture.on('touch', cornerSetter, ele)
 
-
     },
     template:
       '<div><svg style="width: 90%;"> \
+        <g> \
         <g z-index="40" edl-mount  \
           ng-repeat="plane in mountPlanes"  \
           plane="plane" \
           position="position" \
            > \
+        </g> \
         </g> \
       </svg></div>'
   };

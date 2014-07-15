@@ -1,19 +1,6 @@
 services.service('MountPlaneService', [ 'panelOpts', function(panel) {
   // this service contains the functions needed to construct planes for the directive
   return {
-    // FakeMount: function(touchpoint) {
-    //   return {
-    //     corner: touchpoint ? {lat: touchpoint.y, lon: touchpoint.x} : {lat: 10, lon: 10}, // TODO: this should be a latitude longitude point on the map
-    //     planeId: 1,
-    //     azm: 0,
-    //     skew: 0,
-    //     slope: 0,
-    //     panelRows: RowsConstructor(3, 4, null),
-    //     orientation: null,
-    //     length: null,
-    //     height: null
-    //   }
-    // },
     MountingPlane: function (rowCount, rowLength, azm, slope, orientation, corner) {
       if (orientation !== "landscape" && orientation !== "horizontal" ) {
         console.log(orientation)
@@ -53,7 +40,7 @@ services.service('MountPlaneService', [ 'panelOpts', function(panel) {
 var RowsConstructor = function(rowCount, panelsPerRow, orientation, panelOpts){
   var halfstep = false; // TODO: needs implementation to support halfsteps
   var rows = [];
-  panelOpts = panelOpts || {panelHeight: 50, panelLength: 100, orientation: 'landscape'};
+  panelOpts = panelOpts || {panelHeight: 50, panelLength: 100, orientation: 'landscape'}; //TODO: make sure to use the orientation details
 
   var RowOfPanels = function (panelCount, halfstep, panelOpts) {
     if (typeof panelOpts !== "object"){
@@ -86,7 +73,6 @@ var RowsConstructor = function(rowCount, panelsPerRow, orientation, panelOpts){
 
   return rows
 };
-
 
 var PanelConstructor = function(panelOpts, id) {
   var x = panelOpts.panelLength, y = panelOpts.panelHeight, orient = panelOpts.orientation;

@@ -10,5 +10,13 @@ rect {
 }
 
 .panelrow {
-	baground-image:url('../img/de_haro_test_image.png')
+
+}
+
+.firstrow rect {
+	fill: red;
+}
+
+.mplane.isSelected rect {
+	fill: white;
 }
