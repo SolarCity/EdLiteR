@@ -30,7 +30,7 @@ directives.directive('edlPanel', [ '$ionicGesture', 'd3', 'PanelService', functi
       scope.slope = edlMountCtrl.slope;
 
       var removePanel = function(ele) {
-        console.log(arguments);
+        // console.log(arguments);
         scope.plane.removedPanels.push({rowId: scope.rowindex, panelId:scope.panel.panelId});
         this.remove();
       }

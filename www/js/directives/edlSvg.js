@@ -18,8 +18,7 @@ directives.directive('edlSvg', [ '$ionicGesture', 'd3', 'PanelService', 'MountPl
 
         scope.bottomCorner = e.gesture.center;
       };
-      console.log(  ele.css('position'));
-      // console.log(  ele.height())
+
       scope.setTopCorner = function(e) {
           console.log('topC');
         
@@ -40,19 +39,16 @@ directives.directive('edlSvg', [ '$ionicGesture', 'd3', 'PanelService', 'MountPl
       };
 
       ionicGesture.on('touch', cornerSetter, ele);
+
     },
     template: [
           '<div>',
-            // '<input id="place-input" class="controls" type="text" placeholder="Enter a location">',
-            // '<edl-map on-create="mapCreated(map)" id="map-canvas"></edl-map>',
             '<svg >',
-              '<g> ',
-              '<g z-index="40" edl-mount  ',
+              '<g z-index="40" edl-mount ',
                 'ng-repeat="plane in mountPlanes"  ',
                 'plane="plane" ',
                 'position="position" ',
                  '> ',
-              '</g> ',
               '</g> ',
             '</svg>',
           '</div>'

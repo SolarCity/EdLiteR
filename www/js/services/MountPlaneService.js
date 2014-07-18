@@ -2,11 +2,10 @@ services.service('MountPlaneService', [ 'panelOpts', function(panel) {
   // this service contains the functions needed to construct planes for the directive
   return {
     MountingPlane: function (rowCount, rowLength, azm, slope, orientation, corner) {
-      if (orientation !== "landscape" && orientation !== "horizontal" ) {
-        console.log(orientation)
-        console.log('orientation not set, default to landscape');
-        orientation = "landscape"
-      };
+      if (orientation !== "landscape" && orientation !== "portrait" ) {
+        console.log('orientation not set correctly, default to landscape');
+        orientation = "landscape";
+      }
 
       console.log(arguments);
 
@@ -24,15 +23,15 @@ services.service('MountPlaneService', [ 'panelOpts', function(panel) {
         height: rowCount,
         addRow: function() {
           // TODO: recreate Plane w/ +1 rows added to the bottom probably...
-          this.panelRows.push(RowsConstructor(1, this.length, this.orientation, panel))
+          this.panelRows.push(RowsConstructor(1, this.length, this.orientation, panel));
         },
         addColumn: function() {
           // TODO: recreate Plane w/ +1 columns
         }
 
-      }
-      console.log('this is the generated plane: ', newPlane, 'this is the plane\'s location', newPlane.corner);
-      return newPlane
+      };
+      // console.log('this is the generated plane: ', newPlane, 'this is the plane\'s location', newPlane.corner);
+      return newPlane;
     },
   };
 }]);
@@ -44,12 +43,12 @@ var RowsConstructor = function(rowCount, panelsPerRow, orientation, panelOpts){
 
   var RowOfPanels = function (panelCount, halfstep, panelOpts) {
     if (typeof panelOpts !== "object"){
-      console.log('panelOpts not defined... this is a problem...');
+      // console.log('panelOpts not defined... this is a problem...');
       panel = {};
       panel.panelLength = 70;
       panel.panelHeight = 40;
       panel.orientation = 'landscape';
-    };
+    }
 
     halfstep = halfstep ? halfstep : false; //TODO: wtf how do we halfstep
 
@@ -62,16 +61,16 @@ var RowsConstructor = function(rowCount, panelsPerRow, orientation, panelOpts){
       rowId: null,
       halfstep: halfstep,
       panels: panels
-    }
+    };
   };
 
   for (var i = 0; i < rowCount; i++) {
     rows[i] = RowOfPanels(panelsPerRow, halfstep, panelOpts);
     rows[i].rowId = i;
 
-  };
+  }
 
-  return rows
+  return rows;
 };
 
 var PanelConstructor = function(panelOpts, id) {
@@ -83,5 +82,5 @@ var PanelConstructor = function(panelOpts, id) {
       h: y,
       w: x
     },
-  }
+  };
 };

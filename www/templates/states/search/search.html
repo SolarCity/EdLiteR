@@ -1,7 +1,9 @@
 <ion-view title="Search" >
+	<ion-nav-buttons side="right">
+		<button class="button-clear" ui-sref="plan.drawing">This is it</button>
+	</ion-nav-buttons>
 	<ion-content>
 		<input id="place-input" class="controls" type="text" placeholder="Enter a location">
-
 		<edl-map on-create="mapCreated(map)" id="map-canvas"></edl-map>
 		<!-- <h1>Enter your address to find your home</h1>
 		<input id="address" placeholder="Your address here" />

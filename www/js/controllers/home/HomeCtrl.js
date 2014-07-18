@@ -1,3 +1,3 @@
-controllers.controller('HomeCtrl',function($scope) {
+controllers.controller('HomeCtrl',function($scope, $state) {
 
 });

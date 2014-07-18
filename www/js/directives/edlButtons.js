@@ -8,9 +8,11 @@ directives.directive('edlButtons', [ '$ionicGesture', 'd3', 'PanelService', 'Mou
     link: function (scope, ele, attrs, edlMount) {
       // get the <svg> from PanelService
       var azm = 0, slope = 0, orientation = "portrait";
+       console.log('yo1');
 
-      console.log('panelOptions',panel);
+      // console.log('panelOptions',panel);
       scope.addMP = function() {
+        console.log('yo');
         var location = location;
         var rowCount, rowLength;
 
@@ -22,21 +24,26 @@ directives.directive('edlButtons', [ '$ionicGesture', 'd3', 'PanelService', 'Mou
           lat: scope.topCorner.pageY,
           lon: scope.bottomCorner.pageX
         };
-        scope.mountPlanes.push(mp.MountingPlane(rowCount, rowLength, azm, slope, orientation, corner));
-        console.log('dimensions, ',dimensions, 'mountplanes,', scope.mountPlanes)
-      }
+        // console.log('yo before push');
+
+        scope.pushToMountPlane(rowCount, rowLength, azm, slope, orientation, corner);
+
+        // console.log('yo after push');
+
+        // console.log('dimensions, ',dimensions, 'mountplanes,', scope.mountPlanes);
+      };
 
       scope.addRow = function(mp) {
         mp.addRow();
-      }
+      };
 
       scope.addCol = function(mp) {
         mp.addRow();
-      }
+      };
 
       scope.export = function() {
-        console.log(scope.mountPlanes);
-      }
+        // console.log(scope.mountPlanes);
+      };
 
       scope.tellCorners = function() {
         var height = scope.bottomCorner.pageY - scope.topCorner.pageY;
@@ -45,11 +52,11 @@ directives.directive('edlButtons', [ '$ionicGesture', 'd3', 'PanelService', 'Mou
         var result = {
           h: height,
           l: length
-        }
-        console.log(result);
+        };
+        // console.log(result);
 
-        return result
-      }
+        return result;
+      };
 
     },
 
