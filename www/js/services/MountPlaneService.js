@@ -14,6 +14,7 @@ services.service('MountPlaneService', [ 'panelOpts', function(panel) {
         skewX: 0,
         skewY: 0,
         corner: corner,
+        incline: 0,
         azm: azm || null,
         position: null, // TODO: set this value by Directive
         slope: slope || null,
@@ -27,8 +28,11 @@ services.service('MountPlaneService', [ 'panelOpts', function(panel) {
         },
         addColumn: function() {
           // TODO: recreate Plane w/ +1 columns
+        },
+        adjustIncline: function(num) {
+          this.incline += num;
+          console.log(this.incline);
         }
-
       };
       // console.log('this is the generated plane: ', newPlane, 'this is the plane\'s location', newPlane.corner);
       return newPlane;

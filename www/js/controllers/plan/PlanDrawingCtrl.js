@@ -3,9 +3,10 @@ controllers.controller('PlanDrawingCtrl', ['$scope','PanelService', 'MountPlaneS
   $scope.mountPlanes = [];
 
   $scope.pushToMountPlane= function(rC, rL, az, sl, or, cn) {
-  	console.log(arguments)
     $scope.mountPlanes.push($MP.MountingPlane(rC, rL, az, sl, or, cn));
     // rowCount, rowLength, azm, slope, orientation, corner
   };
+
+  $scope.currentSelected = null;
 
 }]);

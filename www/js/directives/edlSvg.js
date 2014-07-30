@@ -43,7 +43,7 @@ directives.directive('edlSvg', [ '$ionicGesture', 'd3', 'PanelService', 'MountPl
     },
     template: [
           '<div>',
-            '<svg >',
+            '<svg class="container">',
               '<g z-index="40" edl-mount ',
                 'ng-repeat="plane in mountPlanes"  ',
                 'plane="plane" ',

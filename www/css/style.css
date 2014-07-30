@@ -8,6 +8,23 @@ edl-svg {
   width: 100%;
 }
 
+.container {
+    /*background: #ccc;*/
+    margin-bottom: 100px;
+    padding: 10px;
+    /*height: 120px;*/
+    -webkit-perspective: 800px;
+    -moz-perspective: 800px;
+    -ms-perspective: 800px;
+    -o-perspective: 800px;
+    perspective: 800px;
+    -webkit-perspective-origin: 0% 0%;
+    -moz-perspective-origin: 0% 0%;
+    -ms-perspective-origin: 0% 0%;
+    -o-perspective-origin: 0% 0%;
+    perspective-origin: 0% 0%;
+}
+
 svg {
   background: rgba(255, 100, 100, 0.5);
   z-index:50;
@@ -33,6 +50,11 @@ button {
 }
 
 rect {
+  -webkit-transform: scale3d(1,.8
+    ,1);
+  /*Chrome, Safari*/
+/*-webkit-transform: scale(2, 5);*/
+
   fill: grey;
   background: red;
   stroke: black;

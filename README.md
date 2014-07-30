@@ -25,6 +25,7 @@ $ npm install -g ionic cordova gulp express nodemon
 $ npm install
 $ bower install
 $ nodemon --watch
+
 ```
 Unless you have a PORT environment variable set, you'll find your app sitting at ````localhost:3000````
 
