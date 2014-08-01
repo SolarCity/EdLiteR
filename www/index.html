@@ -7,7 +7,7 @@
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    <link href="js/ol3/ol.js" rel="stylesheet">
+    <link href="js/ol3/ol.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="lib/bootswatch/superhero/bootstrap.css"/> -->
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
@@ -26,10 +26,7 @@
     <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="lib/angular-bootstrap/ui-bootstrap.js"></script>
-    <script src="lib/angular-ui-map/ui-map.js"></script>
 
-    <!-- d3 dependency injection -->
-    <script src="js/d3/d3v3.js"></script>
     <!-- Application -->
     <script src="js/app.js"></script>
     <!-- <script src="js/states/ *** .js"></script> -->
@@ -38,16 +35,18 @@
     <script src="js/states/search.js"></script>
     <script src="js/states/plan.js"></script>
     <!-- <script src="js/services/ *** .js"></script> -->
-    <script src="js/services/PanelService.js"></script>
-    <script src="js/services/MountPlaneService.js"></script>
+    <script src="js/services/MapService.js"></script>
+    <!-- <script src="js/services/PanelService.js"></script> -->
     <!-- <script src="js/controllers/ *** .js"></script> -->
     <script src="js/controllers/home/HomeCtrl.js"></script>
     <script src="js/controllers/search/SearchCtrl.js"></script>
     <script src="js/controllers/plan/PlanCtrl.js"></script>
     <script src="js/controllers/plan/PlanDrawingCtrl.js"></script>
     <!-- <script src="js/directives/ *** .js"></script> -->
-    <script src="js/directives/edlSvg.js"></script>
+    <!-- <script src="js/directives/edlSvg.js"></script> -->
     <script src="js/directives/edlMap.js"></script>
+    <script src="js/directives/edlGoogleMap.js"></script>
+    <script src="js/directives/edlOlMap.js"></script>
     <script src="js/directives/edlMount.js"></script>
     <script src="js/directives/edlPanel.js"></script>
     <script src="js/directives/edlButtons.js"></script>

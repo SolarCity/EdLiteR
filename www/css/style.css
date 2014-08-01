@@ -1,13 +1,3 @@
-edl-svg {
-  top: 0;
-  left: 0;
-  position: absolute;
-  z-index:50;
-  /*float: left;*/
-  display: inline;
-  width: 100%;
-}
-
 .container {
     /*background: #ccc;*/
     margin-bottom: 100px;
@@ -25,54 +15,27 @@ edl-svg {
     perspective-origin: 0% 0%;
 }
 
-svg {
-  background: rgba(255, 100, 100, 0.5);
-  z-index:50;
-}
-edl-map {
-  top: 0;
-  left: 0;
-  position: absolute;
-  z-index: 0;
-  display: block;
+div.fill {
   width: 100%;
   height: 100%;
 }
 
-edl-button{
-  position: relative;
-  /*z-index: 60;*/
-  float: right;
+edl-map {
+  top: 0;
+  left: 0;
+  position: absolute;
+  /*z-index: 0;*/
+  width: 100%;
+  height: 100%;
 }
 
-button {
-  z-index: 600
-}
-
-rect {
-  -webkit-transform: scale3d(1,.8
-    ,1);
-  /*Chrome, Safari*/
-/*-webkit-transform: scale(2, 5);*/
-
-  fill: grey;
-  background: red;
-  stroke: black;
-  stroke-width: 3;
-  z-index: 700;
-}
-
-.panelrow {
-
-}
-
-.firstrow rect {
-  fill: red;
-}
-
-.mplane.isSelected rect {
-  fill: white;
-  z-index: 600;
+#omap {
+  top: 0;
+  left: 0;
+  position: absolute;
+  /*z-index: 10;*/
+  width: 100%;
+  height: 100%;
 }
 
 .scroll {
@@ -80,6 +43,7 @@ rect {
 }
 
 .controls {
+  z-index: 11;
   margin-top: 16px;
   border: 1px solid transparent;
   border-radius: 2px 0 0 2px;
@@ -97,21 +61,12 @@ rect {
   width: 401px;
 }
 
-.controls {
-  margin-top: 16px;
-  border: 1px solid transparent;
-  border-radius: 2px 0 0 2px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  height: 32px;
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
 
 #place-input {
   background-color: #fff;
   padding: 0 11px 0 13px;
   width: 400px;
+  clear: both;
   font-family: Roboto;
   font-size: 15px;
   font-weight: 300;
@@ -129,7 +84,7 @@ rect {
   font-family: Roboto;
 }
 
-#type-selector {
+/*#type-selector {
   color: #fff;
   background-color: #4d90fe;
   padding: 5px 11px 0px 11px;
@@ -139,4 +94,4 @@ rect {
   font-family: Roboto;
   font-size: 13px;
   font-weight: 300;
-}
+}*/
