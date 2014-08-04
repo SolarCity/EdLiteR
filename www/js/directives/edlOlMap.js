@@ -19,11 +19,10 @@ function edlOlMap(MapService) {
         var gmap = MapService.getGmap();
         // bind ol view to google map
 
-          // gmap.setCenter(center);
-        
         view.on('change:center', function() {
           console.log('changed center');
           var center = view.getCenter();
+          // TODO: why doesn't google set center understand this next instruction?
           gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
         });
         view.on('change:resolution', function() {
@@ -66,6 +65,7 @@ function edlOlMap(MapService) {
         });
         MapService.addOverlay(mountPlaneOverlay);
 
+        // TODO: extract to another state
         var gutterOverlay = new ol.FeatureOverlay({
           style: new ol.style.Style({
             fill: new ol.style.Fill({
@@ -86,14 +86,7 @@ function edlOlMap(MapService) {
         MapService.addOverlay(gutterOverlay);
 
         var modify = new ol.interaction.Modify({
-          features: mountPlaneOverlay.getFeatures(),
-          // the SHIFT key must be pressed to delete vertices, so
-          // that new vertices can be drawn at the same position
-          // of existing vertices
-          deleteCondition: function(event) {
-            return ol.events.condition.shiftKeyOnly(event) &&
-                ol.events.condition.singleClick(event);
-          }
+          features: mountPlaneOverlay.getFeatures()          
         });
         map.addInteraction(modify);
 
@@ -118,7 +111,7 @@ function edlOlMap(MapService) {
         var center =  new google.maps.LatLng(37.5516671,-122.31563);
         gmap.setCenter(center);
                 
-        // gmap.controls[google.maps.ControlPosition.LEFT_TOP].push(olMapDiv);
+        gmap.controls[google.maps.ControlPosition.LEFT_TOP].push(olMapDiv);
       }
       console.log(ele[0]);
 
