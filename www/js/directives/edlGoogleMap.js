@@ -15,21 +15,20 @@ function edlGoogleMap(MapService) {
         var mapOptions = {
           disableDefaultUI: true,
           keyboardShortcuts: false,
-          draggable: false,
+          draggable: true,
           disableDoubleClickZoom: true,
           scrollwheel: false,
           streetViewControl: false,
-          // center: new google.maps.LatLng(37.5516671,-122.31563),
-          // zoom: 20,
+          center: new google.maps.LatLng(37.5516671,-122.31563), //TODO: device location
+          zoom: 20,
           mapTypeId: google.maps.MapTypeId.SATELLITE, 
           tilt: 0, 
-          // streetViewControl: false,
-          // rotateControl: true,
-          // mapTypeControl: false,
-          // zoomControl: true,
-          // zoomControlOptions: {
-          //   style: google.maps.ZoomControlStyle.LARGE
-          // }
+          rotateControl: true,
+          mapTypeControl: false,
+          zoomControl: true,
+          zoomControlOptions: {
+            style: google.maps.ZoomControlStyle.LARGE
+          }
         };
 
         var map =  MapService.setGmap(ele[0], mapOptions);
@@ -63,6 +62,9 @@ function edlGoogleMap(MapService) {
 
 
         });
+        var center =  new google.maps.LatLng(37.5516671,-122.31563);
+        
+        map.setCenter(center);
         ionic.trigger('loadOlMap',{target: window});
       }  
       console.log(ele[0]);
