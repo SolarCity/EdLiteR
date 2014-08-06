@@ -1,114 +1,127 @@
 function edlOlMap(MapService) {
   return {
     restrict: "A",
-    transclude: true,
+    // transclude: true,
     // controller: "SearchCtrl",
     // controllerAs: "search",
+
+    // controller: function edlOlMapCtrl($scope, $element, $attrs) {
+    // },
     link: function edlOlMapLink(scope, ele, attrs) {
+      console.log(arguments);
+      MapService.getStatic()
+      .then(init);
+      function init (imgUrl) {
+        console.log(imgUrl  )
+        // set the ol view
+        var pixelProjection = new ol.proj.Projection({
+          code: 'pixel',
+          units: 'pixels',
+          global: false,
+          extent: [0, 0, 960, 557]
+        });
 
-      // set the ol view
-      var view = MapService.setOview(
-        new ol.View({
-          maxZoom: 19,
-        })
-      );
+        var view = /* MapService.setOview( */
+          new ol.View({
+            projection: pixelProjection,
+            center: ol.extent.getCenter(pixelProjection.getExtent()),
+            zoom: 2 }
+          // })
+        );
 
-      var gmap = MapService.getGmap();
-      // bind ol view to google map
-      var gCenter = MapService.getCenter();
+        // view.on('change:center', function() {
+        //   var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
+        //   gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
+        // });
 
-      view.setZoom(gmap.getZoom());
-      view.setCenter([gCenter.lat(),gCenter.lng()]);
+        // view.on('change:resolution', function() {
+        //   gmap.setZoom(view.getZoom());
+        // });
 
-      view.on('change:center', function() {
-        var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
-        gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
-      });
-      view.on('change:resolution', function() {
-        gmap.setZoom(view.getZoom());
-      });
-
-      // where we will display fixed mounting planes
-      var vector = new ol.layer.Vector({
-        source: new ol.source.Vector({
-          projection: 'EPSG:3857'
-        }),
-      });
-      var olMapDiv = document.getElementById('omap');
-      var mapOptions = {
-        layers: [vector],
-        interactions: ol.interaction.defaults({
-          altShiftDragRotate: false,
-          dragPan: false,
-          rotate: false
-        }).extend([new ol.interaction.DragPan({kinetic: null})]),
-        target: olMapDiv,
-        view: view
-      };
-      var map = MapService.setOmap(mapOptions);
-
-      var mountPlaneOverlay = new ol.FeatureOverlay({
-        style: new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: 'rgba(255, 255, 255, 0.8)'
+        // where we will display fixed mounting planes
+        var vector = new ol.layer.Image({
+          source: new ol.source.ImageStatic({
+            url: imgUrl,
+            imageSize: [960, 557],
+            projection: pixelProjection,
+            imageExtent: pixelProjection.getExtent()
           }),
-          stroke: new ol.style.Stroke({
-            color: '#ffcc33',
-            width: 2
-          }),
-          image: new ol.style.Circle({
-            radius: 7,
-            fill: new ol.style.Fill({
-              color: '#ffcc33'
-            })
-          })
-        })
-      });
-      MapService.addOverlay(mountPlaneOverlay);
+        });
+        var olMapDiv = document.getElementById('omap');
+        var mapOptions = {
+          layers: [vector],
+          interactions: ol.interaction.defaults({
+            altShiftDragRotate: false,
+            dragPan: false,
+            rotate: false
+          }).extend([new ol.interaction.DragPan({kinetic: null})]),
+          // target: ele[0],
+          target: olMapDiv,
+          view: view
+        };
+        var map = MapService.setOmap(mapOptions);
 
-      // TODO: extract to another state
-      var gutterOverlay = new ol.FeatureOverlay({
-        style: new ol.style.Style({
-          fill: new ol.style.Fill({
-            color: 'rgba(0, 0, 255, 0.8)'
-          }),
-          stroke: new ol.style.Stroke({
-            color: 'red',
-            width: 5
-          }),
-          image: new ol.style.Circle({
-            radius: 7,
-            fill: new ol.style.Fill({
-              color: '#ffcc33'
-            })
-          })
-        })
-      });
-      MapService.addOverlay(gutterOverlay);
+        // var mountPlaneOverlay = new ol.FeatureOverlay({
+        //   style: new ol.style.Style({
+        //     fill: new ol.style.Fill({
+        //       color: 'rgba(255, 255, 255, 0.8)'
+        //     }),
+        //     stroke: new ol.style.Stroke({
+        //       color: '#ffcc33',
+        //       width: 2
+        //     }),
+        //     image: new ol.style.Circle({
+        //       radius: 7,
+        //       fill: new ol.style.Fill({
+        //         color: '#ffcc33'
+        //       })
+        //     })
+        //   })
+        // });
+        // MapService.addOverlay(mountPlaneOverlay);
 
-      var modify = new ol.interaction.Modify({
-        features: mountPlaneOverlay.getFeatures()          
-      });
-      map.addInteraction(modify);
+        // TODO: extract to another state
+        // var gutterOverlay = new ol.FeatureOverlay({
+        //   style: new ol.style.Style({
+        //     fill: new ol.style.Fill({
+        //       color: 'rgba(0, 0, 255, 0.8)'
+        //     }),
+        //     stroke: new ol.style.Stroke({
+        //       color: 'red',
+        //       width: 5
+        //     }),
+        //     image: new ol.style.Circle({
+        //       radius: 7,
+        //       fill: new ol.style.Fill({
+        //         color: '#ffcc33'
+        //       })
+        //     })
+        //   })
+        // });
+        // MapService.addOverlay(gutterOverlay);
 
-      // TODO: directive
-      var draw = new ol.interaction.Draw({
-        features: mountPlaneOverlay.getFeatures(),
-        snapTolerance: 25,
-        type: 'Polygon'
-      });
+        // var modify = new ol.interaction.Modify({
+        //   features: mountPlaneOverlay.getFeatures()          
+        // });
+        // map.addInteraction(modify);
 
-      map.addInteraction(draw);
+        // // TODO: directive
+        // var draw = new ol.interaction.Draw({
+        //   features: mountPlaneOverlay.getFeatures(),
+        //   snapTolerance: 25,
+        //   type: 'Polygon'
+        // });
 
-      map.on('click', function(evt) {
-        console.log('click');
-      });
+        // map.addInteraction(draw);
 
-      olMapDiv.parentNode.removeChild(olMapDiv);
-      gmap.controls[google.maps.ControlPosition.TOP_LEFT].pop();
-      gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);
+        // map.on('click', function(evt) {
+        //   console.log('click');
+        // });
+    }
+
     },
     // template: [     ].join('')
   };
+
 }
 directives.directive('edlOlMap', edlOlMap);

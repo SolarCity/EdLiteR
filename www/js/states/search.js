@@ -17,12 +17,6 @@ angular.module('states.search',[]).config( function searchState($stateProvider) 
   })
   .state("search.grab", {
     url: "/grab",
-    // resolve: {
-    // 	gmap: "MapService.getMap()"
-    // },
-    // controller: function searchFindCtrl () {
-      // gmap.controls[google.maps.ControlPosition.TOP_LEFT].pop();
-    // },
     templateUrl: "templates/states/search/search.grab.html",
   });
 });

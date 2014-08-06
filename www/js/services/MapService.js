@@ -1,4 +1,4 @@
-function MapService_ () {
+function MapService_ ($q) {
   // this factory is a singleton for the Application. 
   // it provides maps, layers, collections, etc... 
   var MapService = {};
@@ -105,16 +105,23 @@ function MapService_ () {
     }
   };
 
-  MapService.mapCapture = function () {
-    var element = document.getElementById('gmap') //HACK: this should be a parameter
+  MapService.setStatic = function () {
+    var element = document.getElementById('gmap'); //HACK: this should be a parameter
+    var defer = $q.defer();
+    MapService.o.staticMap = defer.promise;
     html2canvas(element, {
-      // useCORS: true,
+      useCORS: true,
       onrendered: function(canvas) {
         var dataUrl= canvas.toDataURL("image/png");
-        MapService.o.staticMap = dataUrl;
-        console.log('dataUrl saved as ', MapService.o.staticMap);
+        console.log('dataUrl saved as ', dataUrl);
+        defer.resolve(dataUrl);
       }
     });
+    return MapService.o.staticMap;
+  };
+
+  MapService.getStatic = function() {
+    return MapService.o.staticMap;
   };
 
   return MapService;

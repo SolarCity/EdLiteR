@@ -3,11 +3,21 @@ angular.module('states.plan',[]).config( function ($stateProvider) {
     url:         "/plan",
     // controller:  "PlanCtrl",
     templateUrl: "templates/states/plan/plan.html",
-    abstract:    true
+
+    abstract:    true,
   })
   .state("plan.drawing", {
     url:         "/drawing",
-    // controller:  "PlanDrawingCtrl",
-    templateUrl: "templates/states/plan/plan.drawing.html"
+    controller:  "PlanDrawingCtrl",
+    controllerAs: "drawCtrl",
+    templateUrl: "templates/states/plan/plan.drawing.html",
+    resolve: {
+      staticMap: function(MapService) {
+        MapService.getStatic().then(function(data) {
+          return data
+        });
+      },
+    },    
+
   });
 });

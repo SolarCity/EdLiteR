@@ -2,14 +2,13 @@ controllers.controller('SearchCtrl', function($scope, $state, MapService) {
   $scope.mapCreated = function(map) {
     $scope.map = map;
   };
-  $scope.target = 'test';
+
   this.saveMapToDataUrl = function() {
-  	MapService.mapCapture();
+  	$scope.mapStatic = MapService.setStatic();
+  	console.log($scope.mapStatic)
   	$state.go('plan.drawing');
   	
-  }
-
-
+  };
 
   // function (element) {
   //   element = document.getElementById('gmap');
