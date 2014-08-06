@@ -1,9 +1,9 @@
 <ion-view title="Search" >
 	<ion-nav-buttons side="right">
-		<button class="button-clear" ui-sref="plan.drawing">This is it</button>
+		<button class="button-clear" ui-sref="search.grab">Go Grab It</button>
 	</ion-nav-buttons>
 	<ion-content>
 		<input id="place-input" class="controls" type="text" placeholder="Enter a location" />
-		<edl-map class="fill"></edl-map>
+		<div id="gmap" class="fill" edl-google-map></div>
 	</ion-content>
 </ion-view>

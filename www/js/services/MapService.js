@@ -8,6 +8,27 @@ function MapService_ () {
   // the openlayer map
   MapService.o = {};
 
+  MapService.g.mapOptions = { 
+      disableDefaultUI: true,
+      keyboardShortcuts: false,
+      draggable: true,
+      disableDoubleClickZoom: true,
+      scrollwheel: false,
+      streetViewControl: false,
+      // center: new google.maps.LatLng(37.5516671,-122.31563), //TODO: device location
+      // zoom: 20,
+      mapTypeId: google.maps.MapTypeId.SATELLITE, 
+      tilt: 0, 
+      rotateControl: true,
+      mapTypeControl: false,
+      // zoomControl: true,
+      zoomControlOptions: {
+        style: google.maps.ZoomControlStyle.LARGE
+    }
+  };
+
+
+  MapService.o.staticMap = null;  
   // MapService.o.inteactions;
   // MapService.o.projection;
 
@@ -22,8 +43,7 @@ function MapService_ () {
     maxZoom: 21
   });
 
-  MapService.o.layers = null;
-  
+  MapService.o.layers = null;  
 
   // group methods
   MapService.getLayer = function(layername) {
@@ -66,6 +86,35 @@ function MapService_ () {
   MapService.setOview = function(view) {
     MapService.o.view = view;
     return MapService.o.view;
+  };
+
+  MapService.getOview = function() {
+    return MapService.o.view;
+  };
+
+  MapService.setCenter = function(center) {
+    MapService.g.center = center;
+    return MapService.g.center;
+  };
+
+  MapService.getCenter = function(center) {
+    if (MapService.g.center) {
+      return MapService.g.center;
+    } else {
+      return new google.maps.LatLng( 0, 0);
+    }
+  };
+
+  MapService.mapCapture = function () {
+    var element = document.getElementById('gmap') //HACK: this should be a parameter
+    html2canvas(element, {
+      // useCORS: true,
+      onrendered: function(canvas) {
+        var dataUrl= canvas.toDataURL("image/png");
+        MapService.o.staticMap = dataUrl;
+        console.log('dataUrl saved as ', MapService.o.staticMap);
+      }
+    });
   };
 
   return MapService;
