@@ -11,13 +11,25 @@ angular.module('states.plan',[]).config( function ($stateProvider) {
     controller:  "PlanDrawingCtrl",
     controllerAs: "drawCtrl",
     templateUrl: "templates/states/plan/plan.drawing.html",
-    resolve: {
-      staticMap: function(MapService) {
-        MapService.getStatic().then(function(data) {
-          return data
-        });
-      },
-    },    
+    // resolve: {
+    //   staticMap: function(MapService) {
+    //     MapService.getStatic().then(function(data) {
+    //       return data
+    //     });
+    //   },
+    // },
 
+  })
+  .state("plan.plane", {
+    url:         "/plane",
+    controller:  "PlanDrawingCtrl",
+    controllerAs: "drawCtrl",
+    // templateUrl: "templates/states/plan/plan.drawing.html",
+  })
+  .state("plan.obstacle", {
+    url:         "/obstacle",
+    controller:  "PlanDrawingCtrl",
+    controllerAs: "drawCtrl",
+    // templateUrl: "templates/states/plan/plan.drawing.html",
   });
 });

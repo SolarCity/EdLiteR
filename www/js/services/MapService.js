@@ -101,7 +101,8 @@ function MapService_ ($q) {
     if (MapService.g.center) {
       return MapService.g.center;
     } else {
-      return new google.maps.LatLng( 0, 0);
+      return new google.maps.LatLng(37.5516671,-122.31563); //HACK: should only return current map center
+      // return null;
     }
   };
 

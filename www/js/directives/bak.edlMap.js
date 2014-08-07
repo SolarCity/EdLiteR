@@ -5,15 +5,15 @@ directives.directive('edlMap', [ '$ionicGesture', '$ionicPlatform', function( io
       onCreate: "&"
     },
     controller: function ($scope, $element, $attrs) {
-      
+
     },
     link: function (scope, ele, attrs) {
       function initialize() {
         var mapOptions = {
           center: new google.maps.LatLng(37.5516671,-122.31563),
           zoom: 20,
-          mapTypeId: google.maps.MapTypeId.SATELLITE, 
-          tilt: 0, 
+          mapTypeId: google.maps.MapTypeId.SATELLITE,
+          tilt: 0,
           streetViewControl: false,
           rotateControl: true,
           mapTypeControl: false,
@@ -33,12 +33,12 @@ directives.directive('edlMap', [ '$ionicGesture', '$ionicPlatform', function( io
         // });
 
         var input = document.getElementById("place-input");
-      
+
         var types = document.getElementById('type-selector');
 
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);
-      
+
         var autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
 
@@ -75,8 +75,6 @@ directives.directive('edlMap', [ '$ionicGesture', '$ionicPlatform', function( io
 
       google.maps.event.addDomListener(window, 'load', initialize);
       ionic.trigger('load',{target: window});
-
-
     },
 
     };

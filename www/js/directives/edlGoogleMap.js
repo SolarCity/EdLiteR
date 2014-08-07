@@ -48,7 +48,9 @@ function edlGoogleMap(MapService) {
 
       var saveCenter = function saveCenter () {
         var center = map.getCenter();
-        console.log(MapService.setCenter(center));
+        if (center) {
+          console.log(MapService.setCenter(center));
+        }
 
       };
       var mapDiv = document.getElementById('gmap');

@@ -4,53 +4,14 @@ controllers.controller('SearchCtrl', function($scope, $state, MapService) {
   };
 
   this.saveMapToDataUrl = function() {
+  	var map = MapService.getGmap(); //HACK: pop panel to cause canvas to update
+  																	//      results in refresh detected by HTML2Canvas plugin
+    map.controls[google.maps.ControlPosition.TOP_LEFT].pop();
+
   	$scope.mapStatic = MapService.setStatic();
-  	console.log($scope.mapStatic)
+
+  	console.log($scope.mapStatic);
   	$state.go('plan.drawing');
   	
-  };
-
-  // function (element) {
-  //   element = document.getElementById('gmap');
-  //   html2canvas(element , {
-  //     useCORS: true,
-  //     onrendered: function(canvas) {
-  //       var dataUrl= canvas.toDataURL("image/png");
-  //       console.log(dataUrl);
-  //       // DO SOMETHING WITH THE DATAURL
-  //       // Eg. write it to the page
-  //       document.write('<img class="fill" src="' + dataUrl + '"/>');
-  //     }
-  //   });
-  // };
- 
-
+  }; 
 });
-
-
-
-
-
-
-// var pixelProjection = new ol.proj.Projection({
-// 	  code: 'pixel',
-// 	  units: 'pixels',
-// 	  extent: [0, 0, 670, 647]
-// 	});
-// var map = new ol.Map({
-// 	  target: 'map',
-// 	  layers: [ new ol.layer.Image({
-// 	  	source: new ol.source.ImageStatic({
-// 		  		url: 'de_haro_test_image.PNG',
-// 		  		imageSize: [670, 647],
-// 		      projection: pixelProjection,
-// 		      imageExtent: pixelProjection.getExtent()
-// 		  	})
-// 	  	})
-// 	  ],
-// 	  view: new ol.View({
-// 	    projection: pixelProjection,
-// 	    center: ol.extent.getCenter(pixelProjection.getExtent()),
-// 	    zoom: 2
-// 	  })
-// 	});
