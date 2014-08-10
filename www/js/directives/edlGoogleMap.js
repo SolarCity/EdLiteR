@@ -56,7 +56,7 @@ function edlGoogleMap(MapService) {
       var mapDiv = document.getElementById('gmap');
       google.maps.event.addListener(map, 'center_changed', saveCenter);
 
-      console.log(ele[0]);
+      // console.log(ele[0]);
     }
   };
 }

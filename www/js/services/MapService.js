@@ -9,29 +9,27 @@ function MapService_ ($q) {
   MapService.o = {};
 
   MapService.g.mapOptions = { 
-      disableDefaultUI: true,
-      keyboardShortcuts: false,
-      draggable: true,
-      disableDoubleClickZoom: true,
-      scrollwheel: false,
-      streetViewControl: false,
-      // center: new google.maps.LatLng(37.5516671,-122.31563), //TODO: device location
-      // zoom: 20,
-      mapTypeId: google.maps.MapTypeId.SATELLITE, 
-      tilt: 0, 
-      rotateControl: true,
-      mapTypeControl: false,
-      // zoomControl: true,
-      zoomControlOptions: {
-        style: google.maps.ZoomControlStyle.LARGE
+    disableDefaultUI: true,
+    keyboardShortcuts: false,
+    draggable: true,
+    disableDoubleClickZoom: true,
+    scrollwheel: false,
+    streetViewControl: false,
+    // center: new google.maps.LatLng(37.5516671,-122.31563), //TODO: device location
+    // zoom: 20,
+    mapTypeId: google.maps.MapTypeId.SATELLITE, 
+    tilt: 0, 
+    rotateControl: true,
+    mapTypeControl: false,
+    // zoomControl: true,
+    zoomControlOptions: {
+      style: google.maps.ZoomControlStyle.LARGE
     }
   };
-
 
   MapService.o.staticMap = null;  
   // MapService.o.inteactions;
   // MapService.o.projection;
-
 
   // google map
   MapService.g.gmap = null;
@@ -106,7 +104,7 @@ function MapService_ ($q) {
     }
   };
 
-  MapService.setStatic = function () {
+  MapService.setStatic = function (ele) {
     var element = document.getElementById('gmap'); //HACK: this should be a parameter
     var defer = $q.defer();
     MapService.o.staticMap = defer.promise;
