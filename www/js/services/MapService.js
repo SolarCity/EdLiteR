@@ -27,6 +27,7 @@ function MapService_ ($q) {
     }
   };
 
+  // MapService.o.staticMap = null;  
   MapService.o.staticMap = null;  
   // MapService.o.inteactions;
   // MapService.o.projection;
@@ -81,6 +82,10 @@ function MapService_ ($q) {
     return MapService.o.omap;
   };
 
+  MapService.getOmap = function(options) {
+    return MapService.o.omap;
+  };
+
   MapService.setOview = function(view) {
     MapService.o.view = view;
     return MapService.o.view;
@@ -120,7 +125,13 @@ function MapService_ ($q) {
   };
 
   MapService.getStatic = function() {
-    return MapService.o.staticMap;
+    var defer = $q.defer();
+    if (MapService.o.staticMap) {
+      defer.resolve(MapService.o.staticMap);
+    } else { // HACK: this here for development only
+      defer.resolve('img/de_haro_test_image.PNG');
+    }
+    return defer.promise;
   };
 
   return MapService;

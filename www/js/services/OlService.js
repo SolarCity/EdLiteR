@@ -4,10 +4,37 @@ function OlService_ ($q) {
 
   var OlService = {};
 
-  // give styles for the type of thing selected... (maybe)
-  var selectedStyleFunction = function function_name (argument) {
+  // TODO: give styles for the type of thing selected... (maybe)
+  // var selectedStyleFunction = function function_name (argument) {
     
-  };
+  // };
+  
+  OlService.mountPlaneSource = new ol.source.Vector({
+    features: []
+  });
+
+  // create image source from canvas elements from vector source
+  OlService.mountPlaneImage = new ol.source.ImageVector({
+    style: new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: 'green'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#ffff33',
+        width: 2
+      }),
+      image: new ol.style.Circle({
+        radius: 7,
+        fill: new ol.style.Fill({
+          color: '#ffcc33'
+        })
+      })
+    }), 
+    source: OlService.mountPlaneSource
+  });
+
+  // add a feature to the testing layer. 
+
   // mounting plane layer
   OlService.mountPlaneOverlay = new ol.FeatureOverlay({
     style: new ol.style.Style({
@@ -26,6 +53,8 @@ function OlService_ ($q) {
       })
     })
   });
+  
+
   
   // obstruction layer
   OlService.obstructionOverlay = new ol.FeatureOverlay({

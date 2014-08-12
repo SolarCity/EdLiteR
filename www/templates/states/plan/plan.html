@@ -6,18 +6,18 @@
       </ion-nav-back-button>
     </ion-header-bar>
     <ion-nav-buttons side="right">
-      <button class="button button-icon button-clear ion-navicon" >
+      <button class="button button-icon button-clear ion-navicon" ng-click="plan.toggleDetailView()">
+      </button>
+      <button class="button button-icon button-clear button-assertive ion-navicon" on-tap-gesture="plan.showfeatures()">
+      </button>
+      <button class="button button-icon button-clear button-balanced ion-navicon" on-tap-gesture="plan.stateforward()">
       </button>
     </ion-nav-buttons>
     <ion-nav-view animation="no-animation" name="planContent"></ion-nav-view>
   </ion-side-menu-content> 
   
   <ion-side-menu side="right" >
-    <ion-header-bar class="bar-assertive">
-      <h1 class="title">Details</h1>
-      <button class="button button-icon button-clear ion-navicon" >
-      </button>
-    </ion-header-bar>
+
 
     <ion-nav-view name="detailMenu">
     </ion-nav-view>

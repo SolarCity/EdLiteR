@@ -7,8 +7,7 @@ angular.module('states.search',[]).config( function searchState($stateProvider) 
 					"</ion-view>",
 				"</ion-nav-view>",
     ].join(''),
-    controller: "SearchCtrl",
-    controllerAs: "search",
+    controller: "SearchCtrl as search",
     abstract: true
   })
   .state("search.find", {

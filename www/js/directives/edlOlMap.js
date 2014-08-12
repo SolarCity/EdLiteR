@@ -1,15 +1,15 @@
-function edlOlMap(MapService, OlService) {
+function edlOlMap($state, MapService, OlService, MountService) {
   return {
     restrict: "A",
     transclude: true,
-    // controller: "SearchCtrl",
-    // controllerAs: "search",
     scope: {
-      layerTarget: "="
+      targetLayer: "=",
+      // map: "=?", // add the ? because parent scope property doesn't exist yet :)
     },
     // controller: function edlOlMapCtrl($scope, $element, $attrs) {
     // },
     link: function edlOlMapLink(scope, ele, attrs) {
+
       MapService.getStatic()
       .then(init);
       function init (imgUrl) {
@@ -42,8 +42,23 @@ function edlOlMap(MapService, OlService) {
         var olMapDiv = ele[0];
         // var olMapDiv = document.getElementById('omap');
 
+
+
+        // let's tinker with the layers
+        // get the layer... 
+        var mountPlaneImage = OlService.mountPlaneImage;
+        var mountPlaneSource = OlService.mountPlaneSource;
+        var mountLayer = new ol.layer.Image({
+          source: mountPlaneImage
+        });
+
+
+
+        // add the layer to the map
+        // map.addLayer(mountLayer);
+
         var mapOptions = {
-          layers: [mapCapture],
+          layers: [mapCapture, mountLayer],
           interactions: ol.interaction.defaults({
             altShiftDragRotate: true,
             dragPan: false,
@@ -53,6 +68,19 @@ function edlOlMap(MapService, OlService) {
           view: view
         };
         var map = MapService.setOmap(mapOptions);
+        // scope.map = map;
+
+
+
+
+
+
+
+
+
+
+
+
 
         var mountPlaneOverlay = OlService.mountPlaneOverlay;
         MapService.addOverlay(mountPlaneOverlay);
@@ -68,6 +96,8 @@ function edlOlMap(MapService, OlService) {
           features: mountPlaneOverlay.getFeatures()          
         });
         map.addInteraction(modify);
+
+
 
         // // TODO: directive
         var draw = new ol.interaction.Draw({
@@ -104,90 +134,26 @@ function edlOlMap(MapService, OlService) {
           var gutterLineGeom = wkt.readGeometry(gutterLineWkt);
           var gutterLine = new ol.Feature(gutterLineGeom);
           gutterOverlay.addFeature(gutterLine);
+          // mountPlaneSource.addFeature(feature.clone());
 
+          var drawnfeature = mountPlaneOverlay.getFeatures().pop(); //TODO: after feature becomes "fixed"
 
+          drawnfeature.setProperties(MountService.mountplane);
 
+          MountService.setRecent(drawnfeature);
+          
+          mountPlaneSource.addFeature(drawnfeature);
+
+          console.log();
+
+          $state.go('plan.mount', {id: mountPlaneSource.getFeatures().length});
 
         };
                   // NEW BELOW HERE: 
 
-          var overlayStyle = (function() {
-            /* jshint -W069 */
-            var styles = {};
-            styles['Polygon'] = [
-              new ol.style.Style({
-                fill: new ol.style.Fill({
-                  color: [255, 255, 255, 0.5]
-                })
-              }),
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [255, 255, 255, 1],
-                  width: 5
-                })
-              }),
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [0, 153, 255, 1],
-                  width: 3
-                })
-              }),
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [0, 0, 255, 1],
-                  width: 1
-                })
-              })
-            ];
-            styles['MultiPolygon'] = styles['Polygon'];
 
-            styles['LineString'] = [
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [255, 255, 255, 1],
-                  width: 5
-                })
-              }),
-              new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: [0, 153, 255, 1],
-                  width: 3
-                })
-              })
-            ];
-            styles['MultiLineString'] = styles['LineString'];
-
-            styles['Point'] = [
-              new ol.style.Style({
-                image: new ol.style.Circle({
-                  radius: 7,
-                  fill: new ol.style.Fill({
-                    color: [0, 153, 255, 1]
-                  }),
-                  stroke: new ol.style.Stroke({
-                    color: [255, 255, 255, 0.75],
-                    width: 1.5
-                  })
-                }),
-                zIndex: 100000
-              })
-            ];
-            styles['MultiPoint'] = styles['Point'];
-
-            styles['GeometryCollection'] = styles['Polygon'].concat(styles['Point']);
-
-            return function(feature, resolution) {
-              return styles[feature.getGeometry().getType()];
-            };
-            /* jshint +W069 */
-          })();          
-
-          var select = new ol.interaction.Select({
-            style: overlayStyle
-          });
-
-          map.addInteraction(select);
         draw.on('drawend', gutterLineFinder);
+
       }
 
     },

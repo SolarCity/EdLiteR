@@ -1,3 +1,10 @@
+
 <ion-content>
-halo
+	<ion-list>
+		<ion-item ng-repeat="field in mount.feature">
+			{{field}}
+		</ion-item>
+	</ion-list>
+	<button class="button button-small button-balanced" on-tap-gesture="mount.submitFeature()">COMPLETE</button>
+	<button class="button button-small button-assertive" on-tap-gesture="mount.submitFeature()">DELETE</button>
 </ion-content>

@@ -10,12 +10,10 @@ function SearchCtrl_($scope, $state, MapService) {
 
     MapService.setStatic().then(function(data) {
       $scope.mapStatic = data;
-      // console.log($scope.mapStatic);
+      console.log($scope.mapStatic);
       $state.go('plan.mount');
       
     });
-
-    
   }; 
 }
 

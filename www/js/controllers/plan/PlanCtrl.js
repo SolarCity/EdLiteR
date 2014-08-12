@@ -1,6 +1,16 @@
-function PlanCtrl_($scope) {
+function PlanCtrl_($scope, $ionicSideMenuDelegate, $state) {
+	var vm = this;
+	
+	vm.targetLayer = $state.current.data.targetLayer; //TODO: where should this be? 
+	vm.interactionLayer = "mount";
+ 
+ 	vm.toggleDetailView = function() {
+		$ionicSideMenuDelegate.toggleRight();
+	};
+	vm.stateforward = function() {
+		console.log('stateforwa');
+	};
 
-	$scope.layerTarget = {};
 
 }
 controllers.controller('PlanCtrl',PlanCtrl_);
