@@ -8,6 +8,9 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
           return data;
         });
       },
+      omap: function(MapService) {
+        return MapService.getOmap();
+      },
     },
     templateUrl: "templates/states/plan/plan.html",
     abstract:    true,
@@ -18,7 +21,8 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
       targetLayer: "mount"
     },
     resolve: {
-      feature: function resolveMountFeature(OlService) {
+      feature: function resolveMountFeature($stateParams, OlService) {
+        console.log($stateParams.id);
         return OlService.getRecent();
       }
     },
