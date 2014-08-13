@@ -1,10 +1,23 @@
 
 <ion-content>
-	<ion-list>
-		<ion-item ng-repeat="field in mount.feature">
-			{{field}}
-		</ion-item>
-	</ion-list>
-	<button class="button button-small button-balanced" on-tap-gesture="mount.submitFeature()">COMPLETE</button>
-	<button class="button button-small button-assertive" on-tap-gesture="mount.submitFeature()">DELETE</button>
+	<form>
+    <label class="item item-radio" ng-repeat="property in detail.featureDetails">
+    	<span class="input-label">{{property.propertyName}}</span>
+      <ion-radio 	type="radio" 
+      						name="{{option.value}}"
+      						ng-repeat="option in property.options"
+      						ng-model="detail.featureProperties[property.propertyValue]"       						
+      						value="{{option.value}}" 
+
+      >{{option.text}}</ion-radio>
+    </label>
+  </form>
+<button class="button button-small button-balanced" ng-click="detail.submitFeature()">COMPLETE</button>
+<button class="button button-small button-assertive" ng-click="detail.removeFeature()">DELETE</button>
 </ion-content>
+
+
+
+
+<ion-radio ng-repeat="item in feature.featureOptions" ng-value="item.value" ng-model="data.featureDetails">{{ item.text }}</ion-radio>
+<div class="item item-divider">

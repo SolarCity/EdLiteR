@@ -18,13 +18,8 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
       targetLayer: "mount"
     },
     resolve: {
-      feature: function resolveMountFeature(MountService) {
-        // var feature = {};
-        // var detail = {};
-        // detail.slope = 10;
-        // detail.list = [1,2,3,4];
-        // feature.detail = detail;
-        return MountService.getRecent();
+      feature: function resolveMountFeature(OlService) {
+        return OlService.getRecent();
       }
     },
     // //   MountService: "MountService", 
@@ -43,7 +38,7 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
       },
       'detailMenu' :{
         templateUrl: 'templates/mount/detailMenu.html', 
-        controller: "MountDetailCtrl as mount",
+        controller: "MountDetailCtrl as detail",
         // controller:  'MountDetailCtrl'
       }
     },

@@ -9,6 +9,15 @@ function OlService_ ($q) {
     
   // };
   
+  OlService.setRecent = function(feature) {
+    OlService.recentFeature = feature;
+    return OlService.recentFeature;
+  };
+
+  OlService.getRecent = function() {
+    return OlService.recentFeature;
+  };
+
   OlService.mountPlaneSource = new ol.source.Vector({
     features: []
   });

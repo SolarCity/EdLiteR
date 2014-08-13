@@ -127,8 +127,12 @@ function MapService_ ($q) {
   MapService.getStatic = function() {
     var defer = $q.defer();
     if (MapService.o.staticMap) {
+        console.log('staticMap')
+
       defer.resolve(MapService.o.staticMap);
     } else { // HACK: this here for development only
+        console.log('staticHack')
+      
       defer.resolve('img/de_haro_test_image.PNG');
     }
     return defer.promise;

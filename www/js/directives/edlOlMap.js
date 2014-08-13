@@ -1,4 +1,4 @@
-function edlOlMap($state, MapService, OlService, MountService) {
+function edlOlMap($state, MapService, OlService) {
   return {
     restrict: "A",
     transclude: true,
@@ -137,14 +137,12 @@ function edlOlMap($state, MapService, OlService, MountService) {
           // mountPlaneSource.addFeature(feature.clone());
 
           var drawnfeature = mountPlaneOverlay.getFeatures().pop(); //TODO: after feature becomes "fixed"
+          OlService.setRecent(feature);
 
-          drawnfeature.setProperties(MountService.mountplane);
+          drawnfeature.setProperties(OlService.mountplane);
 
-          MountService.setRecent(drawnfeature);
           
           mountPlaneSource.addFeature(drawnfeature);
-
-          console.log();
 
           $state.go('plan.mount', {id: mountPlaneSource.getFeatures().length});
 
