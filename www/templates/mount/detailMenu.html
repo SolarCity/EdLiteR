@@ -1,5 +1,7 @@
 
 <ion-content>
+<button class="button button-small button-balanced" ng-click="detail.submitFeature()">COMPLETE</button>
+<button class="button button-small button-assertive" ng-click="detail.removeFeature()">DELETE</button>
 	<form>
     <label class="item item-radio" ng-repeat="property in detail.featureDetails">
     	<span class="input-label">{{property.propertyName}}</span>
