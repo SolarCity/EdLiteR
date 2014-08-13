@@ -38,14 +38,15 @@ function MapService_ ($q) {
 
   // openlayer map
   MapService.o.omap = null;
-  MapService.o.view = new ol.View({
-    maxZoom: 21
-  });
+  MapService.o.view = null; 
+  // MapService.o.view = new ol.View({
+  //   maxZoom: 21
+  // });
 
   MapService.o.layers = null;  
 
   // group methods
-  MapService.getLayer = function(layername) {
+  MapService.getLayer = function(layername) {    //TODO: move to OlService
     if (layername === undefined) {
       return MapService.o.layers;
     } else {
@@ -53,11 +54,11 @@ function MapService_ ($q) {
     }
   };
 
-  MapService.getView = function() {
+  MapService.getView = function() {  //TODO: move to OlService
     return MapService.o.view;
   };
 
-  MapService.addOverlay = function(layer) {
+  MapService.addOverlay = function(layer) {    //TODO: move to OlService
     // console.log(MapService.o.omap.getLayer())
     return MapService.o.omap.addOverlay(layer);
   };
@@ -76,22 +77,22 @@ function MapService_ ($q) {
     return MapService.g.gmap;
   };
 
-  MapService.setOmap = function(options) {
+  MapService.setOmap = function(options) {  //TODO: move to OlService
 
     MapService.o.omap = new ol.Map(options);
     return MapService.o.omap;
   };
 
-  MapService.getOmap = function(options) {
+  MapService.getOmap = function(options) {  //TODO: move to OlService
     return MapService.o.omap;
   };
 
-  MapService.setOview = function(view) {
+  MapService.setOview = function(view) {  //TODO: move to OlService
     MapService.o.view = view;
     return MapService.o.view;
   };
 
-  MapService.getOview = function() {
+  MapService.getOview = function() {   //TODO: move to OlService
     return MapService.o.view;
   };
 
@@ -109,7 +110,7 @@ function MapService_ ($q) {
     }
   };
 
-  MapService.setStatic = function (ele) {
+  MapService.setStatic = function (ele) {    //TODO: move to OlService (maybe)
     var element = document.getElementById('gmap'); //HACK: this should be a parameter
     var defer = $q.defer();
     MapService.o.staticMap = defer.promise;
@@ -124,7 +125,7 @@ function MapService_ ($q) {
     return MapService.o.staticMap;
   };
 
-  MapService.getStatic = function() {
+  MapService.getStatic = function() {    //TODO: move to OlService
     var defer = $q.defer();
     if (MapService.o.staticMap) {
         console.log('staticMap')
