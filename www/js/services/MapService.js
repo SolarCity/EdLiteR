@@ -59,7 +59,6 @@ function MapService_ ($q) {
   };
 
   MapService.addOverlay = function(layer) {    //TODO: move to OlService
-    // console.log(MapService.o.omap.getLayer())
     return MapService.o.omap.addOverlay(layer);
   };
 

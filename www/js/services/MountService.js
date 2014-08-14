@@ -1,6 +1,7 @@
 function MountService_ () {
-  // this service provides tools for extending mounts. 
+  // this is a mountPlane constructor
   // 
+
   this.mountOptions = [{
 		propertyName: "Panel Orientation",
 		propertyValue: "panelOrientation",
@@ -56,6 +57,7 @@ function MountService_ () {
 		propertyValue: "MP#",
 		options: [{value: "fixme", text: "fixme"}]
 	}];
+
 
 }
 angular.module('edliter').service('MountService', MountService_);  

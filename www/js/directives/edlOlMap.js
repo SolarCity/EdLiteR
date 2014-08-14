@@ -4,7 +4,6 @@ function edlOlMap($state, MapService, OlService) {
     transclude: true,
     scope: {
       targetLayer: "=",
-      // map: "=?", // add the ? because parent scope property doesn't exist yet :)
     },
     // controller: function edlOlMapCtrl($scope, $element, $attrs) {
     // },
@@ -25,7 +24,7 @@ function edlOlMap($state, MapService, OlService) {
           new ol.View({
             projection: pixelProjection,
             center: ol.extent.getCenter(pixelProjection.getExtent()),
-            zoom: 2 
+            zoom: 2
           })
         );
 
@@ -38,6 +37,7 @@ function edlOlMap($state, MapService, OlService) {
             imageExtent: pixelProjection.getExtent()
           }),
         });
+        mapCapture.set('name', 'mapCapture');
 
         var olMapDiv = ele[0];
         // var olMapDiv = document.getElementById('omap');
@@ -47,16 +47,13 @@ function edlOlMap($state, MapService, OlService) {
         // let's tinker with the layers
         // get the layer... 
         var mountPlaneImage = OlService.mountPlaneImage;
-        var mountPlaneSource = OlService.mountPlaneSource;
+        var mountAndGutterSource = OlService.mountAndGutterSource;
         var mountLayer = new ol.layer.Image({
           source: mountPlaneImage
         });
-
-
+        mountLayer.set('name', 'mountLayer');
 
         // add the layer to the map
-        // map.addLayer(mountLayer);
-
         var mapOptions = {
           layers: [mapCapture, mountLayer],
           interactions: ol.interaction.defaults({
@@ -68,56 +65,49 @@ function edlOlMap($state, MapService, OlService) {
           view: view
         };
         var map = MapService.setOmap(mapOptions);
-        // scope.map = map;
 
 
+        var selectedMountOverlay = OlService.selectedMountOverlay;
+        MapService.addOverlay(selectedMountOverlay);
 
-
-
-
-
-
-
-
-
-
-
-        var mountPlaneOverlay = OlService.mountPlaneOverlay;
-        MapService.addOverlay(mountPlaneOverlay);
-
-        //TODO: combine with mountplaneOverlay and give it a style function (i guess)
+        //TODO: combine with selectedMountOverlay and give it a style function (i guess)
         var gutterOverlay = OlService.gutterOverlay;
         MapService.addOverlay(gutterOverlay);
 
-        var obstructionOverlay = OlService.obstructionOverlay;
-        MapService.addOverlay(obstructionOverlay);
+        // TODO: obstructions should work
+        // var obstructionOverlay = OlService.obstructionOverlay;
+        // MapService.addOverlay(obstructionOverlay);
 
         var modify = new ol.interaction.Modify({
-          features: mountPlaneOverlay.getFeatures()          
+          features: selectedMountOverlay.getFeatures()          
         });
         map.addInteraction(modify);
 
-
-
         // // TODO: directive
         var draw = new ol.interaction.Draw({
-          features: mountPlaneOverlay.getFeatures(),
+          features: selectedMountOverlay.getFeatures(),
           snapTolerance: 25,
-          type: 'Polygon'
+          type: 'Polygon', 
+          geometryName: 'mount',
         });
 
         map.addInteraction(draw);
 
         var gutterLineFinder = function gutterLineFinder (event) {
           var feature = event.feature;
+          console.log('feat')
           var wkt = new ol.format.WKT();
 
-          // get & split the WKT (well-known text) for our feature
-          //  looks like this -> POLYGON((0.7031250000000142
-          //                       7.306665009118518,27.949218750000007
-          //                       25.59079413562536,28.828124999999996
-          //                       -15.846384918461212,0.7031250000000142
-          //                     7.306665009118518))
+         /* 
+          *
+          * get & split the WKT (well-known text) for our feature
+          * looks like this -> POLYGON((0.7031250000000142
+          *                     7.306665009118518,27.949218750000007
+          *                     25.59079413562536,28.828124999999996
+          *                     -15.846384918461212,0.7031250000000142
+          *                   7.306665009118518))
+          *
+          */
           var featureWkt = wkt.writeFeature(feature).split(' ');
 
           // create a LineString to mark our gutter
@@ -133,18 +123,24 @@ function edlOlMap($state, MapService, OlService) {
           // make a gutter feature to draw & push to gutterOverlay's feature collection
           var gutterLineGeom = wkt.readGeometry(gutterLineWkt);
           var gutterLine = new ol.Feature(gutterLineGeom);
+          gutterLine.setGeometryName('gutter');
           gutterOverlay.addFeature(gutterLine);
-          // mountPlaneSource.addFeature(feature.clone());
+          // mountAndGutterSource.addFeature(feature.clone());
 
-          var drawnfeature = mountPlaneOverlay.getFeatures().pop(); //TODO: after feature becomes "fixed"
+          // var drawnfeature = selectedMountOverlay.getFeatures().pop(); //TODO: after feature becomes "fixed"
+          var drawnfeature = feature;
+          // var drawnfeature = selectedMountOverlay.getFeatures().getArray()[0].pop();
+
           OlService.setRecent(feature);
-
+          // selectedMountOverlay.addFeature(drawnfeature.clone())
           drawnfeature.setProperties(OlService.mountplane);
 
-          
-          mountPlaneSource.addFeature(drawnfeature);
+          var featurearray = [gutterLine, drawnfeature];
+          var featuresindex = mountAndGutterSource.getFeatures().length;
+          mountAndGutterSource.addFeature(drawnfeature);
 
-          $state.go('plan.mount', {id: mountPlaneSource.getFeatures().length});
+          OlService.setIdsOfFeaturearray(featurearray, featuresindex ); 
+          $state.go('plan.mount', {id: featuresindex});
 
         };
                   // NEW BELOW HERE: 

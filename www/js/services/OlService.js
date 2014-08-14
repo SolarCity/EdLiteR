@@ -1,6 +1,8 @@
-function OlService_ ($q) {
+function OlService_ ($q, StyleService) {
   // this factory is a singleton & provides layers, styles, etc for the edl-ol-map ... 
   // 
+
+  //TODO: get all the OlMap stuff from MapService into this Service instead.
 
   var OlService = {};
 
@@ -8,7 +10,11 @@ function OlService_ ($q) {
   // var selectedStyleFunction = function function_name (argument) {
     
   // };
-  
+
+  OlService.getLayers = function() {
+
+  };
+
   OlService.setRecent = function(feature) {
     OlService.recentFeature = feature;
     return OlService.recentFeature;
@@ -18,49 +24,27 @@ function OlService_ ($q) {
     return OlService.recentFeature;
   };
 
-  OlService.mountPlaneSource = new ol.source.Vector({
+  OlService.setIdsOfFeaturearray = function(featurearray, id) { // TODO: make use of this... 
+    for (var key in featurearray) {
+      var f = featurearray[key];
+      f.setId(id);
+    }
+  };
+
+  OlService.mountAndGutterSource = new ol.source.Vector({
     features: []
   });
 
   // create image source from canvas elements from vector source
+  // these are the uneditable elements
   OlService.mountPlaneImage = new ol.source.ImageVector({
-    style: new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: 'green'
-      }),
-      stroke: new ol.style.Stroke({
-        color: '#ffff33',
-        width: 2
-      }),
-      image: new ol.style.Circle({
-        radius: 7,
-        fill: new ol.style.Fill({
-          color: '#ffcc33'
-        })
-      })
-    }), 
-    source: OlService.mountPlaneSource
+    style: StyleService.defaultStyleFunction, 
+    source: OlService.mountAndGutterSource
   });
 
-  // add a feature to the testing layer. 
-
-  // mounting plane layer
-  OlService.mountPlaneOverlay = new ol.FeatureOverlay({
-    style: new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: 'rgba(255, 255, 255, 0.8)'
-      }),
-      stroke: new ol.style.Stroke({
-        color: '#ffcc33',
-        width: 2
-      }),
-      image: new ol.style.Circle({
-        radius: 7,
-        fill: new ol.style.Fill({
-          color: '#ffcc33'
-        })
-      })
-    })
+  // mounting plane FeatureOverlay
+  OlService.selectedMountOverlay = new ol.FeatureOverlay({
+    style: StyleService.highlightStyleFunction 
   });
   
 
@@ -76,21 +60,7 @@ function OlService_ ($q) {
 
   // gutterlayer (to be changed later)
   OlService.gutterOverlay = new ol.FeatureOverlay({
-    style: new ol.style.Style({
-      fill: new ol.style.Fill({
-        color: 'rgba(0, 0, 255, 0.8)'
-      }),
-      stroke: new ol.style.Stroke({
-        color: 'red',
-        width: 5
-      }),
-      image: new ol.style.Circle({
-        radius: 7,
-        fill: new ol.style.Fill({
-          color: '#ffcc33'
-        })
-      })
-    })
+    style: StyleService.defaultStyleFunction 
   });
 
   return OlService;
