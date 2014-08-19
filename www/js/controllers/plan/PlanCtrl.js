@@ -1,9 +1,10 @@
 function PlanCtrl_($scope, $ionicSideMenuDelegate, $state) {
 	var vm = this;
-	
+	// vm.staticMap = staticMap;
+
+	// console.log(staticMap)
 	// vm.targetLayer = $state.current.data.targetLayer; //TODO: where should this be? 
 	vm.interactionLayer = "mount";
-        console.log('ho')
  
  	vm.toggleDetailView = function() {
 		$ionicSideMenuDelegate.toggleRight();

@@ -8,7 +8,7 @@ function MountDetailCtrl_($scope, $stateParams, OlService, MountService, MapServ
 	vm.featureId = $stateParams.id;
 
 	// where we find mountplane features added by drawing
-	vm.mpSource = OlService.mountAndGutterSource;
+	vm.mpSource = OlService.mounts;
 
 	// where we find gutterline features added automagically
 	vm.glSource = OlService.gutterOverlay;
@@ -46,8 +46,8 @@ function MountDetailCtrl_($scope, $stateParams, OlService, MountService, MapServ
 		// add featureDetails to the feature
 		f.setProperties(vm.featureProperties);
 		f.setId(vm.featureId);
-		// add/move/clone the feature to mountAndGutterSource
-		OlService.mountAndGutterSource.addFeature(f);
+		// add/move/clone the feature to mounts
+		OlService.mounts.addFeature(f);
 		// delete the original feature from selectedMountOverlay
 		var allfeaturearray = OlService.mountPlaneImage.getSource().getFeatures();
 		OlService.selectedMountOverlay.removeFeature(f);

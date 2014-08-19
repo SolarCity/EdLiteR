@@ -3,14 +3,11 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
     url:         "/plan",
     controller:  "PlanCtrl as plan",
     resolve: {
-      staticMap: function(MapService) {
-        MapService.getStatic().then(function(data) {
-          return data;
-        });
-      },
-      omap: function(MapService) {
-        return MapService.getOmap();
-      },
+      // staticMap: function(MapService) {
+      //   MapService.getStatic().then(function(data) {
+      //     return data;
+      //   });
+      // },
     },
     templateUrl: "templates/states/plan/plan.html",
     abstract:    true,
@@ -23,8 +20,9 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
     resolve: {
       feature: function resolveMountFeature($stateParams, OlService) {
         console.log($stateParams.id);
+
         return OlService.getRecent();
-      }
+      },
     },
     // //   MountService: "MountService", 
     // //   //TODO: use this to capture the selected Mount
@@ -43,7 +41,6 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
       'detailMenu' :{
         templateUrl: 'templates/mount/detailMenu.html', 
         controller: "MountDetailCtrl as detail",
-        // controller:  'MountDetailCtrl'
       }
     },
   })
