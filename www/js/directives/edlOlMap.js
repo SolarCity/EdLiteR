@@ -50,6 +50,7 @@ function edlOlMap($state, MapService, OlService, StyleService) {
       var DrawControlButton = function DrawControlButton(opt_options){
         var options = opt_options || {};
 
+        var map = options.map;
         var anchor = options.target;
         anchor.addClass('button button-stable');
         if (options.buttonText) anchor.text(options.buttonText);
@@ -60,7 +61,6 @@ function edlOlMap($state, MapService, OlService, StyleService) {
 
         return new ol.control.Control({
           element: anchor[0],
-
         });
       };
       ol.inherits(DrawControlButton , ol.control.Control);
@@ -81,15 +81,23 @@ function edlOlMap($state, MapService, OlService, StyleService) {
         mapCapture.set('name', 'mapCapture');
 
         var mounts = OlService.mounts;
-        var mountLayer = new ol.layer.Image({
-          source: OlService.mountPlaneImage, 
-          style:  StyleService.defaultStyleFunction,
+        var mountLayer = new ol.layer.Vector({
+          // source: OlService.mountPlaneImage,
+          source: mounts, 
+          // style:  StyleService.defaultStyleFunction,
+        });
+        mountLayer.set('name', 'mountLayer');
+        var obstructions = OlService.obstructions;
+        var obstacleLayer = new ol.layer.Vector({
+          // source: OlService.mountPlaneImage,
+          source: obstructions, 
+          // style:  StyleService.defaultStyleFunction,
         });
         mountLayer.set('name', 'mountLayer');
 
         /* Map Options */
         var mapOptions = {
-          layers: [mapCapture, mountLayer],
+          layers: [mapCapture, mountLayer, obstacleLayer],
           controls: ol.control.defaults({
               attributionOptions: ({
                 collapsible: false
@@ -107,13 +115,25 @@ function edlOlMap($state, MapService, OlService, StyleService) {
 
         /* left controls callbacks */
         var handleMountButton = function handleMountButton(e){
-          console.log('handleMount');
+          mountLayer.setStyle(StyleService.highlightStyleFunction);
+          obstacleLayer.setStyle(StyleService.defaultStyleFunction);
+          var interactions = map.getInteractions();
+          interactions.pop();
+          // map.removeInteraction(drawObstacle);
+          map.addInteraction(drawMount);
+
         };
 
         var handleObstacleButton = function handleObstacleButton(e) {
-          console.log('hello obstruction');
+          mountLayer.setStyle(StyleService.defaultStyleFunction);
+          obstacleLayer.setStyle(StyleService.highlightStyleFunction);
+          // change button styling
           var elem = angular.element(this);
           elem.toggleClass('button-assertive');
+          
+          var interactions = map.getInteractions();
+          interactions.pop();
+          map.addInteraction(drawObstacle);
         };
 
         /* Left controller buttons */ 
@@ -123,6 +143,7 @@ function edlOlMap($state, MapService, OlService, StyleService) {
           bottomButton: false, 
           callback:     handleMountButton, 
           target:       mountdrawbutton,
+          // map: map,
         };
         
         var bottom_button_options = {
@@ -131,13 +152,14 @@ function edlOlMap($state, MapService, OlService, StyleService) {
           bottomButton: true, 
           callback:     handleObstacleButton,
           target:       obstructionbutton,
+          // map: map,
         };
 
         var mountbutton = new DrawControlButton(top_button_options);
         var obstaclebutton = new DrawControlButton(bottom_button_options);
 
-        var selectedMountOverlay = OlService.selectedMountOverlay;
-        MapService.addOverlay(selectedMountOverlay);
+        var selectedOverlay = OlService.selectedOverlay;
+        MapService.addOverlay(selectedOverlay);
 
         /* Interactions */
         var select = new ol.interaction.Select({
@@ -152,20 +174,31 @@ function edlOlMap($state, MapService, OlService, StyleService) {
           features: select.getFeatures(),
           style: StyleService.highlightStyleFunction,
         });
+
         map.addInteraction(modify);
         // // TODO: directive
-        var draw = new ol.interaction.Draw({
-          features: mounts.getFeatures(),
+        var drawMount = new ol.interaction.Draw({
+          // features: mounts.getFeatures(),
+          source: mounts,
           snapTolerance: 25,
           type: 'Polygon', 
           geometryName: 'mount',
           style: StyleService.defaultStyleFunction,
         });
 
-        map.addInteraction(draw);
+        var drawObstacle = new ol.interaction.Draw({
+          // features: mounts.getFeatures(),
+          source: mounts,
+          // snapTolerance: 25,
+          type: 'Point',
+          geometryName: 'obstruction',
+          style: StyleService.defaultStyleFunction,
+        });
+
+        map.addInteraction(drawMount);
 
         var gutterLineFinder = OlService.gutterLineFinder;
-        draw.on('drawend', gutterLineFinder);
+        drawMount.on('drawend', gutterLineFinder);
 
       }
 

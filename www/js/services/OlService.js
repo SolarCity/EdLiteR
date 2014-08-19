@@ -1,4 +1,4 @@
-function OlService_ ($q, StyleService) {
+function OlService_ ($q, $state, StyleService) {
   // this factory is a singleton & provides layers, styles, etc for the edl-ol-map ... 
   // 
 
@@ -11,10 +11,6 @@ function OlService_ ($q, StyleService) {
     
   // };
 
-  OlService.getLayers = function() {
-
-  };
-
   OlService.setRecent = function(feature) {
     OlService.recentFeature = feature;
     return OlService.recentFeature;
@@ -24,44 +20,95 @@ function OlService_ ($q, StyleService) {
     return OlService.recentFeature;
   };
 
-  OlService.setIdsOfFeaturearray = function(featurearray, id) { // TODO: make use of this... 
+  OlService.setIdsOfFeaturearray = function(featurearray, id) { 
     for (var key in featurearray) {
       var f = featurearray[key];
       f.setId(id);
     }
   };
 
-  OlService.mountAndGutterSource = new ol.source.Vector({
+  OlService.mounts = new ol.source.Vector({
+    features: []
+  });
+
+  OlService.gutters = new ol.source.Vector({ //TODO: can prob get rid of this
+    features: []
+  });
+
+  OlService.obstructions = new ol.source.Vector({
     features: []
   });
 
   // create image source from canvas elements from vector source
   // these are the uneditable elements
-  OlService.mountPlaneImage = new ol.source.ImageVector({
-    style: StyleService.defaultStyleFunction, 
-    source: OlService.mountAndGutterSource
+  OlService.mountPlaneImage = new ol.source.Vector({
+    style: StyleService.defaultStyleFunction,
+    source: OlService.mounts
   });
 
   // mounting plane FeatureOverlay
-  OlService.selectedMountOverlay = new ol.FeatureOverlay({
-    style: StyleService.highlightStyleFunction 
+  OlService.selectedOverlay = new ol.FeatureOverlay({
+    style: StyleService.highlightStyleFunction,
   });
   
+  OlService.gutterLineFinder = function gutterLineFinder (event) {
+    var feature = event.feature;
+    var mountfeature = feature.getGeometry();
 
-  
-  // obstruction layer
-  OlService.obstructionOverlay = new ol.FeatureOverlay({
-    style: new ol.style.Circle({
-      radius: 10,
-      fill: null,
-      stroke: new ol.style.Stroke({color: 'orange', width: 2})
-    }
-  )});
+    var featureWkt;
+    var gutterLineWkt;
+    var wkt = new ol.format.WKT();
 
-  // gutterlayer (to be changed later)
-  OlService.gutterOverlay = new ol.FeatureOverlay({
-    style: StyleService.defaultStyleFunction 
-  });
+    var mounts = OlService.mounts; //HACK: make this a parameter? 
+
+   /* 
+    *
+    * get & split the WKT (well-known text) for our feature
+    * looks like this -> POLYGON((0.7031250000000142  7.306665009118518,27.949218750000007  25.59079413562536,28.828124999999996  -15.846384918461212,0.70312500000001427.306665009118518))
+    *
+    */
+    featureWkt = wkt.writeFeature(feature).split(' ');
+
+    // create a LineString to mark our gutter
+    // looks like this --> "LINESTRING(549.609375", "360.140625,372.294921875", "254.798828125)"
+    gutterLineWkt = [
+      'LINESTRING(',
+        featureWkt[0].split('((')[1],
+        featureWkt[1],
+        featureWkt[2].split(',')[0],
+        ')'
+    ].join(' ');
+
+    // make a gutter feature to draw & push to gutterOverlay's feature collection
+    var gutterLineGeom = wkt.readGeometry(gutterLineWkt);
+
+    var gutterFeature = wkt.readFeature(gutterLineWkt);
+
+    // set gutter geometry and key for stylefunction
+    gutterFeature.setProperties({
+      gutter: gutterLineGeom,
+    });
+    gutterFeature.setGeometryName('gutter');
+    // set drawn geometry and key for stylefunction
+    feature.setProperties({
+      mount: mountfeature,
+    });
+    feature.setGeometryName('mount');
+
+    OlService.setRecent(mountfeature); //HACK: this should happen elsewhere
+    feature.setProperties(OlService.mountplane); //HACK: this should happen elsewhere
+
+    // put the features in the overlay
+    var featurearray = [gutterFeature, feature];
+    mounts.addFeatures(featurearray);
+
+    // set feature id#s to be the same
+    var featuresindex = mounts.getFeatures().length;
+    OlService.setIdsOfFeaturearray(featurearray, featuresindex ); 
+
+    $state.go('plan.mount', {id: featuresindex});
+
+  };
 
   return OlService;
 }
