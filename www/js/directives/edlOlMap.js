@@ -25,57 +25,50 @@ function edlOlMap($state, MapService, OlService, StyleService) {
         })
       );
 
-      // TODO: why can't angular elements be used here?
-      // make a controls box
+      /* Leftside controls. See init() for instantiation */
       var controllerbox = angular.element('<div></div>');
       controllerbox.addClass('mapboxcontrols');
       controllerbox.attr('id', 'edl-control-box');
-
-      // mountdraw button
       var mountdrawbutton = angular.element('<button></button>');
-      mountdrawbutton.addClass('button button-stable topbutton');
-      mountdrawbutton.text('Mount');
-      var mountcontrol = new ol.control.Control({
-        element: mountdrawbutton[0]
-      });
-      // obstruction button
       var obstructionbutton = angular.element('<button></button>');
-      obstructionbutton.addClass('button button-stable bottombutton');
-      obstructionbutton.text('Obstacle');
-      var obstructioncontrol = new ol.control.Control({
-        element: obstructionbutton[0],
-      });
-      // add buttons to box
-
+      var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
       controllerbox.append(mountdrawbutton);
       controllerbox.append(obstructionbutton);
 
-      var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
+      /*
+       *  ControllButton constructor
+       *  options look like this: 
+       *  {
+       *    buttonText: {string}, 
+       *    topButton: {boolean},
+       *    bottomButton: {boolean}, 
+       *    callback: {function}, 
+       *    target:   {should be your map?}, 
+       *    container: {DOM element into which button gets appended}, 
+       *  } 
+       */  
+      var DrawControlButton = function DrawControlButton(opt_options){
+        var options = opt_options || {};
 
-      // draw mount
-        // control function
-      var mountDraw = function mountDraw(){
-        console.log('hello mount');
+        var anchor = options.target;
+        anchor.addClass('button button-stable');
+        if (options.buttonText) anchor.text(options.buttonText);
+        if (!!options.topButton) anchor.addClass('topbutton');
+        if (!!options.bottomButton) anchor.addClass('bottombutton');
 
+        anchor.on('touchstart', options.callback);
+
+        return new ol.control.Control({
+          element: anchor[0],
+
+        });
       };
-      var obstructionDraw = function obstructionDraw(){
-        console.log('hello obstruction');
+      ol.inherits(DrawControlButton , ol.control.Control);
 
-      };
-      // add control to button
-      // mountdrawbutton.on('touchstart', mountDraw, false);
-      // draw obstruction
-        // control function
-        // add control to button
-
-      mountdrawbutton.on('click', mountDraw);
-      obstructionbutton.on('click', obstructionDraw);
-
+      /* map init! */
       MapService.getStatic()
       .then(init);
       function init (imgUrl) {
-        // set the ol view
-
         // the picture we'll display our drawn features on
         var mapCapture = new ol.layer.Image({
           source: new ol.source.ImageStatic({
@@ -94,19 +87,17 @@ function edlOlMap($state, MapService, OlService, StyleService) {
         });
         mountLayer.set('name', 'mountLayer');
 
-        // add the layer to the map
-
+        /* Map Options */
         var mapOptions = {
           layers: [mapCapture, mountLayer],
           controls: ol.control.defaults({
               attributionOptions: ({
                 collapsible: false
               })
-            // }).extend([mountcontrol, obstructioncontrol]),
             }).extend([leftsidecontrolbox]),
           interactions: ol.interaction.defaults({
             altShiftDragRotate: true,
-            dragPan: false,
+            dragPan: true,
             rotate: true
           }).extend([new ol.interaction.DragPan({kinetic: null})]),
           target: olMapDiv,
@@ -114,6 +105,41 @@ function edlOlMap($state, MapService, OlService, StyleService) {
         };
         var map = MapService.setOmap(mapOptions);
 
+        /* left controls callbacks */
+        var handleMountButton = function handleMountButton(e){
+          console.log('handleMount');
+        };
+
+        var handleObstacleButton = function handleObstacleButton(e) {
+          console.log('hello obstruction');
+          var elem = angular.element(this);
+          elem.toggleClass('button-assertive');
+        };
+
+        /* Left controller buttons */ 
+        var top_button_options = {
+          buttonText:   'Mount', 
+          topButton:    true,
+          bottomButton: false, 
+          callback:     handleMountButton, 
+          target:       mountdrawbutton,
+        };
+        
+        var bottom_button_options = {
+          buttonText:   'Obstruction', 
+          topButton:    false,
+          bottomButton: true, 
+          callback:     handleObstacleButton,
+          target:       obstructionbutton,
+        };
+
+        var mountbutton = new DrawControlButton(top_button_options);
+        var obstaclebutton = new DrawControlButton(bottom_button_options);
+
+        var selectedMountOverlay = OlService.selectedMountOverlay;
+        MapService.addOverlay(selectedMountOverlay);
+
+        /* Interactions */
         var select = new ol.interaction.Select({
           features: mounts.getFeatures(),
           condition: ol.events.condition.targetNotEditable,
@@ -121,8 +147,6 @@ function edlOlMap($state, MapService, OlService, StyleService) {
         });
         map.addInteraction(select);
 
-        var selectedMountOverlay = OlService.selectedMountOverlay;
-        MapService.addOverlay(selectedMountOverlay);
 
         var modify = new ol.interaction.Modify({
           features: select.getFeatures(),
