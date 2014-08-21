@@ -106,7 +106,7 @@ function OlService_ ($q, $state, StyleService) {
     var featuresindex = mounts.getFeatures().length;
     OlService.setIdsOfFeaturearray(featurearray, featuresindex ); 
 
-    $state.go('plan.mount', {id: featuresindex});
+    // $state.go('plan.mount', {id: featuresindex});
 
   };
 
