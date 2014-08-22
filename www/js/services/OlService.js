@@ -11,16 +11,19 @@ function OlService_ ($q, $state, StyleService) {
     
   // };
 
-  OlService.setRecent = function(featureArray) {
+  OlService.recentFeature = {}; 
+
+  OlService.setRecent = function(featureArray, opt) {
+    if (opt === undefined) console.log('setRecent needs a type to set');return; //TODO: check error in prettier way
     
     featureArray = Array.isArray(featureArray) ? featureArray : [ featureArray ];
 
-    OlService.recentFeature = new ol.Collection(featureArray);
+    OlService.recentFeature[opt] = new ol.Collection(featureArray);
     return OlService.recentFeature;
   };
 
-  OlService.getRecent = function() {
-    return OlService.recentFeature;
+  OlService.getRecent = function(opt) {
+    return OlService.recentFeature[opt];
   };
 
   OlService.setIdsOfFeaturearray = function(featurearray, id) { 
@@ -69,7 +72,7 @@ function OlService_ ($q, $state, StyleService) {
    /* 
     *
     * get & split the WKT (well-known text) for our feature
-    * looks like this -> POLYGON((0.7031250000000142  7.306665009118518,27.949218750000007  25.59079413562536,28.828124999999996  -15.846384918461212,0.70312500000001427.306665009118518))
+    * looks like this -> POLYGON((0.7031250000000142  7.306665009118518,27.949218750000007  25.59079413562536,28.828124999999996  -15.846384918461212,0.703125000000014 27.306665009118518))
     *
     */
     featureWkt = wkt.writeFeature(feature).split(' ');
@@ -99,7 +102,7 @@ function OlService_ ($q, $state, StyleService) {
     });
     feature.setGeometryName('mount');
 
-    OlService.setRecent([mountfeature, gutterFeature]); //HACK: this should happen elsewhere
+    OlService.setRecent([mountfeature, gutterFeature], 'mount'); //HACK: this should happen elsewhere
     feature.setProperties(OlService.mountplane); //HACK: this should happen elsewhere
 
     // put the features in the overlay
