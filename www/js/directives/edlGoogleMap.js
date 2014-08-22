@@ -1,4 +1,4 @@
-function edlGoogleMap(MapService) {
+function edlGoogleMap($document, $window, MapService) {
   return {
     restrict: "A",
     transclude: true,
@@ -9,7 +9,10 @@ function edlGoogleMap(MapService) {
 
     },
     link: function edlGoogleMapLink(scope, ele, attrs) {
-    
+      
+      console.log($window.innerHeight);
+      console.log(Object.keys($document[0]));
+      
       var mapOptions = MapService.g.mapOptions;
 
       var map =  MapService.setGmap(ele[0], mapOptions);

@@ -11,8 +11,11 @@ function OlService_ ($q, $state, StyleService) {
     
   // };
 
-  OlService.setRecent = function(feature) {
-    OlService.recentFeature = feature;
+  OlService.setRecent = function(featureArray) {
+    
+    featureArray = Array.isArray(featureArray) ? featureArray : [ featureArray ];
+
+    OlService.recentFeature = new ol.Collection(featureArray);
     return OlService.recentFeature;
   };
 
@@ -27,11 +30,13 @@ function OlService_ ($q, $state, StyleService) {
     }
   };
 
-  OlService.mounts = new ol.source.Vector({
-    features: []
-  });
+  OlService.removeRecent = function(recentArray){
+    recentArray.forEach(function(){
 
-  OlService.gutters = new ol.source.Vector({ //TODO: can prob get rid of this
+    });
+  };
+
+  OlService.mounts = new ol.source.Vector({
     features: []
   });
 
@@ -41,15 +46,15 @@ function OlService_ ($q, $state, StyleService) {
 
   // create image source from canvas elements from vector source
   // these are the uneditable elements
-  OlService.mountPlaneImage = new ol.source.Vector({
-    style: StyleService.defaultStyleFunction,
-    source: OlService.mounts
-  });
+  // OlService.mountPlaneImage = new ol.source.Vector({
+  //   style: StyleService.defaultStyleFunction,
+  //   source: OlService.mounts
+  // });
 
-  // mounting plane FeatureOverlay
-  OlService.selectedOverlay = new ol.FeatureOverlay({
-    style: StyleService.highlightStyleFunction,
-  });
+  // mounting plane FeatureOverlay // NOTE: not used
+  // OlService.selectedOverlay = new ol.FeatureOverlay({
+  //   style: StyleService.highlightStyleFunction,
+  // });
   
   OlService.gutterLineFinder = function gutterLineFinder (event) {
     var feature = event.feature;
@@ -81,7 +86,6 @@ function OlService_ ($q, $state, StyleService) {
 
     // make a gutter feature to draw & push to gutterOverlay's feature collection
     var gutterLineGeom = wkt.readGeometry(gutterLineWkt);
-
     var gutterFeature = wkt.readFeature(gutterLineWkt);
 
     // set gutter geometry and key for stylefunction
@@ -95,7 +99,7 @@ function OlService_ ($q, $state, StyleService) {
     });
     feature.setGeometryName('mount');
 
-    OlService.setRecent(mountfeature); //HACK: this should happen elsewhere
+    OlService.setRecent([mountfeature, gutterFeature]); //HACK: this should happen elsewhere
     feature.setProperties(OlService.mountplane); //HACK: this should happen elsewhere
 
     // put the features in the overlay
@@ -106,7 +110,7 @@ function OlService_ ($q, $state, StyleService) {
     var featuresindex = mounts.getFeatures().length;
     OlService.setIdsOfFeaturearray(featurearray, featuresindex ); 
 
-    // $state.go('plan.mount', {id: featuresindex});
+    // $state.go('plan.mount', {id: featuresindex}); // TODO: still need access to the feature id, but can't do it with statego because too much refreshing
 
   };
 

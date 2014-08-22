@@ -18,7 +18,7 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
       targetLayer: "mount"
     },
     resolve: {
-      feature: function resolveMountFeature($stateParams, OlService) {
+      featureArray: function resolveMountFeature($stateParams, OlService) {
         console.log($stateParams.id);
 
         return OlService.getRecent();
