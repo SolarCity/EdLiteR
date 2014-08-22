@@ -1,10 +1,10 @@
 function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionService, MapService) {
-	var featureType = $state.current.data.featureType;
-
+	this.featureType = $state.current.data.featureType;
+	
 	var vm = this;
 	vm.omap = MapService.getOmap();
 	vm.featureArray = OlService.getRecent;
-	vm.featureDetails = FeatureOptionService.options[featureType];
+	vm.featureDetails = FeatureOptionService.options[this.featureType];
 	vm.featureProperties = {};
 	vm.featureId = $stateParams.id;
 
@@ -20,6 +20,7 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
 	};
 
 	vm.submitFeature = function(f) {
+		console.log('trying to set properties', vm.featureProperties);
 		f = f === undefined ? vm.featureArray() : f;
 
 		var properties = {};

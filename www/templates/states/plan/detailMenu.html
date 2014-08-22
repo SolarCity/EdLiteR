@@ -2,15 +2,25 @@
 <ion-content>
 <button class="button button-small button-balanced" ng-click="detail.submitFeature()">COMPLETE</button>
 <button class="button button-small button-assertive" ng-click="detail.removeFeature()">DELETE</button>
-	<form>
+  <form>
+    <label ng-if="detail.featureType==='obstruction'">
+      <span class="input-label">Radius</span>
+      <div class="item range range-positive">
+        <input  type="range"
+                name="radius"
+                min="5"
+                max="100"
+      				  ng-model="detail.featureProperties.radius"
+                value="{{option.radius}}">
+      </div>
+    </label>
     <label class="item item-radio" ng-repeat="property in detail.featureDetails">
-    	<span class="input-label">{{property.propertyName}}</span>
-      <ion-radio 	type="radio" 
-      						name="{{option.value}}"
-      						ng-repeat="option in property.options"
-      						ng-model="detail.featureProperties[property.propertyValue]"       						
-      						value="{{option.value}}" 
-
+      <span class="input-label">{{property.propertyName}}</span>
+      <ion-radio  type="radio" 
+                  name="{{option.value}}"
+                  ng-repeat="option in property.options"
+                  ng-model="detail.featureProperties[property.propertyValue]"                   
+      						value="{{option.value}}"
       >{{option.text}}</ion-radio>
     </label>
   </form>
