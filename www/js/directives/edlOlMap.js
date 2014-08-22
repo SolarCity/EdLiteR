@@ -204,6 +204,7 @@ function edlOlMap($state, $window, $timeout, $document, MapService, OlService, S
           map.addInteraction(selectObstruction); //TODO: use filterfunction
           map.addInteraction(modifyObstruction);
           map.addInteraction(drawObstruction);
+
         };
 
         /* Left controller buttons */ 

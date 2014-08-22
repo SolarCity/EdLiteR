@@ -35,11 +35,11 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
     // },
     views: {
       'planContent' :{
-        templateUrl: 'templates/mount/planContent.html',
+        templateUrl: 'templates/states/plan/planContent.html',
         // controller:  'MountCtrl'
       },
       'detailMenu' :{
-        templateUrl: 'templates/mount/detailMenu.html', 
+        templateUrl: 'templates/states/plan/detailMenu.html', 
         controller: "DetailCtrl as detail",
       }
     },
@@ -58,11 +58,11 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
     },
     views: {
       'planContent' :{
-        templateUrl: 'templates/mount/planContent.html',
+        templateUrl: 'templates/states/plan/planContent.html',
         // controller:  'MountCtrl'
       },
       'detailMenu' :{
-        templateUrl: 'templates/mount/detailMenu.html', 
+        templateUrl: 'templates/states/plan/detailMenu.html', 
         controller: "DetailCtrl as detail",
       }
     },
@@ -71,6 +71,6 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
   //   url:         "/obstacle",
   //   controller:  function(){},
   //   controllerAs: "drawCtrl",
-  //   templateUrl: "templates/states/plan/plan.obstacle.html",
+  //   templateUrl: "templates/states/plan/plan/plan.obstacle.html",
   // })
 ;});
