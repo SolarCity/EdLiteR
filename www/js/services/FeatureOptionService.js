@@ -1,8 +1,10 @@
-function MountService_ () {
+function FeatureOptionService_ () {
   // this is a mountPlane constructor
   // 
 
-  this.mountOptions = [{
+  var options = {};
+  this.options = options;
+  options.mount =  [{
 		propertyName: "Panel Orientation",
 		propertyValue: "panelOrientation",
 		options: [{
@@ -12,6 +14,10 @@ function MountService_ () {
 			value: "portrait",
 			text:  "Portrait"
 		}]
+	},{
+		propertyName: "Mount Slope",
+		propertyValue: "mountSlope",
+		options: [{value: "fixme", text: "fixme to numeric input"}]
 	},{
 		propertyName: "Gutter Height",
 		propertyValue: "gutterHeight",
@@ -58,6 +64,19 @@ function MountService_ () {
 		options: [{value: "fixme", text: "fixme"}]
 	}];
 
+	options.obstruction = [{
+		propertyName: "Radius",
+		propertyValue: "radius",
+		options: [{value: "fixme", text: "fixme"}]
+	},{
+		propertyName: "Height",
+		propertyValue: "height",
+		options: [{value: "fixme", text: "fixme to numeric input"}]
+	},{
+		propertyName: "obstacleId",
+		propertyValue: "O#",
+		options: [{value: "fixme", text: "fixme"}]
+	}];
 
 }
-angular.module('edliter').service('MountService', MountService_);  
+angular.module('edliter').service('FeatureOptionService', FeatureOptionService_);  

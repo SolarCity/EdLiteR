@@ -15,13 +15,13 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
   .state("plan.mount", {
     url:         "/mount/:id",
     data: {
-      targetLayer: "mount"
+      featureType: "mount"
     },
     resolve: {
       featureArray: function resolveMountFeature($stateParams, OlService) {
         console.log($stateParams.id);
 
-        return OlService.getRecent();
+        return OlService.getRecent('mount');
       },
     },
     // //   MountService: "MountService", 
@@ -40,7 +40,30 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
       },
       'detailMenu' :{
         templateUrl: 'templates/mount/detailMenu.html', 
-        controller: "MountDetailCtrl as detail",
+        controller: "DetailCtrl as detail",
+      }
+    },
+  })
+  .state("plan.obstruction", {
+    url:         "/obstruction/:id",
+    data: {
+      featureType: "obstruction"
+    },
+    resolve: {
+      featureArray: function resolveObstructionFeature($stateParams, OlService) {
+        console.log($stateParams.id);
+
+        return OlService.getRecent('obstruction');
+      },
+    },
+    views: {
+      'planContent' :{
+        templateUrl: 'templates/mount/planContent.html',
+        // controller:  'MountCtrl'
+      },
+      'detailMenu' :{
+        templateUrl: 'templates/mount/detailMenu.html', 
+        controller: "DetailCtrl as detail",
       }
     },
   })

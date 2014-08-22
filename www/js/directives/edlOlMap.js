@@ -63,6 +63,7 @@ function edlOlMap($state, $window, $timeout, $document, MapService, OlService, S
         if (!!options.topButton) anchor.addClass('topbutton');
         if (!!options.bottomButton) anchor.addClass('bottombutton');
 
+        anchor.on('click', options.callback);
         anchor.on('touchstart', options.callback);
 
         return new ol.control.Control({

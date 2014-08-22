@@ -1,9 +1,10 @@
-function MountDetailCtrl_($scope, $stateParams, OlService, MountService, MapService) {
+function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionService, MapService) {
+	var featureType = $state.current.data.featureType;
 
 	var vm = this;
 	vm.omap = MapService.getOmap();
 	vm.featureArray = OlService.getRecent;
-	vm.featureDetails = MountService.mountOptions;
+	vm.featureDetails = FeatureOptionService.options[featureType];
 	vm.featureProperties = {};
 	vm.featureId = $stateParams.id;
 
@@ -38,7 +39,7 @@ function MountDetailCtrl_($scope, $stateParams, OlService, MountService, MapServ
 	};
 }
 
-controllers.controller("MountDetailCtrl", MountDetailCtrl_);
+controllers.controller("DetailCtrl", DetailCtrl_);
 
 	//TODO: more stuff like this pattern
 	// var vm = this; 
