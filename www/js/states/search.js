@@ -1,7 +1,21 @@
-angular.module('states.search',[]).config( function ($stateProvider) {
+angular.module('states.search',[]).config( function searchState($stateProvider) {
   $stateProvider.state("search", {
     url: "/search",
-    controller: "SearchCtrl",
-    templateUrl: "../templates/states/search/search.html",
+    template: [
+    		"<ion-nav-view >",
+					"<ion-view>",
+					"</ion-view>",
+				"</ion-nav-view>",
+    ].join(''),
+    controller: "SearchCtrl as search",
+    abstract: true
   })
+  .state("search.find", {
+    url: "/find",
+    templateUrl: "templates/states/search/search.find.html",
+  })
+  .state("search.grab", {
+    url: "/grab",
+    templateUrl: "templates/states/search/search.grab.html",
+  });
 });

@@ -1,22 +1,116 @@
-svg {
-	background-image:url('../img/de_haro_test_image.png');
+.container {
+    /*background: #ccc;*/
+    margin-bottom: 100px;
+    padding: 10px;
+    /*height: 120px;*/
+    -webkit-perspective: 800px;
+    -moz-perspective: 800px;
+    -ms-perspective: 800px;
+    -o-perspective: 800px;
+    perspective: 800px;
+    -webkit-perspective-origin: 0% 0%;
+    -moz-perspective-origin: 0% 0%;
+    -ms-perspective-origin: 0% 0%;
+    -o-perspective-origin: 0% 0%;
+    perspective-origin: 0% 0%;
 }
 
-rect {
-  fill: grey;
-	background: red;
-	stroke: black;
-	stroke-width: 3;
+div.fill {
+  width: 100%;
+  height: 100%;
 }
 
-.panelrow {
+edl-map {
+  top: 0;
+  left: 0;
+  position: absolute;
+  /*z-index: 0;*/
+  width: 100%;
+  height: 100%;
+}
+
+#omap {
+  top: 0;
+  left: 0;
+  /*position: relative;*/
+  /*z-index: 10;*/
+  width: 100%;
+  height: 100%;
 
 }
 
-.firstrow rect {
-	fill: red;
+.scroll {
+  height: 100%;
 }
 
-.mplane.isSelected rect {
-	fill: white;
+.mapboxcontrols { /* TODO: styling */
+  position: absolute;
+  top: 65px;
+  left: 8px;
+  display: block;
 }
+
+.topbutton {
+  position: absolute;
+  top: 65px;
+  left: 8px;
+}
+.bottombutton {
+  position: absolute;
+  top: 120px;
+  left: 8px;
+}
+
+.controls {
+  z-index: 11;
+  margin-top: 16px;
+  border: 1px solid transparent;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+#place-input:focus {
+  border-color: #4d90fe;
+  margin-left: -1px;
+  padding-left: 14px;  /* Regular padding-left + 1. */
+  width: 401px;
+}
+
+
+#place-input {
+  background-color: #fff;
+  padding: 0 11px 0 13px;
+  width: 400px;
+  clear: both;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  text-overflow: ellipsis;
+}
+
+#place-input:focus {
+  border-color: #4d90fe;
+  margin-left: -1px;
+  padding-left: 14px;  /* Regular padding-left + 1. */
+  width: 401px;
+}
+
+.pac-container {
+  font-family: Roboto;
+}
+
+/*#type-selector {
+  color: #fff;
+  background-color: #4d90fe;
+  padding: 5px 11px 0px 11px;
+}
+
+#type-selector label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}*/

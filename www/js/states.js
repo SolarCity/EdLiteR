@@ -3,6 +3,6 @@ angular.module('states',[
   'states.search',
   'states.plan',
 ])
-.config(function ($urlRouterProvider) {
-   $urlRouterProvider.otherwise('/home');
+.config(function ($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise('/home');
 });
