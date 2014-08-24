@@ -60,7 +60,8 @@ function OlService_ ($q, $state, StyleService) {
   
   OlService.afterObstruction = function afterObstruction(event) {
     var feature = event.feature;
-    feature.set('radius', 15 )
+    console.log(feature.getKeys());
+    feature.set('radius', 25 );
     OlService.setRecent([feature], 'obstruction');
   };
 

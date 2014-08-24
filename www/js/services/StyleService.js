@@ -18,7 +18,7 @@ function StyleService_ ($q) {
   c.grey_btns               = "rgba(131, 131, 131, 1)";
 
   var StyleService = {};
-
+  StyleService.colors = c;
   StyleService.defaultStyleFunction = (function() {
     /* jshint -W069 */
     var styles = {};
@@ -83,6 +83,7 @@ function StyleService_ ($q) {
 
 
     return function(feature, resolution) {
+      console.log(feature.get('radius'));
       return styles[feature.getGeometryName()];
     };
     /* jshint +W069 */
@@ -154,6 +155,7 @@ function StyleService_ ($q) {
     /*jshint +W069 */
 
     return function(feature, resolution) {
+      console.log(feature.get('radius'));
       return styles[feature.getGeometryName()] ;
     };
   })();
