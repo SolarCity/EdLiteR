@@ -21,7 +21,6 @@ function StyleService_ ($q) {
 
   StyleService.defaultStyleFunction = (function() {
     /* jshint -W069 */
-    console.log('defaultStyleFunction');
     var styles = {};
 
     styles['mount'] = [new ol.style.Style({

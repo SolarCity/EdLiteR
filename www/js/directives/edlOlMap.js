@@ -1,4 +1,4 @@
-function edlOlMap($state, $window, $timeout, $document, MapService, OlService, StyleService) {
+function edlOlMap($stateParams, $window, $timeout, $document, MapService, OlService, StyleService) {
   return {
     restrict: "A",
     transclude: true,
@@ -14,6 +14,7 @@ function edlOlMap($state, $window, $timeout, $document, MapService, OlService, S
     //         alert('Ctrlfunc')
     // },
     link: function edlOlMapLink(scope, ele, attrs) {
+      console.log($stateParams);
       var olMapDiv = ele[0];
 
       var pixelProjection = new ol.proj.Projection({
@@ -204,7 +205,6 @@ function edlOlMap($state, $window, $timeout, $document, MapService, OlService, S
           map.addInteraction(selectObstruction); //TODO: use filterfunction
           map.addInteraction(modifyObstruction);
           map.addInteraction(drawObstruction);
-
         };
 
         /* Left controller buttons */ 
@@ -230,7 +230,7 @@ function edlOlMap($state, $window, $timeout, $document, MapService, OlService, S
         var obstructionDrawbutton = new DrawControlButton(bottom_button_options);
         
         var handlechange = function handlechange(c){
-
+          console.log('handlechange');
         };
         
         selectMount.on('addfeature', handlechange);
@@ -242,7 +242,9 @@ function edlOlMap($state, $window, $timeout, $document, MapService, OlService, S
 
         var gutterLineFinder = OlService.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder);
-          pixelProjection.setExtent([0, 0, 1024, 725] );
+        var afterObstruction = OlService.afterObstruction;
+        drawObstruction.on('drawend', afterObstruction);
+        // pixelProjection.setExtent([0, 0, 1024, 725] );
       
 
       }

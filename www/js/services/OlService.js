@@ -14,15 +14,14 @@ function OlService_ ($q, $state, StyleService) {
   OlService.recentFeature = {}; 
 
   OlService.setRecent = function(featureArray, opt) {
-    if (opt === undefined) console.log('setRecent needs a type to set');return; //TODO: check error in prettier way
-    
+    if (opt === undefined) console.log('setRecent needs a type to set'); //TODO: check error in prettier way
     featureArray = Array.isArray(featureArray) ? featureArray : [ featureArray ];
-
     OlService.recentFeature[opt] = new ol.Collection(featureArray);
     return OlService.recentFeature;
   };
 
   OlService.getRecent = function(opt) {
+    if (opt === undefined) console.log('getRecent needs a type to get, dummy'); //TODO: check error in prettier way
     return OlService.recentFeature[opt];
   };
 
@@ -59,7 +58,13 @@ function OlService_ ($q, $state, StyleService) {
   //   style: StyleService.highlightStyleFunction,
   // });
   
-  OlService.gutterLineFinder = function gutterLineFinder (event) {
+  OlService.afterObstruction = function afterObstruction(event) {
+    var feature = event.feature;
+    feature.set('radius', 15 )
+    OlService.setRecent([feature], 'obstruction');
+  };
+
+  OlService.gutterLineFinder = function gutterLineFinder(event) {
     var feature = event.feature;
     var mountfeature = feature.getGeometry();
 
@@ -105,7 +110,7 @@ function OlService_ ($q, $state, StyleService) {
     OlService.setRecent([mountfeature, gutterFeature], 'mount'); //HACK: this should happen elsewhere
     feature.setProperties(OlService.mountplane); //HACK: this should happen elsewhere
 
-    // put the features in the overlay
+    // put the features in the source
     var featurearray = [gutterFeature, feature];
     mounts.addFeatures(featurearray);
 
