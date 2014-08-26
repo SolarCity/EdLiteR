@@ -83,6 +83,7 @@ function StyleService_ ($q) {
 
     // create a separate style function: 
     styles['obstruction'] = function(radius) {
+      console.log('stylefunctionobsturction')
       return [new ol.style.Style({
               image: new ol.style.Circle({
                 radius: radius,
@@ -157,6 +158,7 @@ function StyleService_ ($q) {
             })];
     // obstruction style
     styles['obstruction'] = function(radius) {
+      console.log('stylefunctionobsturction');
       return [new ol.style.Style({
               image: new ol.style.Circle({
                 radius: radius,

@@ -11,8 +11,19 @@
                 min="5"
                 max="100"
                 ng-change="detail.setRadius()"
-      				  ng-model="detail.featureProperties.radius"
+                ng-model="detail.featureProperties.radius"
                 value="{{detail.featureProperties.radius}}">
+      </div>
+    </label>
+    <label ng-if="detail.featureType==='mount'">
+      <span class="input-label">Slope</span>
+      <div class="item item-input-inset">
+        <label class="item-input-wrapper">
+          <input type="number" placeholder="Slope">
+        </label>
+        <button class="button button-small">
+          Set
+        </button>
       </div>
     </label>
     <label class="item item-radio" ng-repeat="property in detail.featureDetails">

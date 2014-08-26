@@ -41,11 +41,11 @@ function OlService_ ($q, $state, StyleService) {
   };
 
   OlService.mounts = new ol.source.Vector({
-    features: [] //TODO: get these from planCtrl
+    features: [] 
   });
 
   OlService.obstructions = new ol.source.Vector({
-    features: []  //TODO: get these from planCtrl
+    features: []
   });
   
   // OlService.afterObstruction = function afterObstruction(event, formDetails) {

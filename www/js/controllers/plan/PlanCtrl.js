@@ -1,8 +1,6 @@
-function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService) {
+function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlService) {
 	var vm = this;
-  vm.obstructionArray = []; //TODO: use these for vector source feature array
-  vm.mountArray 			= []; //TODO: use these for vector source feature array
- 
+
  	vm.toggleDetailView = function() {
 		$ionicSideMenuDelegate.toggleRight();
 	};

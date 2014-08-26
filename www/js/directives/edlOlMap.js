@@ -3,10 +3,10 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
     restrict: "A",
     transclude: false,
     scope: {
-      featureDetails:   "=",
-      mountArray:       "=",
-      obstructionArray: "=",
-      planRadius:       "=",
+      featureDetails:        "=",
+      mountCollection:       "=",
+      obstructionCollection: "=",
+      planRadius:            "=",
     },
     // controller: function edlOlMapCtrl($scope, $element, $attrs) {
     // },
@@ -139,13 +139,14 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
         
         var selectObstruction = new ol.interaction.Select({
           features: obstructions.getFeatures(),
-          condition: ol.events.condition.targetNotEditable,
+          condition: ol.events.condition.click,
           style: StyleService.highlightStyleFunction,
         });
 
         var modifyObstruction = new ol.interaction.Modify({
           features: selectObstruction.getFeatures(),
-          style: StyleService.highlightStyleFunction,
+          // style: StyleService.highlightStyleFunction,
+          style: StyleService.defaultStyleFunction,
         });
         
 
@@ -203,7 +204,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
 
           // add Obstruction interactions
           map.addInteraction(selectObstruction); //TODO: use filterfunction
-          map.addInteraction(modifyObstruction);
+          // map.addInteraction(modifyObstruction);
           map.addInteraction(drawObstruction);
           scope.$emit('controlbutton', {featureType: 'obstruction'}); 
         };
@@ -235,6 +236,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
         };
         
         selectMount.on('addfeature', handlechange);
+        selectObstruction.on('addfeature', handlechange);
       
         // handleMountButton();
         var gutterLineFinder = OlService.gutterLineFinder;
@@ -242,11 +244,24 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
 
         var afterObstruction =  function (event) {
           var feature = event.feature;
-          var radius = scope.planRadius || 10;
-          feature.set('radius', radius );
-          OlService.setRecent([feature], 'obstruction');
-        };
+          console.log(feature);
+          // var redrawOnChangeRadius = function (){
+          //   console.log('resetStyleAfterRadius');
+          //   this.setStyle(StyleService.defaultStyleFunction);
+          // };
 
+          var featureId = obstructions.getFeatures().length;
+          console.log(featureId);
+          OlService.setIdsOfFeaturearray([feature], featureId);
+          console.log(scope.planRadius);
+          var radius = scope.planRadius ? scope.planRadius : 10;
+          feature.set('radius', radius );
+          console.log(feature.get('radius'));
+          OlService.setRecent([feature], 'obstruction');
+          OlService.currentModify = selectObstruction.getFeatures().getArray()
+          console.log(OlService.currentModify);
+
+        };
 
         
         // var afterObstruction = OlService.afterObstruction;

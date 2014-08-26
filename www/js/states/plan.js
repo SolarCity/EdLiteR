@@ -14,7 +14,7 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
   })
   .state("plan.type", {
     url:         "",
-    data: {
+    data: { //TODO: this should be removed
       featureType: "mount"
     },
     resolve: {
@@ -32,5 +32,16 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
         controller: "DetailCtrl as detail",
       }
     },
+  })
+  .state("plan.type.fill", {
+    url:         "/fill",
+    controller:  "FillCtrl as fill",
+    resolve: {
+      FillService: function(PanelFillService) {
+        return PanelFillService.sample;
+      },
+    },
+    // templateUrl: "templates/states/fill/fill.html",
+    template: "",
   })
 ;});
