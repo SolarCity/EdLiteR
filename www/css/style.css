@@ -54,11 +54,13 @@ edl-map {
   position: absolute;
   top: 65px;
   left: 8px;
+  /*z-index: 1000;*/
 }
 .bottombutton {
   position: absolute;
   top: 120px;
   left: 8px;
+  /*z-index: 1000;*/
 }
 
 .controls {

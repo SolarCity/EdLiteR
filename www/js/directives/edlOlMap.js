@@ -263,7 +263,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
 
         };
 
-        
+        // initialize buttons
+        mountbutton.addClass('button-assertive');
+
+        // initialize interactions
+        map.addInteraction(selectMount); //TODO: use filterfunction
+        map.addInteraction(modifyMount);
+        map.addInteraction(drawMount);
+
+
         // var afterObstruction = OlService.afterObstruction;
         drawObstruction.on('drawend', afterObstruction);
 
