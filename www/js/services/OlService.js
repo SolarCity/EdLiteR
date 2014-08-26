@@ -14,13 +14,15 @@ function OlService_ ($q, $state, StyleService) {
   OlService.recentFeature = {}; 
 
   OlService.setRecent = function(featureArray, opt) {
-    if (opt === undefined) console.log('setRecent needs a type to set'); //TODO: check error in prettier way
+    console.log('set recent', opt);
+    if (opt === undefined) console.log('setRecent needs a type to set, dummy'); //TODO: check error in prettier way
     featureArray = Array.isArray(featureArray) ? featureArray : [ featureArray ];
     OlService.recentFeature[opt] = new ol.Collection(featureArray);
     return OlService.recentFeature;
   };
 
   OlService.getRecent = function(opt) {
+    console.log('getting recent', opt);
     if (opt === undefined) console.log('getRecent needs a type to get, dummy'); //TODO: check error in prettier way
     return OlService.recentFeature[opt];
   };
@@ -39,31 +41,21 @@ function OlService_ ($q, $state, StyleService) {
   };
 
   OlService.mounts = new ol.source.Vector({
-    features: []
+    features: [] //TODO: get these from planCtrl
   });
 
   OlService.obstructions = new ol.source.Vector({
-    features: []
+    features: []  //TODO: get these from planCtrl
   });
-
-  // create image source from canvas elements from vector source
-  // these are the uneditable elements
-  // OlService.mountPlaneImage = new ol.source.Vector({
-  //   style: StyleService.defaultStyleFunction,
-  //   source: OlService.mounts
-  // });
-
-  // mounting plane FeatureOverlay // NOTE: not used
-  // OlService.selectedOverlay = new ol.FeatureOverlay({
-  //   style: StyleService.highlightStyleFunction,
-  // });
   
-  OlService.afterObstruction = function afterObstruction(event) {
-    var feature = event.feature;
-    console.log(feature.getKeys());
-    feature.set('radius', 25 );
-    OlService.setRecent([feature], 'obstruction');
-  };
+  // OlService.afterObstruction = function afterObstruction(event, formDetails) {
+  //   var feature = event.feature;
+  //   console.log(formDetails);
+
+  //   var radius = Math.floor(Math.random()*25 + 1);
+  //   feature.set('radius', radius );
+  //   OlService.setRecent([feature], 'obstruction');
+  // };
 
   OlService.gutterLineFinder = function gutterLineFinder(event) {
     var feature = event.feature;
@@ -76,10 +68,8 @@ function OlService_ ($q, $state, StyleService) {
     var mounts = OlService.mounts; //HACK: make this a parameter? 
 
    /* 
-    *
     * get & split the WKT (well-known text) for our feature
     * looks like this -> POLYGON((0.7031250000000142  7.306665009118518,27.949218750000007  25.59079413562536,28.828124999999996  -15.846384918461212,0.703125000000014 27.306665009118518))
-    *
     */
     featureWkt = wkt.writeFeature(feature).split(' ');
 

@@ -72,18 +72,32 @@ function StyleService_ ($q) {
               })
             })];
     // obstruction style
-    styles['obstruction'] = [new ol.style.Style({
+    // styles['obstruction'] = [new ol.style.Style({
+    //           image: new ol.style.Circle({
+    //             radius: 15,
+    //             fill: new ol.style.Fill({
+    //               color: c.greenGutter
+    //             })
+    //           })
+    //         })];
+
+    // create a separate style function: 
+    styles['obstruction'] = function(radius) {
+      return [new ol.style.Style({
               image: new ol.style.Circle({
-                radius: 15,
+                radius: radius,
                 fill: new ol.style.Fill({
                   color: c.greenGutter
                 })
               })
             })];
-
+      };
 
     return function(feature, resolution) {
-      console.log(feature.get('radius'));
+      var radius = feature.get('radius');
+      if (radius) {
+        return styles[feature.getGeometryName()](radius.radius);
+      }
       return styles[feature.getGeometryName()];
     };
     /* jshint +W069 */
@@ -91,7 +105,6 @@ function StyleService_ ($q) {
 
   StyleService.highlightStyleFunction = (function() {
     /* jshint -W069 */
-    console.log('highlightStyleFunction');
     var styles = {};
     styles['mount'] = [new ol.style.Style({
               fill: new ol.style.Fill({
@@ -143,20 +156,25 @@ function StyleService_ ($q) {
               })
             })];
     // obstruction style
-    styles['obstruction'] = [new ol.style.Style({
+    styles['obstruction'] = function(radius) {
+      return [new ol.style.Style({
               image: new ol.style.Circle({
-                radius: 7,
+                radius: radius,
                 fill: new ol.style.Fill({
                   color: c.orangeGutter
                 })
               })
             })];
+      };
 
     /*jshint +W069 */
 
     return function(feature, resolution) {
-      console.log(feature.get('radius'));
-      return styles[feature.getGeometryName()] ;
+      var radius = feature.get('radius');
+      if (radius) {
+        return styles[feature.getGeometryName()](radius.radius);
+      }
+      return styles[feature.getGeometryName()];
     };
   })();
 

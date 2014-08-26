@@ -10,9 +10,9 @@
                 name="radius"
                 min="5"
                 max="100"
-                ng-change="detail.showVal(value)"
+                ng-change="detail.setRadius()"
       				  ng-model="detail.featureProperties.radius"
-                value="{{option.radius}}">
+                value="{{detail.featureProperties.radius}}">
       </div>
     </label>
     <label class="item item-radio" ng-repeat="property in detail.featureDetails">

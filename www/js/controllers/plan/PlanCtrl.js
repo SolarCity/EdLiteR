@@ -1,17 +1,27 @@
-function PlanCtrl_($scope, $ionicSideMenuDelegate, $state) {
+function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService) {
 	var vm = this;
-	// vm.staticMap = staticMap;
-
-	// console.log(staticMap)
-	// vm.targetLayer = $state.current.data.targetLayer; //TODO: where should this be? 
-	vm.interactionLayer = "mount";
+  vm.obstructionArray = []; //TODO: use these for vector source feature array
+  vm.mountArray 			= []; //TODO: use these for vector source feature array
  
  	vm.toggleDetailView = function() {
 		$ionicSideMenuDelegate.toggleRight();
 	};
-	vm.stateforward = function() {
-		console.log('stateforwa');
-	};
+
+
+	// detail and feature listen for this event fired on controlbutton
+	function controlbutton(e, args){
+		e.preventDefault();
+		$scope.$broadcast('update details', args); 
+	}
+	$scope.$on(	'controlbutton', controlbutton);
+
+
+	// listen for radius change in detailCtrl
+	function planUpdateRadius(e, args){
+		vm.radius = args;
+	}
+	$scope.$on('new radius', planUpdateRadius);
+
 
 }
 controllers.controller('PlanCtrl',PlanCtrl_);

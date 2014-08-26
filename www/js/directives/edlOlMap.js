@@ -1,20 +1,17 @@
-function edlOlMap($stateParams, $window, $timeout, $document, MapService, OlService, StyleService) {
+function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapService, OlService, StyleService, FeatureOptionService) {
   return {
     restrict: "A",
-    transclude: true,
+    transclude: false,
     scope: {
-      targetLayer: "=",
+      featureDetails:   "=",
+      mountArray:       "=",
+      obstructionArray: "=",
+      planRadius:       "=",
     },
     // controller: function edlOlMapCtrl($scope, $element, $attrs) {
-    //   console.log('ele ehight', $element[0].clientHeight);
-
-    //   var watcher = function(){return $element[0].clientHeight};
-    //   var listern = function(){console.log(arguments)};
-    //   $scope.$watch(watcher, listern, true);
-    //         alert('Ctrlfunc')
     // },
     link: function edlOlMapLink(scope, ele, attrs) {
-      console.log($stateParams);
+
       var olMapDiv = ele[0];
 
       var pixelProjection = new ol.proj.Projection({
@@ -36,8 +33,8 @@ function edlOlMap($stateParams, $window, $timeout, $document, MapService, OlServ
       var controllerbox = angular.element('<div></div>');
       controllerbox.addClass('mapboxcontrols');
       controllerbox.attr('id', 'edl-control-box');
-      var mountbutton = angular.element('<button></button>');
-      var obstructionbutton = angular.element('<button></button>');
+      var mountbutton = angular.element('<button ui-sref="plan.type({id:null, type:\'mount\'})"></button>');
+      var obstructionbutton = angular.element('<button ui-sref="plan.type({id:null, type:\'obstruction\'})"></button>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
       controllerbox.append(mountbutton);
       controllerbox.append(obstructionbutton);
@@ -176,6 +173,7 @@ function edlOlMap($stateParams, $window, $timeout, $document, MapService, OlServ
         
         /* left controls callbacks */
         var handleMountButton = function handleMountButton(e){
+          e.preventDefault();
           // change button styling
           mountbutton.addClass('button-assertive');
           obstructionbutton.removeClass('button-assertive');
@@ -189,9 +187,11 @@ function edlOlMap($stateParams, $window, $timeout, $document, MapService, OlServ
           map.addInteraction(selectMount); //TODO: use filterfunction
           map.addInteraction(modifyMount);
           map.addInteraction(drawMount);
+          scope.$emit('controlbutton', {featureType: 'mount'});
         };
 
         var handleObstructionButton = function handleObstructionButton(e) {
+          e.preventDefault();
           // change button styling
           obstructionbutton.addClass('button-assertive');
           mountbutton.removeClass('button-assertive');
@@ -205,6 +205,7 @@ function edlOlMap($stateParams, $window, $timeout, $document, MapService, OlServ
           map.addInteraction(selectObstruction); //TODO: use filterfunction
           map.addInteraction(modifyObstruction);
           map.addInteraction(drawObstruction);
+          scope.$emit('controlbutton', {featureType: 'obstruction'}); 
         };
 
         /* Left controller buttons */ 
@@ -230,22 +231,26 @@ function edlOlMap($stateParams, $window, $timeout, $document, MapService, OlServ
         var obstructionDrawbutton = new DrawControlButton(bottom_button_options);
         
         var handlechange = function handlechange(c){
-          console.log('handlechange');
+          console.log('handlechange', arguments);
         };
         
         selectMount.on('addfeature', handlechange);
       
-
-        handleMountButton();
-
-
-
+        // handleMountButton();
         var gutterLineFinder = OlService.gutterLineFinder;
-        drawMount.on('drawend', gutterLineFinder);
-        var afterObstruction = OlService.afterObstruction;
+        drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
+
+        var afterObstruction =  function (event) {
+          var feature = event.feature;
+          var radius = scope.planRadius || 10;
+          feature.set('radius', radius );
+          OlService.setRecent([feature], 'obstruction');
+        };
+
+
+        
+        // var afterObstruction = OlService.afterObstruction;
         drawObstruction.on('drawend', afterObstruction);
-        // pixelProjection.setExtent([0, 0, 1024, 725] );
-      
 
       }
     },
