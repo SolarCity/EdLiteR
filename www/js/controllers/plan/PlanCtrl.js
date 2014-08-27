@@ -13,13 +13,11 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 	}
 	$scope.$on(	'controlbutton', controlbutton);
 
-
 	// listen for radius change in detailCtrl
 	function planUpdateRadius(e, args){
 		vm.radius = args;
 	}
 	$scope.$on('new radius', planUpdateRadius);
-
 
 }
 controllers.controller('PlanCtrl',PlanCtrl_);

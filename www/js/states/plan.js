@@ -32,16 +32,22 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
         controller: "DetailCtrl as detail",
       }
     },
-  })
-  .state("plan.type.fill", {
+  }).state("plan.fill", {
     url:         "/fill",
-    controller:  "FillCtrl as fill",
     resolve: {
-      FillService: function(PanelFillService) {
+      fillExample: function(PanelFillService) {
         return PanelFillService.sample;
       },
     },
-    // templateUrl: "templates/states/fill/fill.html",
-    template: "",
+    views: {
+      'planContent' :{
+        templateUrl: 'templates/states/fill/fillContent.html',
+        controller:  "FillCtrl as fill",
+      },
+      'detailMenu' :{
+        templateUrl: 'templates/states/plan/detailMenu.html', 
+        // controller: "DetailCtrl as detail",
+      }
+    },
   })
 ;});

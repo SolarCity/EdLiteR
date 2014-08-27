@@ -44,6 +44,10 @@ function OlService_ ($q, $state, StyleService) {
     features: [] 
   });
 
+  OlService.panels = new ol.source.Vector({
+    features: []
+  });
+  
   OlService.obstructions = new ol.source.Vector({
     features: []
   });
@@ -57,13 +61,15 @@ function OlService_ ($q, $state, StyleService) {
   //   OlService.setRecent([feature], 'obstruction');
   // };
 
+  OlService.wkt = new ol.format.WKT();
+
   OlService.gutterLineFinder = function gutterLineFinder(event) {
     var feature = event.feature;
     var mountfeature = feature.getGeometry();
 
     var featureWkt;
     var gutterLineWkt;
-    var wkt = new ol.format.WKT();
+    var wkt = OlService.wkt;
 
     var mounts = OlService.mounts; //HACK: make this a parameter? 
 
@@ -72,7 +78,7 @@ function OlService_ ($q, $state, StyleService) {
     * looks like this -> POLYGON((0.7031250000000142  7.306665009118518,27.949218750000007  25.59079413562536,28.828124999999996  -15.846384918461212,0.703125000000014 27.306665009118518))
     */
     featureWkt = wkt.writeFeature(feature).split(' ');
-
+    console.log(wkt.writeFeature(feature)); 
     // create a LineString to mark our gutter
     // looks like this --> "LINESTRING(549.609375", "360.140625,372.294921875", "254.798828125)"
     gutterLineWkt = [

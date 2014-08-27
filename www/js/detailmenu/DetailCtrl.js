@@ -35,7 +35,7 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
 	vm.obstructionFeatures = OlService.obstructions.getFeatures();
 
 	vm.setRadius = function (){
-		var newval = vm.featureProperties.radius;
+		var newval = vm.featureProperties.radius || 10;
 		var recent = OlService.getRecent('obstruction');
 		if (recent) {
 			console.log('newval', newval);

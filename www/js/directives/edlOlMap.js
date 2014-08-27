@@ -35,9 +35,11 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
       controllerbox.attr('id', 'edl-control-box');
       var mountbutton = angular.element('<button ui-sref="plan.type({id:null, type:\'mount\'})"></button>');
       var obstructionbutton = angular.element('<button ui-sref="plan.type({id:null, type:\'obstruction\'})"></button>');
+      var selectbutton = angular.element('<button class="button button-stable">Select</button>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
       controllerbox.append(mountbutton);
       controllerbox.append(obstructionbutton);
+      controllerbox.append(selectbutton);
       
       /*
        *  ControllButton constructor
@@ -75,8 +77,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
       function timer_init() {
       MapService.getStatic()
             .then(init);
-        
       }
+
       function init (imgUrl) {
         // the picture we'll display our drawn features on
         var mapCapture = new ol.layer.Image({ //HACK: possible solution for timeout hack is to set this mapCapture inside of the OLService instead of in this map. 
@@ -105,8 +107,26 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           projection: pixelProjection,
           style:  StyleService.defaultStyleFunction,
         });
-
         obstructionLayer.set('name', 'obstructionLayer');
+
+
+        
+
+        // var testFeature = OlService.wkt.readGeometry("POLYGON((159 569,541 576,554 286,193 271,159 569))");
+        // console.log(testFeature.getKeys());
+        // console.log(obstructionLayer.getSource().addFeature([OlService.wkt.readGeometry("POLYGON((159 569,541 576,554 286,193 271,159 569))")]));
+        // layer for panels
+        
+
+
+
+        var panels = OlService.panels;
+        var panelLayer = new ol.layer.Vector({
+          source: panels, 
+          projection: pixelProjection,
+          // style:  StyleService.defaultStyleFunction,
+        });
+        panelLayer.set('name', 'panelLayer');
         
         /* Mount interactions */
         var drawMount = new ol.interaction.Draw({
@@ -127,7 +147,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           features: selectMount.getFeatures(),
           style: StyleService.highlightStyleFunction,
         });
-
 
         /* Obstruction interactions */
         var drawObstruction = new ol.interaction.Draw({
@@ -154,7 +173,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
 
         /* Map Options */
         var mapOptions = {
-          layers: [mapCapture, mountLayer, obstructionLayer],
+          layers: [mapCapture, mountLayer, obstructionLayer, panelLayer],
           controls: ol.control.defaults({
               attributionOptions: ({
                 collapsible: false
@@ -230,7 +249,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
 
         var mountDrawbutton = new DrawControlButton(top_button_options);
         var obstructionDrawbutton = new DrawControlButton(bottom_button_options);
-        
+
         var handlechange = function handlechange(c){
           console.log('handlechange', arguments);
         };
