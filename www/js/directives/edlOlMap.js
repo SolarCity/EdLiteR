@@ -12,23 +12,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
     // },
     link: function edlOlMapLink(scope, ele, attrs) {
 
-      var olMapDiv = ele[0];
-
-      var pixelProjection = new ol.proj.Projection({
-        code: 'pixel',
-        units: 'pixels',
-        global: false,
-        extent: [0, 0, $window.innerWidth, olMapDiv.clientHeight ] //HACK: Should be dynamic
-      });
-
-      var view =  MapService.setOview( 
-        new ol.View({
-          projection: pixelProjection,
-          center: ol.extent.getCenter(pixelProjection.getExtent()),
-          zoom: 2
-        })
-      );
-
       /* Leftside controls. See init() for instantiation */
       var controllerbox = angular.element('<div></div>');
       controllerbox.addClass('mapboxcontrols');
@@ -80,11 +63,40 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
       }
 
       function init (imgUrl) {
+        var olMapDiv = ele[0];
+        OlService.mapDiv = olMapDiv;
+
+        var gmap = MapService.getGmap();
+        var bounds;
+        if (gmap) {
+          bounds = gmap.getBounds();
+          MapService.g.bounds = bounds;
+          console.log(bounds,'*************************************');
+        }
+
+        var pixelProjection = new ol.proj.Projection({
+          // code: 'pixelsweknownalove',
+          code: 'EPSG:3857',
+          units: 'pixels',
+          // global: false,
+          extent: OlService.extent
+        });
+        
+        OlService.pixelProjection = pixelProjection;
+        console.log(pixelProjection.getExtent());
+        var view =  MapService.setOview( 
+          new ol.View({
+            projection: pixelProjection,
+            center: ol.extent.getCenter(pixelProjection.getExtent()),
+            // center: [ MapService.getCenter().lng(),  MapService.getCenter().lat()],
+            zoom: 2
+          })
+        );
         // the picture we'll display our drawn features on
         var mapCapture = new ol.layer.Image({ //HACK: possible solution for timeout hack is to set this mapCapture inside of the OLService instead of in this map. 
           source: new ol.source.ImageStatic({
             url: imgUrl,
-            imageSize: [$window.innerHeight, $window.innerWidth],
+            imageSize: [OlService.extent[2], OlService.extent[3]],
             projection: pixelProjection,
             imageExtent: pixelProjection.getExtent()
           }),
@@ -127,6 +139,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           // style:  StyleService.defaultStyleFunction,
         });
         panelLayer.set('name', 'panelLayer');
+        OlService.panelLayer = panelLayer;
         
         /* Mount interactions */
         var drawMount = new ol.interaction.Draw({

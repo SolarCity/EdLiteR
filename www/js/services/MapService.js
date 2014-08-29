@@ -13,10 +13,10 @@ function MapService_ ($q) {
     keyboardShortcuts: false,
     draggable: true,
     disableDoubleClickZoom: true,
-    scrollwheel: false,
+    scrollwheel: true,
     streetViewControl: false,
     // center: new google.maps.LatLng(37.5516671,-122.31563), //TODO: device location
-    // zoom: 20,
+    zoom: 19,
     mapTypeId: google.maps.MapTypeId.SATELLITE, 
     tilt: 0, 
     rotateControl: true,
@@ -96,15 +96,16 @@ function MapService_ ($q) {
   };
 
   MapService.setCenter = function(center) {
+    console.log(center)
     MapService.g.center = center;
     return MapService.g.center;
   };
 
-  MapService.getCenter = function(center) {
+  MapService.getCenter = function() {
     if (MapService.g.center) {
       return MapService.g.center;
     } else {
-      return new google.maps.LatLng(37.5516671,-122.31563); //HACK: should only return current map center
+      return new google.maps.LatLng(37.766849, -122.399515); //HACK: should only return current map center
       // return null;
     }
   };

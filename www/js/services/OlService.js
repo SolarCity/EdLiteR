@@ -1,9 +1,8 @@
-function OlService_ ($q, $state, StyleService) {
+function OlService_ ($q, $state, $window, StyleService) {
   // this factory is a singleton & provides layers, styles, etc for the edl-ol-map ... 
   // 
 
   //TODO: get all the OlMap stuff from MapService into this Service instead.
-
   var OlService = {};
 
   // TODO: give styles for the type of thing selected... (maybe)
@@ -12,6 +11,13 @@ function OlService_ ($q, $state, StyleService) {
   // };
 
   OlService.recentFeature = {}; 
+
+  // dev 
+  var mapDiv = {};
+  mapDiv.clientHeight = 725;
+  OlService.mapDiv = mapDiv;
+  OlService.extent = [0, 0, $window.innerWidth, OlService.mapDiv.clientHeight ]  
+
 
   OlService.setRecent = function(featureArray, opt) {
     console.log('set recent', opt);
@@ -61,6 +67,7 @@ function OlService_ ($q, $state, StyleService) {
   //   OlService.setRecent([feature], 'obstruction');
   // };
 
+  console.log('OlService')
   OlService.wkt = new ol.format.WKT();
 
   OlService.gutterLineFinder = function gutterLineFinder(event) {
