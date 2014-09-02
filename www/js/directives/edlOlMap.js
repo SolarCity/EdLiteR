@@ -71,24 +71,21 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
         if (gmap) {
           bounds = gmap.getBounds();
           MapService.g.bounds = bounds;
-          console.log(bounds,'*************************************');
         }
 
         var pixelProjection = new ol.proj.Projection({
           // code: 'pixelsweknownalove',
-          code: 'EPSG:3857',
+          // code: 'EPSG:3857',
           units: 'pixels',
           // global: false,
           extent: OlService.extent
         });
         
         OlService.pixelProjection = pixelProjection;
-        console.log(pixelProjection.getExtent());
         var view =  MapService.setOview( 
           new ol.View({
             projection: pixelProjection,
             center: ol.extent.getCenter(pixelProjection.getExtent()),
-            // center: [ MapService.getCenter().lng(),  MapService.getCenter().lat()],
             zoom: 2
           })
         );

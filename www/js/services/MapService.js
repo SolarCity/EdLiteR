@@ -105,7 +105,7 @@ function MapService_ ($q) {
     if (MapService.g.center) {
       return MapService.g.center;
     } else {
-      return new google.maps.LatLng(37.766849, -122.399515); //HACK: should only return current map center
+      return new google.maps.LatLng(37.483443610459965, -122.2673599891102); //HACK: should only return current map center
       // return null;
     }
   };
@@ -118,7 +118,6 @@ function MapService_ ($q) {
       useCORS: true,
       onrendered: function(canvas) {
         var dataUrl= canvas.toDataURL("image/png");
-        console.log('dataUrl saved as ', dataUrl);
         defer.resolve(dataUrl);
       }
     });
@@ -128,12 +127,10 @@ function MapService_ ($q) {
   MapService.getStatic = function() {    //TODO: move to OlService
     var defer = $q.defer();
     if (MapService.o.staticMap) {
-        console.log('staticMap')
-
+      console.log('staticMap');
       defer.resolve(MapService.o.staticMap);
     } else { // HACK: this here for development only
-        console.log('staticHack')
-      
+      console.log('staticHack')
       defer.resolve('img/de_haro_test_image.PNG');
     }
     return defer.promise;
