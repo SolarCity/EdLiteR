@@ -86,7 +86,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           new ol.View({
             projection: pixelProjection,
             center: ol.extent.getCenter(pixelProjection.getExtent()),
-            zoom: 2
+            zoom: OlService.defaultZoom,
           })
         );
         // the picture we'll display our drawn features on

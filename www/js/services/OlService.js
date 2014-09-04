@@ -17,6 +17,7 @@ function OlService_ ($q, $state, $window, StyleService) {
   mapDiv.clientHeight = 725;
   OlService.mapDiv = mapDiv;
   OlService.extent = [0, 0, $window.innerWidth, OlService.mapDiv.clientHeight ];
+  OlService.defaultZoom = 2;
 
   OlService.setRecent = function(featureArray, opt) {
     console.log('set recent', opt);
@@ -83,7 +84,6 @@ function OlService_ ($q, $state, $window, StyleService) {
     * looks like this -> POLYGON((0.7031250000000142  7.306665009118518,27.949218750000007  25.59079413562536,28.828124999999996  -15.846384918461212,0.703125000000014 27.306665009118518))
     */
     featureWkt = wkt.writeFeature(feature).split(' ');
-    console.log(wkt.writeFeature(feature)); 
     // create a LineString to mark our gutter
     // looks like this --> "LINESTRING(549.609375", "360.140625,372.294921875", "254.798828125)"
     gutterLineWkt = [
