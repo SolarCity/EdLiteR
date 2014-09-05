@@ -2,7 +2,7 @@ function ApiService_ ($http, $q) {
   // this Service provides Api access
   var ApiService = {};
 
-  var baseUrl = "http://slc3web00/scexchangestaging/testfill.aspx";
+  var baseUrl = "http://scexchange.solarcity.com/scfilefactory/testfill.aspx";
 
   var example =   {"0":[
 	[
@@ -17,20 +17,28 @@ function ApiService_ ($http, $q) {
 
   ApiService.uploadMounts = function(data) {
   	var deferred = $q.defer();
+    
+    $http.post(baseUrl, data, {
+      // headers: {'Access-Control-Allow-Origin': ['http://localhost:8100', 'http://scexchange.solarcity.com/scfilefactory/testfill.aspx']},
+      headers: {'Access-Control-Allow-Origin': "*"}
 
-	  $http({
-      method: 'POST',
-      url: baseUrl, 
-      data: data,
     })
+    // $http({
+   //    method: 'POST',
+   //    headers: {'Access-Control-Allow-Origin': 'http://localhost:8100'},
+   //    url: baseUrl, 
+   //    data: {
+   //      "TestJSON": data,
+   //  },
+   //  })
     .success(function(data, status) {
       console.log(data, status);
-      // deferred.resolve(data); //HACK testing
+      deferred.resolve(data); //HACK testing
     })
     .error(function(data, status){
       console.log('err',data,status,example);
-  		deferred.resolve(example);
-      // deferred.reject(data); //HACK testing
+  		// deferred.resolve(example);
+      deferred.reject(data); //HACK testing
     });
 
     return deferred.promise;
@@ -59,7 +67,24 @@ angular.module('edliter').service('ApiService', ApiService_);
 // [-122.26710786146282, 37.48354470600906]]]};
 
 
-
+// var x = '{"o": [{"radius": 224,"height": 0,"center": {"lat": 37.483357, "lon": -122.267425}}' +
+//         ',{"radius": 64,"height": 0,"center": {"lat": 37.483407, "lon": -122.267325}}' +
+//         ',{"radius": 64,"height": 0,"center": {"lat": 37.483503, "lon": -122.267259}}' +
+//         '],' +
+//         '"m": [{"id": 0,"pitch": 0,"points": [[-122.267425, 37.483357], [-122.267215, 37.483461],' +
+//         '[-122.267259, 37.483503], [-122.267361, 37.483449]]}]}';
+ 
+// $.ajax({
+//     type: "POST",
+//     url: "http://slc3web00/scexchangestaging/testfill.aspx",
+//     data: {
+//         "TestJSON": x
+//     },
+//     success: function(data){
+//               var t = JSON.parse(data);
+// }
+// });
+ 
 
 
 

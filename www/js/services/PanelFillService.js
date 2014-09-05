@@ -9,13 +9,14 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
    * functions we use
    */
 
-  PanelFillService.processFeatures = function(features){
+  PanelFillService.processFeatures = function(mounts, obstructions ){
+  	console.log(obstructions);
   	var msg = {};
   	msg.m = [];
-  	for (var idx in features) {
+  	for (var idx in mounts) {
   		var p = [];
-  		for (var point in features[idx]){ 
-  			p.push(PanelFillService.pointToLatLng(features[idx][point], idx, features));
+  		for (var point in mounts[idx]){ 
+  			p.push(PanelFillService.pointToLatLng(mounts[idx][point], idx, mounts));
 				
   		}
   		msg.m.push({
@@ -24,6 +25,25 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 					points: p,
 				});
   	}
+
+  	msg.o = [];
+  	for (var ix in obstructions) {
+  		var o = [];
+  		for (var center in obstructions[ix]){ 
+  			console.log(obstructions[ix][center]);
+  			console.log(obstructions);
+  			o.push(PanelFillService.pointToLatLng(obstructions[ix][center], ix, obstructions));
+				
+  		}
+  		msg.o.push({
+					id: idx, 
+					radius: 'radius',
+					height: 'height',
+					center: o,
+				});
+  	}
+
+
 		return msg;
   };
 

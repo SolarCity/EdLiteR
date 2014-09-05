@@ -18,26 +18,42 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 		vm.radius = args;
 	}
 	$scope.$on('new radius', planUpdateRadius);
-	// vm.mountPoints = {"o": 'o'};
+
 	vm.featureCorners = function() {
 		var mountPoints = {}; // we'll send this to the api
 		var wkt = OlService.wkt; // used for turning features to strings
 		//set zoom to initial zoomlevel // HACK: avoid using projection pixel <> latlng 		
 		MapService.getView().setZoom(OlService.defaultZoom);
 		// get features
-		var features  = OlService.mounts.getFeatures();
+		var mounts  = OlService.mounts.getFeatures();
+    mountPoints.m = {};
+    var obstructions = OlService.obstructions.getFeatures();
+    console.log(obstructions)
+    mountPoints.o = {};
 		// for features by type "mount" 
-		features.forEach(function(feat, idx, col){
+		mounts.forEach(function(feat, idx, col){
 			if (feat.getGeometryName() === "mount") {
 
 				// add their points to mountpoints
-				mountPoints[idx] = wkt.writeFeature(feat).split(',');
-				mountPoints[idx][0] = mountPoints[idx][0].split('((')[1];
-				mountPoints[idx].splice(-1); // remove the last point, it's a dupe of the 1st
+				mountPoints.m[idx] = wkt.writeFeature(feat).split(',');
+				mountPoints.m[idx][0] = mountPoints.m[idx][0].split('((')[1];
+				mountPoints.m[idx].splice(-1); // remove the last point, it's a dupe of the 1st
+			}
+		});
+		obstructions.forEach(function(feat, idx, col){
+			if (feat.getGeometryName() === "obstruction") {
+
+				// add their points to mountpoints
+				mountPoints.o[idx] = wkt.writeFeature(feat).split(',');
+        console.log(mountPoints.o[idx]);
+        mountPoints.o[idx][0] = mountPoints.o[idx][0].split('(')[1];
+        console.log(mountPoints.o[idx]);
+        mountPoints.o[idx][0] = mountPoints.o[idx][0].split(')');
+        console.log(mountPoints.o[idx][0], mountPoints.o[idx][1]);
 			}
 		});
 		// vm.buildMessage(mountPoints, {});
-		vm.apiMessage = PanelFillService.processFeatures(mountPoints);
+		vm.apiMessage = PanelFillService.processFeatures(mountPoints.m, mountPoints.o);
 	};
 
 	vm.buildMessage = function(mounts, obstructions) {

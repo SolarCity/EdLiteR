@@ -5,7 +5,16 @@ angular.module('edliter', [
   'app.controllers',
   'app.directives',
   'app.options',
-]).run(function($ionicPlatform) {
+]).config(function($sceDelegateProvider, $sceProvider) {
+  $sceDelegateProvider.resourceUrlWhitelist([
+   // Allow same origin resource loads.
+   'self',
+   'http://localhost:8100/**',
+   // Allow loading from our assets domain.  Notice the difference between * and **.
+   'http://scexchange.solarcity.com/scfilefactory/testfill.aspx'
+  ]);
+  $sceProvider.enabled(false);
+}).run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -17,6 +26,7 @@ angular.module('edliter', [
     // }
   });
 });
+
 
 var controllers = angular.module('app.controllers',[]);
 var directives  = angular.module('app.directives',[]);

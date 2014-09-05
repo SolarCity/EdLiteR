@@ -5,6 +5,7 @@ function FillCtrl_($scope, $ionicSideMenuDelegate, MapService, OlService, PanelF
 	var mounts = OlService.mounts;
 	vm.sample = ApiService.uploadMounts()
 		.then(function(data){
+			console.log('api data response', data, arguments)
 			angular.forEach(data, responseIterator);
 			OlService.panels.addFeatures(featurestoadd);	
 	});
