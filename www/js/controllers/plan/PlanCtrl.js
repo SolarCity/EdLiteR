@@ -33,27 +33,29 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 		// for features by type "mount" 
 		mounts.forEach(function(feat, idx, col){
 			if (feat.getGeometryName() === "mount") {
+        idx = parseInt(idx);
+        // add their points to mountpoints
+        mountPoints.m[idx] = wkt.writeFeature(feat).split(',');
+        mountPoints.m[idx][0] = mountPoints.m[idx][0].split('((')[1];
+        mountPoints.m[idx].splice(-1); // remove the last point, it's a dupe of the 1st
+      }
+    });
+    obstructions.forEach(function(feat, idx, col){
+      if (feat.getGeometryName() === "obstruction") {
 
-				// add their points to mountpoints
-				mountPoints.m[idx] = wkt.writeFeature(feat).split(',');
-				mountPoints.m[idx][0] = mountPoints.m[idx][0].split('((')[1];
-				mountPoints.m[idx].splice(-1); // remove the last point, it's a dupe of the 1st
-			}
-		});
-		obstructions.forEach(function(feat, idx, col){
-			if (feat.getGeometryName() === "obstruction") {
-
+        idx = parseInt(idx);
 				// add their points to mountpoints
 				mountPoints.o[idx] = wkt.writeFeature(feat).split(',');
-        console.log(mountPoints.o[idx]);
         mountPoints.o[idx][0] = mountPoints.o[idx][0].split('(')[1];
-        console.log(mountPoints.o[idx]);
         mountPoints.o[idx][0] = mountPoints.o[idx][0].split(')');
-        console.log(mountPoints.o[idx][0], mountPoints.o[idx][1]);
+        mountPoints.o[idx].splice(1);
+        mountPoints.o[idx] = mountPoints.o[idx][0];
+
 			}
 		});
 		// vm.buildMessage(mountPoints, {});
 		vm.apiMessage = PanelFillService.processFeatures(mountPoints.m, mountPoints.o);
+    $scope.apiMessage = vm.apiMessage;
 	};
 
 	vm.buildMessage = function(mounts, obstructions) {
@@ -86,7 +88,7 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 		}
 		
 
-
+    console.log(msg);
 		vm.apiMessage = msg;
 	};
 

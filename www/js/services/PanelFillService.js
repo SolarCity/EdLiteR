@@ -15,13 +15,17 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
   	msg.m = [];
   	for (var idx in mounts) {
   		var p = [];
+  		console.log(typeof idx);
+  		idx = parseInt(idx);
+  		console.log(typeof idx);
   		for (var point in mounts[idx]){ 
   			p.push(PanelFillService.pointToLatLng(mounts[idx][point], idx, mounts));
 				
   		}
+  		console.log(p)
   		msg.m.push({
 					id: idx, 
-					pitch: 'pitch',
+					pitch: 0,
 					points: p,
 				});
   	}
@@ -30,19 +34,20 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
   	for (var ix in obstructions) {
   		var o = [];
   		for (var center in obstructions[ix]){ 
-  			console.log(obstructions[ix][center]);
-  			console.log(obstructions);
   			o.push(PanelFillService.pointToLatLng(obstructions[ix][center], ix, obstructions));
-				
   		}
+  		console.log(o);
   		msg.o.push({
-					id: idx, 
-					radius: 'radius',
-					height: 'height',
-					center: o,
+					// id: idx, 
+					radius: 25,
+					height: 0,
+					center: {
+						lon: o[0][0],
+						lat: o[0][1],
+					},
 				});
   	}
-
+  	console.log(msg);
 
 		return msg;
   };
@@ -96,7 +101,8 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 		}
 
 		function point_machine(pt_xy){
-			return [east_pt(pt_xy[0]), north_pt(pt_xy[1])].join(',');
+			// return [east_pt(pt_xy[0]), north_pt(pt_xy[1])].join(',');
+			return [east_pt(pt_xy[0]), north_pt(pt_xy[1])];
 		}
 
 		return point_machine(pt_xy);

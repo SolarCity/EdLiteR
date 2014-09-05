@@ -5,7 +5,7 @@ angular.module('edliter', [
   'app.controllers',
   'app.directives',
   'app.options',
-]).config(function($sceDelegateProvider, $sceProvider) {
+]).config(function($sceDelegateProvider, $sceProvider, $httpProvider) {
   $sceDelegateProvider.resourceUrlWhitelist([
    // Allow same origin resource loads.
    'self',
@@ -14,6 +14,9 @@ angular.module('edliter', [
    'http://scexchange.solarcity.com/scfilefactory/testfill.aspx'
   ]);
   $sceProvider.enabled(false);
+  $httpProvider.defaults.useXDomain = true;
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
+    
 }).run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

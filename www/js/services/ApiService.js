@@ -17,29 +17,46 @@ function ApiService_ ($http, $q) {
 
   ApiService.uploadMounts = function(data) {
   	var deferred = $q.defer();
-    
-    $http.post(baseUrl, data, {
-      // headers: {'Access-Control-Allow-Origin': ['http://localhost:8100', 'http://scexchange.solarcity.com/scfilefactory/testfill.aspx']},
-      headers: {'Access-Control-Allow-Origin': "*"}
+    var x = {};
+    // x = JSON.stringify(data);
+    // var x = {"o": [{"radius": 224,"height": 0,"center": {"lat": 37.483357, "lon": -122.267425}}         ,{"radius": 64,"height": 0,"center": {"lat": 37.483407, "lon": -122.267325}}         ,{"radius": 64,"height": 0,"center": {"lat": 37.483503, "lon": -122.267259}} 
+    //     ],         "m": [{"id": 0,"pitch": 0,"points": [[-122.267425, 37.483357], [-122.267215, 37.483461], 
+    //     [-122.267259, 37.483503], [-122.267361, 37.483449]]}]};
 
-    })
+    x = JSON.stringify(data);
+    console.log(x);
+  
     // $http({
-   //    method: 'POST',
-   //    headers: {'Access-Control-Allow-Origin': 'http://localhost:8100'},
-   //    url: baseUrl, 
-   //    data: {
-   //      "TestJSON": data,
-   //  },
-   //  })
-    .success(function(data, status) {
-      console.log(data, status);
-      deferred.resolve(data); //HACK testing
-    })
-    .error(function(data, status){
-      console.log('err',data,status,example);
-  		// deferred.resolve(example);
-      deferred.reject(data); //HACK testing
-    });
+    //   method: 'POST',
+    //   headers: {'Access-Control-Allow-Origin': '*'},
+    //   url: baseUrl,
+    //   data: {
+    //     "TestJSON": x
+    //   },
+    // })
+    // .success(function(data, status) {
+    //   console.log(data, status);
+    //   deferred.resolve(data);
+    // })
+    // .error(function(data, status){
+    //   console.log('err',data, status,example);
+  		// // deferred.resolve(example);
+    //   deferred.reject(data); 
+    // });
+    // console.log(x);
+
+    $.ajax({
+    type: "POST",
+    url: baseUrl,
+    headers: {'Access-Control-Allow-Origin': '*'},
+    data: {
+        "TestJSON": x
+    },
+    success: function(data){
+        var t = JSON.parse(data);
+        deferred.resolve(t);
+}
+});
 
     return deferred.promise;
   };
@@ -86,5 +103,8 @@ angular.module('edliter').service('ApiService', ApiService_);
 // });
  
 
+
+// Object sent to API: 
+// {"m":[{"id":"0","pitch":"0","points":[[-122.26785351556896,37.48373839143003],[-122.2679152063763,37.4830445293725],[-122.26693351787685,37.4830445293725]]}],"o":[{"radius":"224","height":"0","center":{"lat":-122.26753969711422,"lon":37.48336166264419}}]}
 
 

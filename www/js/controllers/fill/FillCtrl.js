@@ -3,7 +3,7 @@ function FillCtrl_($scope, $ionicSideMenuDelegate, MapService, OlService, PanelF
 
 	// vm.sample = fillExample;
 	var mounts = OlService.mounts;
-	vm.sample = ApiService.uploadMounts()
+	vm.sample = ApiService.uploadMounts($scope.apiMessage)
 		.then(function(data){
 			console.log('api data response', data, arguments)
 			angular.forEach(data, responseIterator);
