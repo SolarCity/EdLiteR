@@ -34,19 +34,15 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
     },
   }).state("plan.fill", {
     url:         "/fill",
-    resolve: {
-      fillExample: function(PanelFillService) {
-        return PanelFillService.sample;
-      },
-    },
     views: {
       'planContent' :{
         templateUrl: 'templates/states/fill/fillContent.html',
         controller:  "FillCtrl as fill",
       },
       'detailMenu' :{
-        templateUrl: 'templates/states/plan/detailMenu.html', 
-        // controller: "DetailCtrl as detail",
+        // templateUrl: 'templates/states/plan/detailMenu.html', 
+        templateUrl: 'templates/states/fill/detailMenu.html', 
+        controller: "",
       }
     },
   })

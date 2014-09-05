@@ -1,6 +1,6 @@
 function FeatureCtrl_($scope, $ionicSideMenuDelegate, $state, $stateParams, FeatureOptionService, MapService, OlService) {
 	var vm = this;
-
+	
 }
 controllers.controller('FeatureCtrl',FeatureCtrl_);
 
@@ -14,8 +14,6 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
 	}
 	$scope.$on('update details', detailsUpdate); 
 	
-
-
 	var vm = this;
 	vm.featureProperties = {};
 	vm.featureProperties.radius = 10;
@@ -25,8 +23,6 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
   vm.omap = MapService.getOmap();
   vm.featureArray = OlService.getRecent;
   
-
-	
 	// the form values become these properties
 	// vm.featureId = $stateParams.id;
 
@@ -38,10 +34,6 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
 		var newval = vm.featureProperties.radius || 10;
 		var recent = OlService.getRecent('obstruction');
 		if (recent) {
-			console.log('newval', newval);
-			console.log('recent', recent);
-			recent.set('radius', newval);
-			console.log(OlService.currentModify);
 			// OlService.currentModify[0].set('radius', radius);
 			// OlService.currentModify[0].setStyle(StyleService.defaultStyleFunction);
 			var radius = recent.get('radius');

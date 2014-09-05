@@ -6,13 +6,16 @@
       </ion-nav-back-button>
     </ion-header-bar>
     <ion-nav-buttons side="right">
-      <button class="button button-icon button-clear ion-navicon" ng-click="plan.toggleDetailView()">
+      <button class="button button button-large button-energized" ng-click="plan.toggleDetailView()">
+        ToggleView
       </button>
-      <button class="button button-icon button-clear button-assertive ion-navicon" ui-sref="plan.fill">
+      <button class="button button-large button-energized" ui-sref="plan.fill">
+      FillState
       </button>
-<!--       <button class="button button-icon button-clear button-calm ion-navicon" ng-click="plan.featureCorners()">
+      <button class="button button-large button-calm" ng-click="plan.featureCorners()">
+        FeatureCorners
       </button>
- -->      <!-- <button class="button button-icon button-clear button-balanced ion-navicon" on-tap-gesture="plan.stateforward()"> -->
+      <!-- <button class="button button-icon button-clear button-balanced ion-navicon" on-tap-gesture="plan.stateforward()"> -->
       <!-- </button> -->
     </ion-nav-buttons>
     <ion-nav-view animation="no-animation" name="planContent"></ion-nav-view>

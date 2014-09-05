@@ -1,12 +1,18 @@
-function FillCtrl_($scope, $ionicSideMenuDelegate, fillExample, MapService, OlService, PanelFillService) {
+function FillCtrl_($scope, $ionicSideMenuDelegate, MapService, OlService, PanelFillService, ApiService) {
 	var vm = this;
 
-	vm.sample = fillExample;
+	// vm.sample = fillExample;
+	var mounts = OlService.mounts;
+	vm.sample = ApiService.uploadMounts()
+		.then(function(data){
+			angular.forEach(data, responseIterator);
+			OlService.panels.addFeatures(featurestoadd);	
+	});
 
 	var featurestoadd = [];
 
 	// iterate over every mount Plane in the api response
-	angular.forEach(vm.sample, responseIterator);
+	// angular.forEach(vm.sample, responseIterator);
 
 	function responseIterator(arrayOfPanels, key){
 		// iterate over each panel in the array of panels
@@ -17,7 +23,6 @@ function FillCtrl_($scope, $ionicSideMenuDelegate, fillExample, MapService, OlSe
 			featurestoadd.push(feature);	
 		});
 	}
-	OlService.panels.addFeatures(featurestoadd);	
 
 }
 controllers.controller('FillCtrl',FillCtrl_);

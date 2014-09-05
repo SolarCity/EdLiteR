@@ -1,4 +1,4 @@
-function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlService, MapService, PanelFillService) {
+function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlService, MapService, PanelFillService, ApiService) {
 	var vm = this;
 
  	vm.toggleDetailView = function() {
@@ -18,7 +18,7 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 		vm.radius = args;
 	}
 	$scope.$on('new radius', planUpdateRadius);
-
+	// vm.mountPoints = {"o": 'o'};
 	vm.featureCorners = function() {
 		var mountPoints = {}; // we'll send this to the api
 		var wkt = OlService.wkt; // used for turning features to strings
@@ -29,14 +29,82 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 		// for features by type "mount" 
 		features.forEach(function(feat, idx, col){
 			if (feat.getGeometryName() === "mount") {
+
 				// add their points to mountpoints
 				mountPoints[idx] = wkt.writeFeature(feat).split(',');
 				mountPoints[idx][0] = mountPoints[idx][0].split('((')[1];
 				mountPoints[idx].splice(-1); // remove the last point, it's a dupe of the 1st
 			}
 		});
-		PanelFillService.processFeatures(mountPoints);
+		// vm.buildMessage(mountPoints, {});
+		vm.apiMessage = PanelFillService.processFeatures(mountPoints);
+	};
+
+	vm.buildMessage = function(mounts, obstructions) {
+		mounts = mounts || {};
+		obstructions = obstructions || {};
+		var msg = {};
+		msg.o = [];
+		msg.m = [];
+
+		for (var m in mounts) {
+
+			console.log(mounts);
+			console.log(m);
+			msg.m.push({
+				id: m.idx, 
+				pitch: 'pitch',
+				points: mounts,
+			});
+		}
+		
+		for (var o in obstructions) {
+			msg.o.push({
+				id: o.idx, 
+				radius: 'radius',
+				center: {
+					lat: 'lat',
+					lng: 'lng',
+				}
+			});
+		}
+		
+
+
+		vm.apiMessage = msg;
 	};
 
 }
 controllers.controller('PlanCtrl',PlanCtrl_);
+
+
+
+// {
+// 	"o": [
+// 		{
+// 			"radius": 0,
+// 			"height": 0,
+// 			"center": {
+// 				"lat": 0,
+// 				"lon": 0
+// 			}
+
+// 		}
+// 	],
+
+
+// 	"m": [
+// 		{
+// 			"id": 0,
+// 			"pitch": 0,
+// 			"points": [
+// 				[0,1,2], 
+// 				[0,1,2], 
+// 				[0,1,2], 
+// 				[0,1,2], 
+// 				[0,1,2], 
+// 			]
+// 		}
+// 	]
+
+// }
