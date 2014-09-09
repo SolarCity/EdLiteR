@@ -55,6 +55,17 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     }
   };
 
+  OlService.getFeatureFromLayerByIdAndType = function getFeatureFromLayerByIdAndType(layer, id, type) {
+    var result;
+    var matchType = function(f) {
+      if (f.getGeometryName()=== type && f.getId() === id) {
+        result = f;
+      }
+    };
+    layer.forEachFeature(matchType);
+    return result;
+  };
+
   OlService.mounts = new ol.source.Vector({
     features: new ol.Collection([])
   });
@@ -122,10 +133,10 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     OlService.setIdsOfFeaturearray(featureArray, OlService.mounts.getFeatures().length);
 
     mounts.addFeature(gutterFeature);
-    feature.on('change', function(event){
-      console.log(event.target);
-      // this.removeFeature([gutterFeature]);
-    }, mounts);
+    // feature.on('change', function(event){
+    //   console.log(event.target);
+    //   // this.removeFeature([gutterFeature]);
+    // }, mounts);
 
   };
 

@@ -35,9 +35,13 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
   		for (var center in obstructions[ix]){ 
   			o.push(PanelFillService.pointToLatLng(obstructions[ix][center], ix, obstructions));
   		}
+  		// console.log('radius: ', );
+  		// console.log('radius: ', OlService.obstructions.getFeatures().getArray(), ix);
+  		// console.log('radius: ', OlService.obstructions.getFeatures().getArray()[ix].get('radius'));
   		msg.o.push({
 					// id: idx, 
-					radius: 25,
+					// radius: 25,
+					radius: parseInt(OlService.obstructions.getFeatures()[ix].get('radius').radius),
 					height: 0,
 					center: {
 						lon: o[0][0],
@@ -46,7 +50,7 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 				});
   	}
   	console.log(msg);
-
+  	// msg = {"m":[{"id":0,"pitch":0,"points":[[-122.26742436212658,37.48330632395249],[-122.26703544181942,37.483399974046144],[-122.26716687006115,37.48354683442028],[-122.26746191305278,37.4834723400276]]}],"o":[{"radius":{"radius":"11"},"height":0,"center":{"lon":-122.26725806516765,"lat":37.48347446843882}}]} 
 		return msg;
   };
 

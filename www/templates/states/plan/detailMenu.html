@@ -1,36 +1,39 @@
 <ion-content>
-<button class="button button-small button-balanced" ng-click="detail.submitFeature(detail.featureArray())">COMPLETE</button>
-<button class="button button-small button-assertive" ng-click="detail.removeFeature()">DELETE</button>
+<button class="button button-small button-balanced" ng-click="detail.submitFeature()">COMPLETE</button>
+<button class="button button-small button-assertive" ng-click="plan.removeFeature()">DELETE</button>
   <form>
     <label ng-if="detail.featureType==='obstruction'">
       <span class="input-label">Radius</span>
       <div class="item range range-positive">
         <input  type="range"
                 name="radius"
-                min="5"
-                max="100"
-                ng-change="detail.setRadius()"
-                ng-model="detail.featureProperties.radius"
-                value="{{detail.featureProperties.radius}}">
+                min="10"
+                max="500"
+                ng-change="plan.setRadius()"
+                ng-model="plan.feature.radius"
+                value="{{plan.feature.radius}}">
       </div>
     </label>
     <label ng-if="detail.featureType==='mount'">
       <span class="input-label">Slope</span>
       <div class="item item-input-inset">
         <label class="item-input-wrapper">
-          <input type="number" placeholder="Slope">
+          <input type="number"
+                 placeholder="Slope"
+                 ng-model="detail.feature.slope"
+                 value="plan.feature.slope">
         </label>
         <button class="button button-small">
           Set
         </button>
       </div>
     </label>
-    <label class="item item-radio" ng-repeat="property in detail.featureDetails">
+    <label class="item item-radio" ng-repeat="property in plan.feature.edl">
       <span class="input-label">{{property.propertyName}}</span>
       <ion-radio  type="radio" 
                   name="{{option.value}}"
                   ng-repeat="option in property.options"
-                  ng-model="detail.featureProperties[property.propertyValue]"                   
+                  ng-model="plan.feature.edl[property.propertyValue]"                   
       						value="{{option.value}}"
       >{{option.text}}</ion-radio>
     </label>
@@ -40,5 +43,5 @@
 
 
 
-<ion-radio ng-repeat="item in feature.featureOptions" ng-value="item.value" ng-model="data.featureDetails">{{ item.text }}</ion-radio>
+<!-- <ion-radio ng-repeat="item in feature.featureOptions" ng-value="item.value" ng-model="data.featureDetails">{{ item.text }}</ion-radio> -->
 <div class="item item-divider">

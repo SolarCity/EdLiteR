@@ -2,21 +2,14 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
   $stateProvider.state("plan", {
     url:         "/plan",
     controller:  "PlanCtrl as plan",
-    resolve: {
-      // staticMap: function(MapService) {
-      //   MapService.getStatic().then(function(data) {
-      //     return data;
-      //   });
-      // },
-    },
     templateUrl: "templates/states/plan/plan.html",
     abstract:    true,
   })
   .state("plan.type", {
     url:         "",
-    data: { //TODO: this should be removed
-      featureType: "mount"
-    },
+    // data: { //TODO: this should be removed
+    //   featureType: "mount"
+    // },
     resolve: {
       featureArray: function resolveMountFeature($stateParams, OlService) {
         return OlService.getRecent('mount');
@@ -40,7 +33,6 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
         controller:  "FillCtrl as fill",
       },
       'detailMenu' :{
-        // templateUrl: 'templates/states/plan/detailMenu.html', 
         templateUrl: 'templates/states/fill/detailMenu.html', 
         controller: "",
       }

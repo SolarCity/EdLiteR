@@ -7,7 +7,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
       mountCollection:       "=",
       obstructionCollection: "=",
       planRadius:            "=",
-      planIncline:           "=",
+      // planIncline:           "=",
       featureType:           "=",
     },
     link: function edlOlMapLink(scope, ele, attrs) {
