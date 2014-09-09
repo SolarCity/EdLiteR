@@ -1,4 +1,4 @@
-function OlService_ ($q, $state, $window, StyleService) {
+function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, MapService) {
   // this factory is a singleton & provides layers, styles, etc for the edl-ol-map ... 
   // 
 
@@ -20,42 +20,51 @@ function OlService_ ($q, $state, $window, StyleService) {
   OlService.defaultZoom = 2;
 
   OlService.setRecent = function(featureArray, opt) {
-    console.log('set recent', opt);
     if (opt === undefined) console.log('setRecent needs a type to set, dummy'); //TODO: check error in prettier way
     featureArray = Array.isArray(featureArray) ? featureArray : [ featureArray ];
     OlService.recentFeature[opt] = new ol.Collection(featureArray);
+    console.log('setting recent', opt, 'as: ', OlService.recentFeature);
+    $ionicSideMenuDelegate.toggleRight();
     return OlService.recentFeature;
   };
 
   OlService.getRecent = function(opt) {
-    console.log('getting recent', opt);
+    console.log('getting recent', opt, OlService.recentFeature[opt]);
     if (opt === undefined) console.log('getRecent needs a type to get, dummy'); //TODO: check error in prettier way
     return OlService.recentFeature[opt];
   };
 
-  OlService.setIdsOfFeaturearray = function(featurearray, id) { 
+  OlService.setIdsOfFeaturearray = function(featurearray, id) { // utility for setting id. allow to later remove by id(??)
     for (var key in featurearray) {
+      console.log('featureId', featurearray[key]);
       var f = featurearray[key];
       f.setId(id);
     }
   };
 
-  OlService.removeRecent = function(recentArray){
-    recentArray.forEach(function(){
-
-    });
+  OlService.removeFeatureById = function(id, layer){
+    var removeus = [];
+    function findforremove(f) {
+      if (f.getId() === id) {
+        removeus.push(f);
+      }
+    }
+    layer.forEachFeature(findforremove);
+    for (var a in removeus) {
+      layer.removeFeature(removeus[a]);
+    }
   };
 
   OlService.mounts = new ol.source.Vector({
-    features: [] 
+    features: new ol.Collection([])
   });
 
   OlService.panels = new ol.source.Vector({
-    features: []
+    features: new ol.Collection([]),
   });
   
   OlService.obstructions = new ol.source.Vector({
-    features: []
+    features: new ol.Collection([])
   });
   
   // OlService.afterObstruction = function afterObstruction(event, formDetails) {
@@ -79,13 +88,9 @@ function OlService_ ($q, $state, $window, StyleService) {
 
     var mounts = OlService.mounts; //HACK: make this a parameter? 
 
-   /* 
-    * get & split the WKT (well-known text) for our feature
-    * looks like this -> POLYGON((0.7031250000000142  7.306665009118518,27.949218750000007  25.59079413562536,28.828124999999996  -15.846384918461212,0.703125000000014 27.306665009118518))
-    */
+    // get & split the WKT (well-known text) for our feature
     featureWkt = wkt.writeFeature(feature).split(' ');
     // create a LineString to mark our gutter
-    // looks like this --> "LINESTRING(549.609375", "360.140625,372.294921875", "254.798828125)"
     gutterLineWkt = [
       'LINESTRING(',
         featureWkt[0].split('((')[1],
@@ -109,18 +114,18 @@ function OlService_ ($q, $state, $window, StyleService) {
     });
     feature.setGeometryName('mount');
 
-    OlService.setRecent([mountfeature, gutterFeature], 'mount'); //HACK: this should happen elsewhere
-    feature.setProperties(OlService.mountplane); //HACK: this should happen elsewhere
+    // OlService.setRecent([feature, gutterFeature], 'mount'); //HACK: this should happen elsewhere
 
     // put the features in the source
-    var featurearray = [gutterFeature, feature];
-    mounts.addFeatures(featurearray);
+    var featureArray = [feature, gutterFeature];
+    console.log('setting mount id as', OlService.mounts.getFeatures().length);
+    OlService.setIdsOfFeaturearray(featureArray, OlService.mounts.getFeatures().length);
 
-    // set feature id#s to be the same
-    var featuresindex = mounts.getFeatures().length;
-    OlService.setIdsOfFeaturearray(featurearray, featuresindex ); 
-
-    // $state.go('plan.mount', {id: featuresindex}); // TODO: still need access to the feature id, but can't do it with statego because too much refreshing
+    mounts.addFeature(gutterFeature);
+    feature.on('change', function(event){
+      console.log(event.target);
+      // this.removeFeature([gutterFeature]);
+    }, mounts);
 
   };
 

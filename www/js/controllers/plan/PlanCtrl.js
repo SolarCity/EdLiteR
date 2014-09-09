@@ -1,7 +1,8 @@
 function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlService, MapService, PanelFillService, ApiService) {
 	var vm = this;
 
- 	vm.toggleDetailView = function() {
+ 	vm.toggleDetailView = function(e, args) {
+    // request update of values in detail control
 		$ionicSideMenuDelegate.toggleRight();
 	};
 
@@ -9,6 +10,7 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 	// detail and feature listen for this event fired on controlbutton
 	function controlbutton(e, args){
 		e.preventDefault();
+    console.log('broadcast', args);
 		$scope.$broadcast('update details', args); 
 	}
 	$scope.$on(	'controlbutton', controlbutton);
@@ -28,7 +30,7 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 		var mounts  = OlService.mounts.getFeatures();
     mountPoints.m = {};
     var obstructions = OlService.obstructions.getFeatures();
-    console.log(obstructions)
+    console.log(obstructions);
     mountPoints.o = {};
 		// for features by type "mount" 
 		mounts.forEach(function(feat, idx, col){

@@ -7,18 +7,17 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
       mountCollection:       "=",
       obstructionCollection: "=",
       planRadius:            "=",
+      planIncline:           "=",
+      featureType:           "=",
     },
-    // controller: function edlOlMapCtrl($scope, $element, $attrs) {
-    // },
     link: function edlOlMapLink(scope, ele, attrs) {
-
       /* Leftside controls. See init() for instantiation */
       var controllerbox = angular.element('<div></div>');
       controllerbox.addClass('mapboxcontrols');
       controllerbox.attr('id', 'edl-control-box');
-      var mountbutton = angular.element('<button ui-sref="plan.type({id:null, type:\'mount\'})"></button>');
-      var obstructionbutton = angular.element('<button ui-sref="plan.type({id:null, type:\'obstruction\'})"></button>');
-      var selectbutton = angular.element('<button class="button button-stable">Select</button>');
+      var mountbutton = angular.element('<button ></button>');
+      var obstructionbutton = angular.element('<button ></button>');
+      var selectbutton = angular.element('<button >Select</button>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
       controllerbox.append(mountbutton);
       controllerbox.append(obstructionbutton);
@@ -56,7 +55,10 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
       ol.inherits(DrawControlButton , ol.control.Control);
       
       /* map init! */
-      $timeout(timer_init, 1); //HACK: biggest hack evar. this allows the $window.innerHeight to get set appropriately after Angular(ionic?) sets that top banner. so dumb. otherwise the mouse position is offSet too high on the first click.
+      $timeout(timer_init, 1); //HACK: biggest hack evar.
+      //  this allows the $window.innerHeight to get set appropriately 
+      //  after Angular(ionic?) sets that top banner. so dumb. otherwise 
+      // the mouse position is offSet too high on the first click.
       function timer_init() {
       MapService.getStatic()
             .then(init);
@@ -90,7 +92,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           })
         );
         // the picture we'll display our drawn features on
-        var mapCapture = new ol.layer.Image({ //HACK: possible solution for timeout hack is to set this mapCapture inside of the OLService instead of in this map. 
+        var mapCapture = new ol.layer.Image({ //HACK: possible solution for timeout hack 
+                                             // is to set this mapCapture inside of the OLService
+                                             // instead of in this map. 
           source: new ol.source.ImageStatic({
             url: imgUrl,
             imageSize: [OlService.extent[2], OlService.extent[3]],
@@ -118,17 +122,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
         });
         obstructionLayer.set('name', 'obstructionLayer');
 
-
-        
-
-        // var testFeature = OlService.wkt.readGeometry("POLYGON((159 569,541 576,554 286,193 271,159 569))");
-        // console.log(testFeature.getKeys());
-        // console.log(obstructionLayer.getSource().addFeature([OlService.wkt.readGeometry("POLYGON((159 569,541 576,554 286,193 271,159 569))")]));
         // layer for panels
-        
-
-
-
         var panels = OlService.panels;
         var panelLayer = new ol.layer.Vector({
           source: panels, 
@@ -147,17 +141,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           style: StyleService.defaultStyleFunction,
         });
 
-        var selectMount = new ol.interaction.Select({
-          features: mounts.getFeatures(),
-          condition: ol.events.condition.targetNotEditable,
-          style: StyleService.highlightStyleFunction,
-        });
-        
-        var modifyMount = new ol.interaction.Modify({
-          features: selectMount.getFeatures(),
-          style: StyleService.highlightStyleFunction,
-        });
-
         /* Obstruction interactions */
         var drawObstruction = new ol.interaction.Draw({
           source: obstructions,
@@ -165,21 +148,18 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           geometryName: 'obstruction',
           style: StyleService.defaultStyleFunction,
         });
-        
-        var selectObstruction = new ol.interaction.Select({
-          features: obstructions.getFeatures(),
-          condition: ol.events.condition.click,
+                
+        var selectInteraction = new ol.interaction.Select({
+          features: [mounts.getFeatures(), obstructions.getFeatures()],
+          condition: ol.events.condition.targetNotEditable,
           style: StyleService.highlightStyleFunction,
         });
+        OlService.selectInteraction = selectInteraction;
 
-        var modifyObstruction = new ol.interaction.Modify({
-          features: selectObstruction.getFeatures(),
-          // style: StyleService.highlightStyleFunction,
-          style: StyleService.defaultStyleFunction,
+        var modifyInteraction = new ol.interaction.Modify({
+          features: selectInteraction.getFeatures(),
+          style: StyleService.highlightStyleFunction,
         });
-        
-
-        // var selectedOverlay = OlService.selectedOverlay;
 
         /* Map Options */
         var mapOptions = {
@@ -194,7 +174,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
             dragPan: true,
             rotate: true
           }).extend([new ol.interaction.DragPan({kinetic: null})]),
-          // overlays: [selectedOverlay],
           target: olMapDiv,
           view: view
         };
@@ -204,19 +183,21 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
         /* left controls callbacks */
         var handleMountButton = function handleMountButton(e){
           e.preventDefault();
+
           // change button styling
           mountbutton.addClass('button-assertive');
           obstructionbutton.removeClass('button-assertive');
+          selectbutton.removeClass('button-assertive');
 
           // remove Obstruction interactions
           map.removeInteraction(drawObstruction);
-          map.removeInteraction(selectObstruction);
-          map.removeInteraction(modifyObstruction);
+          map.removeInteraction(selectInteraction);
+          map.removeInteraction(modifyInteraction);
 
-          // add Mount interactions
-          map.addInteraction(selectMount); //TODO: use filterfunction
-          map.addInteraction(modifyMount);
+          // add mount draw interaction
           map.addInteraction(drawMount);
+
+          // notify controllbutton listener to update plan.featureType
           scope.$emit('controlbutton', {featureType: 'mount'});
         };
 
@@ -225,19 +206,34 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           // change button styling
           obstructionbutton.addClass('button-assertive');
           mountbutton.removeClass('button-assertive');
+          selectbutton.removeClass('button-assertive');
 
-          // remove Mount interactions
+          // remove interactions
           map.removeInteraction(drawMount);
-          map.removeInteraction(selectMount);
-          map.removeInteraction(modifyMount);
+          map.removeInteraction(selectInteraction);
+          map.removeInteraction(modifyInteraction);
 
-          // add Obstruction interactions
-          map.addInteraction(selectObstruction); //TODO: use filterfunction
-          // map.addInteraction(modifyObstruction);
+          // add obstruction draw interaction
           map.addInteraction(drawObstruction);
+
+          // notify controllbutton listener to update plan.featureType
           scope.$emit('controlbutton', {featureType: 'obstruction'}); 
         };
 
+        var handleSelectButton = function handleSelectButton (e) {
+          e.preventDefault();
+          selectbutton.addClass('button-assertive');
+          mountbutton.removeClass('button-assertive');
+          obstructionbutton.removeClass('button-assertive');
+
+          // remove Draw interactions
+          map.removeInteraction(drawMount);
+          map.removeInteraction(drawObstruction);
+
+          // add select and modify interactions
+          map.addInteraction(selectInteraction);
+          map.addInteraction(modifyInteraction);
+        };
         /* Left controller buttons */ 
         var top_button_options = {
           buttonText:   'Mount', 
@@ -256,20 +252,30 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           target:       obstructionbutton,
           // map: map,
         };
+        var select_button_options = {
+          buttonText:   'Select', 
+          // topButton:    false,
+          // bottomButton: true,
+          callback:     handleSelectButton,
+          target:       selectbutton,
+          // map: map,
+        };
 
-        var mountDrawbutton = new DrawControlButton(top_button_options);
+        var mountDrawbutton       = new DrawControlButton(top_button_options);
         var obstructionDrawbutton = new DrawControlButton(bottom_button_options);
+        var selectDrawbutton      = new DrawControlButton(select_button_options);
 
         var handlechange = function handlechange(c){
           console.log('handlechange', arguments);
         };
         
-        selectMount.on('addfeature', handlechange);
-        selectObstruction.on('addfeature', handlechange);
+        // selectInteraction.getFeatures().on('change:length', handlechange);
       
-        // handleMountButton();
         var gutterLineFinder = OlService.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
+        drawMount.on('drawend', function(){
+          scope.$emit('controlbutton', {featureType: 'mount'});
+        });
 
         var afterObstruction =  function (event) {
           var feature = event.feature;
@@ -280,15 +286,16 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           // };
 
           var featureId = obstructions.getFeatures().length;
-          console.log(featureId);
+          console.log('featureId (for removing feature if needed)',featureId);
           OlService.setIdsOfFeaturearray([feature], featureId);
-          console.log(scope.planRadius);
           var radius = scope.planRadius ? scope.planRadius : 10;
           feature.set('radius', radius );
-          console.log(feature.get('radius'));
           OlService.setRecent([feature], 'obstruction');
-          OlService.currentModify = selectObstruction.getFeatures().getArray()
+          OlService.currentModify = selectInteraction.getFeatures().push(feature);
           console.log(OlService.currentModify);
+
+          var selected = selectInteraction.getFeatures();
+          selected.insertAt(selected.length, feature);
 
         };
 
@@ -296,11 +303,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
         mountbutton.addClass('button-assertive');
 
         // initialize interactions
-        map.addInteraction(selectMount); //TODO: use filterfunction
-        map.addInteraction(modifyMount);
-        map.addInteraction(drawMount);
-
-
+        map.addInteraction(modifyInteraction);
+  
         // var afterObstruction = OlService.afterObstruction;
         drawObstruction.on('drawend', afterObstruction);
 

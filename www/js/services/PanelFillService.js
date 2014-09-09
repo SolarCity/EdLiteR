@@ -22,7 +22,6 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
   			p.push(PanelFillService.pointToLatLng(mounts[idx][point], idx, mounts));
 				
   		}
-  		console.log(p)
   		msg.m.push({
 					id: idx, 
 					pitch: 0,
@@ -36,7 +35,6 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
   		for (var center in obstructions[ix]){ 
   			o.push(PanelFillService.pointToLatLng(obstructions[ix][center], ix, obstructions));
   		}
-  		console.log(o);
   		msg.o.push({
 					// id: idx, 
 					radius: 25,
@@ -101,7 +99,6 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 		}
 
 		function point_machine(pt_xy){
-			// return [east_pt(pt_xy[0]), north_pt(pt_xy[1])].join(',');
 			return [east_pt(pt_xy[0]), north_pt(pt_xy[1])];
 		}
 

@@ -22,20 +22,20 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
   vm.featureType = 'obstruction';
   vm.omap = MapService.getOmap();
   vm.featureArray = OlService.getRecent;
+
   
-	// the form values become these properties
-	// vm.featureId = $stateParams.id;
-
 	// where we find mountplane features added by drawing
-	vm.mountFeatures 			 = OlService.mounts.getFeatures();
-	vm.obstructionFeatures = OlService.obstructions.getFeatures();
-
+	var layers = {};
+	layers.mount = OlService.mounts;
+	layers.obstruction = OlService.obstructions;
+	
 	vm.setRadius = function (){
-		var newval = vm.featureProperties.radius || 10;
+		var newval = vm.featureProperties.radius;
 		var recent = OlService.getRecent('obstruction');
 		if (recent) {
-			// OlService.currentModify[0].set('radius', radius);
+			recent.set('radius', radius);
 			// OlService.currentModify[0].setStyle(StyleService.defaultStyleFunction);
+			// var radius = recent.getKeys();
 			var radius = recent.get('radius');
 			console.log('radius', radius);
 		}
@@ -43,14 +43,13 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
 	};
 	
 	vm.getFeatureDetails = function (f) {
-		f = f === undefined ? vm.featureArray() : f;
+		f = f === undefined ? vm.featureArray(vm.featureType) : f;
 		console.log('featuredetails', f.get('edl'));
 		return f.get('edl');
 	};
 
 	vm.submitFeature = function(f) {
 		console.log('trying to set properties', vm.featureProperties);
-		vm.featureType = FeatureOptionService.currentFeatureType;
 
 		f = f === undefined ? vm.featureArray(vm.featureType) : f;
 		console.log(vm.featureType, vm.featureArray(vm.featureType));
@@ -66,8 +65,18 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
 
 	vm.removeFeature = function(f) {
 		// identify the feature's layer
+		console.log('trying to remove feature & type', vm.featureType,  layers[vm.featureType].getFeatures());
+		f = f === undefined ? vm.featureArray(vm.featureType) : f;
 		// remove the feature from that layer.
-		vm.getFeatureDetails();
+		console.log();
+		// debugger;
+		// console.log('f', f.getArray());
+		// f.getArray()[0].setId(2);
+		// f.getArray()[1].setId(1);
+		var features = OlService.selectInteraction.getFeatures().getArray();
+		OlService.removeFeatureById(features[0].getId(), layers[vm.featureType]);
+		// OlService.selectInteraction.removeFeature(features[0]);
+	
 	};
 }
 
