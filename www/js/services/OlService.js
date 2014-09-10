@@ -14,7 +14,7 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
 
   // dev 
   var mapDiv = {};
-  mapDiv.clientHeight = 725;
+  mapDiv.clientHeight = 725; //HACK: why is this hardcoded? 
   OlService.mapDiv = mapDiv;
   OlService.extent = [0, 0, $window.innerWidth, OlService.mapDiv.clientHeight ];
   OlService.defaultZoom = 2;
@@ -48,6 +48,7 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   OlService.removeFeatureById = function(id, layer){
     var removeus = [];
     function findforremove(f) {
+      console.log(id, f.getId());
       if (f.getId() === id) {
         removeus.push(f);
       }

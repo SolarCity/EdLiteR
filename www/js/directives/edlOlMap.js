@@ -256,9 +256,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
             // if selected feature has panels, delete them
           var id = feature.getId();
           var panellayer = OlService.layers.panel;
-          console.log(panellayer.getFeatureById(id))
-          if (panellayer.getFeatureById(id)) {
-            console.log('delete')
+          var existing = panellayer.getFeatureById(id);
+          if (existing) {
             OlService.removeFeatureById(id, panellayer);
           }
           var msg = OlService.fillMessageForSingleMount(feature);
@@ -267,7 +266,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
           ApiService.uploadMounts(api) //TODO: change from sample
             .then(function(data){
-              PanelFillService.addPanelsFromApi(data);              
+              PanelFillService.addPanelsFromApi(data, id);              
           });
         };
 
@@ -305,13 +304,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var OLselectButton          = new DrawControlButton(select_button_options);
         var OLdeleteButton          = new DrawControlButton(delete_button_options);
         var OLfillButton            = new DrawControlButton(fill_button_options);
-
-        var handlechange = function handlechange(c){
-          console.log('handlechange', arguments);
-        };
         
-        // selectInteraction.getFeatures().on('change:length', handlechange);
-      
         var gutterLineFinder = OlService.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
         drawMount.on('drawend', function(){
@@ -342,8 +335,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
         // initialize interactions
         map.addInteraction(modifyInteraction);
-  
-
       }
     },
     // template: [     ].join('')
