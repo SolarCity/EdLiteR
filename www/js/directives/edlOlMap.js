@@ -314,6 +314,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           var radius = scope.planRadius ? scope.planRadius : {radius: "50"};
           feature.set('radius', radius );
           $ionicSideMenuDelegate.toggleRight();
+
+          
   
         };
         drawObstruction.on('drawend', afterObstruction);
