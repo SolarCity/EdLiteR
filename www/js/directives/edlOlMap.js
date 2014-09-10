@@ -17,14 +17,14 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
       controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
 
-      var mountbutton = angular.element('<button ></button>');
-      var obstructionbutton = angular.element('<button ></button>');
-      var selectbutton = angular.element('<button >Select</button>');
-      var deletebutton = angular.element('<button >Delete</button>');
-      var fillbutton   = angular.element('<button >Fill</button>');
+      var mountbutton = angular.element('<button id="mountbutton" ></button>');
+      var selectbutton = angular.element('<button id="selectbutton">Select</button>');
+      var obstructionbutton = angular.element('<button id="obstructionbutton" ></button>');
+      var deletebutton = angular.element('<button id="deletebutton" >Delete</button>');
+      var fillbutton   = angular.element('<button id="fillbutton" >Fill</button>');
+      controllerbox.append(selectbutton);
       controllerbox.append(mountbutton);
       controllerbox.append(obstructionbutton);
-      controllerbox.append(selectbutton);
       controllerbox.append(deletebutton);
       controllerbox.append(fillbutton);
       
@@ -241,66 +241,47 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         };        
         var handleDeleteButton = function handleDeleteButton (e) {
           e.preventDefault();
+          var layer;
           var feature = selectInteraction.getFeatures().getArray().pop();
-          console.log(OlService.layers[feature.getGeometryName()]);
-
-          var layer   = OlService.layers[feature.getGeometryName()];
-          console.log('layer in delete button ',layer);
-          if (feature) {
+          if (!!feature) {
+            layer = OlService.layers[feature.getGeometryName()];
             OlService.removeFeatureById(feature.getId(), layer);
-          } else {
-            console.log('balls!', arguments);
-          }
+          } 
         };
         var handleFillButton = function handleFillButton (e) {
           e.preventDefault();
           console.log('fill!!', arguments);
           
         };
-        /* Left controller buttons */ 
+
+        /* Map controller button options */ 
         var top_button_options = {
           buttonText:   'Mount', 
-          // topButton:    true,
-          // bottomButton: false, 
           callback:     handleMountButton, 
           target:       mountbutton,
-          // map: map,
         };
         
         var bottom_button_options = {
           buttonText:   'Obstruction', 
-          // topButton:    false,
-          // bottomButton: true, 
           callback:     handleObstructionButton,
           target:       obstructionbutton,
-          // map: map,
         };
         var select_button_options = {
           buttonText:   'Select', 
-          // topButton:    false,
-          // bottomButton: true,
           callback:     handleSelectButton,
           target:       selectbutton,
-          // map: map,
         };        
 
         var delete_button_options = {
           buttonText:   'Delete', 
-          // topButton:    false,
-          // bottomButton: true,
           callback:     handleDeleteButton,
           target:       deletebutton,
-          // map: map,
         };
         var fill_button_options = {
           buttonText:   'FillMount', 
-          // topButton:    false,
-          // bottomButton: true,
           callback:     handleFillButton,
           target:       fillbutton,
-          // map: map,
         };
-
 
         var OLmountDrawbutton       = new DrawControlButton(top_button_options);
         var OLobstructionDrawbutton = new DrawControlButton(bottom_button_options);
@@ -322,35 +303,27 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
         var afterObstruction =  function (event) {
           var feature = event.feature;
-          console.log(feature);
           // var redrawOnChangeRadius = function (){
           //   console.log('resetStyleAfterRadius');
           //   this.setStyle(StyleService.defaultStyleFunction);
           // };
 
           var featureId = obstructions.getFeatures().length;
-          console.log('featureId (for removing feature if needed)',featureId);
+  
           OlService.setIdsOfFeaturearray([feature], featureId);
           var radius = scope.planRadius ? scope.planRadius : {radius: "50"};
           feature.set('radius', radius );
           $ionicSideMenuDelegate.toggleRight();
-          // OlService.setRecent([feature], 'obstruction');
-          // OlService.currentModify = selectInteraction.getFeatures().push(feature);
-          // console.log(OlService.currentModify);
-
-          // var selected = selectInteraction.getFeatures();
-          // selected.insertAt(selected.length, feature);
-
+  
         };
+        drawObstruction.on('drawend', afterObstruction);
 
         // initialize buttons
-        mountbutton.addClass('button-assertive');
+        selectbutton.addClass('button-assertive');
 
         // initialize interactions
         map.addInteraction(modifyInteraction);
   
-        // var afterObstruction = OlService.afterObstruction;
-        drawObstruction.on('drawend', afterObstruction);
 
       }
     },
