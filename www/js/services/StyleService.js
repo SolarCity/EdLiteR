@@ -16,10 +16,10 @@ function StyleService_ ($q) {
   c.greenFill               = "rgba(30, 173, 83, 0.3)";
   c.highlightBGlightGreen   = "rgba(235, 246, 238, 1)";
   c.grey_btns               = "rgba(131, 131, 131, 1)";
-  c.panelBorderHighlight    = "rgba(223, 215, 191, 1)";
-  c.panelFillHighlight      = "rgba(41, 49, 69, 0.5)";
+  c.panelBorderHighlight    = "rgba(223, 215, 191, 0.8)";
+  c.panelFillHighlight      = "rgba(41, 49, 69, 0.4)";
   c.panelBorder             = "rgba(0,  66, 99, 1)";
-  c.panelFill               = "rgba(33, 22, 45, 0.8)";
+  c.panelFill               = "rgba(33, 22, 45, 0.4)";
 
   var StyleService = {};
   StyleService.colors = c;

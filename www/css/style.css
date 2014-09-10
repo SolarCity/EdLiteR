@@ -44,17 +44,18 @@ edl-map {
 }
 
 .buttoncontrols { /* TODO: styling */
+  z-index: 20000;
   position: absolute;
   bottom: 1%;
   left: 1%;
   display: inline;
+  data-tap-disabled: true;
 }
 
 .topbutton {
   position: absolute;
   top: 65px;
   left: 8px;
-  /*z-index: 1000;*/
 }
 .bottombutton {
   position: absolute;
@@ -64,7 +65,7 @@ edl-map {
 }
 
 .controls {
-  /*z-index: 11;*/
+  z-index: 11000;
   margin-top: 16px;
   border: 1px solid transparent;
   border-radius: 2px 0 0 2px;
@@ -97,17 +98,4 @@ edl-map {
 .pac-container {
   /*z-index: 20000;*/
   font-family: Roboto;
-  /*data-tap-disabled: true;*/
-}
-
-#type-selector {
-  color: #fff;
-  background-color: #4d90fe;
-  padding: 5px 11px 0px 11px;
-}
-
-#type-selector label {
-  font-family: Roboto;
-  font-size: 13px;
-  font-weight: 300;
 }
