@@ -117,7 +117,6 @@ function StyleService_ ($q) {
       if (radius) {
         return styles[feature.getGeometryName()](radius.radius, resolution);
       }
-      console.log(feature.getGeometryName())
       return styles[feature.getGeometryName()];
     };
     /* jshint +W069 */

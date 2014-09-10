@@ -34,6 +34,10 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     return OlService.recentFeature[opt];
   };
 
+  OlService.getSelectedFeature = function(){
+    return OlService.selectInteraction.getFeatures().getArray();
+  };
+
   OlService.setIdsOfFeaturearray = function(featurearray, id) { // utility for setting id. allow to later remove by id(??)
     for (var key in featurearray) {
       var f = featurearray[key];
@@ -54,7 +58,7 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     }
   };
 
-  OlService.getFeatureFromLayerByIdAndType = function getFeatureFromLayerByIdAndType(layer, id, type) {
+  OlService.getFeatureFromLayerByIdAndType = function(layer, id, type) {
     var result;
     var matchType = function(f) {
       if (f.getGeometryName()=== type && f.getId() === id) {
@@ -83,14 +87,33 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     panel: OlService.panels,
   };
   
-  // OlService.afterObstruction = function afterObstruction(event, formDetails) {
-  //   var feature = event.feature;
-  //   console.log(formDetails);
-
-  //   var radius = Math.floor(Math.random()*25 + 1);
-  //   feature.set('radius', radius );
-  //   OlService.setRecent([feature], 'obstruction');
-  // };
+  OlService.fillMessageForSingleMount = function(mount){
+    if (mount.getGeometryName() !== "mount") throw 'err must be a mount'; 
+    var wkt = OlService.wkt;
+    var msg = {};
+    // get all obstructions on page
+    var obstructions = OlService.obstructions.getFeatures();
+    // add mount points object
+    msg.m = {};
+    var id = parseInt(mount.getId());
+    msg.m[id] = wkt.writeFeature(mount).split(',');
+    msg.m[id][0] = msg.m[id][0].split('((')[1];
+    msg.m[id].splice(-1); // remove the last point, it's a dupe of the 1st
+    // add obstruction points object 
+    msg.o = {};
+    obstructions.forEach(function(feat, idx, col){
+      if (feat.getGeometryName() === "obstruction") {
+        idx = parseInt(idx);
+        // add their points to mountpoints
+        msg.o[idx] = wkt.writeFeature(feat).split(',');
+        msg.o[idx][0] = msg.o[idx][0].split('(')[1];
+        msg.o[idx][0] = msg.o[idx][0].split(')');
+        msg.o[idx].splice(1);
+        msg.o[idx] = msg.o[idx][0];
+      }
+    });
+    return msg;
+  };
 
   OlService.wkt = new ol.format.WKT();
 

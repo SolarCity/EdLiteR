@@ -1,4 +1,4 @@
-function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDelegate, $timeout, MapService, OlService, StyleService, FeatureOptionService) {
+function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDelegate, $timeout, ApiService, PanelFillService, MapService, OlService, StyleService, FeatureOptionService) {
   return {
     restrict: "A",
     transclude: false,
@@ -242,16 +242,33 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var handleDeleteButton = function handleDeleteButton (e) {
           e.preventDefault();
           var layer;
-          var feature = selectInteraction.getFeatures().getArray().pop();
+          var feature = OlService.getSelectedFeature().pop();
           if (!!feature) {
             layer = OlService.layers[feature.getGeometryName()];
             OlService.removeFeatureById(feature.getId(), layer);
-          } 
+          }
         };
+
         var handleFillButton = function handleFillButton (e) {
           e.preventDefault();
-          console.log('fill!!', arguments);
-          
+          // get selected feature
+          var feature = OlService.getSelectedFeature()[0];
+            // if selected feature has panels, delete them
+          var id = feature.getId();
+          var panellayer = OlService.layers.panel;
+          console.log(panellayer.getFeatureById(id))
+          if (panellayer.getFeatureById(id)) {
+            console.log('delete')
+            OlService.removeFeatureById(id, panellayer);
+          }
+          var msg = OlService.fillMessageForSingleMount(feature);
+          // create api message with Process Features
+          var api = PanelFillService.processFeatures(msg.m, msg.o);
+
+          ApiService.uploadMounts(api) //TODO: change from sample
+            .then(function(data){
+              PanelFillService.addPanelsFromApi(data);              
+          });
         };
 
         /* Map controller button options */ 
@@ -315,7 +332,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           feature.set('radius', radius );
           $ionicSideMenuDelegate.toggleRight();
 
-          
+
   
         };
         drawObstruction.on('drawend', afterObstruction);

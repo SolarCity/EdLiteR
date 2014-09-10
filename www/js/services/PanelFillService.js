@@ -9,6 +9,26 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
    * functions we use
    */
 
+
+  PanelFillService.addPanelsFromApi = function(data){ //TODO: consolidate with responseIterator. 
+  	angular.forEach(data, PanelFillService.responseIterator);
+  };
+
+  PanelFillService.responseIterator = function(arrayOfPanels, key){
+    // iterate over each panel in the array of panels
+  	var featurestoadd = [];
+
+    arrayOfPanels.forEach(function(points_for_panel, key, obj){
+      // turn each array of points into a WKT
+      var feature = PanelFillService.panelFromJson(points_for_panel);
+      // var features = OlService.panels.getFeatures();
+      featurestoadd.push(feature);
+      OlService.setIdsOfFeaturearray([feature], key);
+    });
+
+    OlService.panels.addFeatures(featurestoadd);  
+  };
+
   PanelFillService.processFeatures = function(mounts, obstructions ){
   	console.log(obstructions);
   	var msg = {};
