@@ -19,14 +19,14 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   OlService.extent = [0, 0, $window.innerWidth, OlService.mapDiv.clientHeight ];
   OlService.defaultZoom = 2;
 
-  OlService.setRecent = function(featureArray, opt) {
-    if (opt === undefined) console.log('setRecent needs a type to set, dummy'); //TODO: check error in prettier way
-    featureArray = Array.isArray(featureArray) ? featureArray : [ featureArray ];
-    OlService.recentFeature[opt] = new ol.Collection(featureArray);
-    console.log('setting recent', opt, 'as: ', OlService.recentFeature);
-    $ionicSideMenuDelegate.toggleRight();
-    return OlService.recentFeature;
-  };
+  // OlService.setRecent = function(featureArray, opt) {
+  //   if (opt === undefined) console.log('setRecent needs a type to set, dummy'); //TODO: check error in prettier way
+  //   featureArray = Array.isArray(featureArray) ? featureArray : [ featureArray ];
+  //   OlService.recentFeature[opt] = new ol.Collection(featureArray);
+  //   console.log('setting recent', opt, 'as: ', OlService.recentFeature);
+  //   $ionicSideMenuDelegate.toggleRight();
+  //   return OlService.recentFeature;
+  // };
 
   OlService.getRecent = function(opt) {
     console.log('getting recent', opt, OlService.recentFeature[opt]);
@@ -36,7 +36,6 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
 
   OlService.setIdsOfFeaturearray = function(featurearray, id) { // utility for setting id. allow to later remove by id(??)
     for (var key in featurearray) {
-      console.log('featureId', featurearray[key]);
       var f = featurearray[key];
       f.setId(id);
     }
@@ -77,6 +76,12 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   OlService.obstructions = new ol.source.Vector({
     features: new ol.Collection([])
   });
+
+  OlService.layers = {
+    mount: OlService.mounts,
+    obstruction: OlService.obstructions, 
+    panel: OlService.panels,
+  };
   
   // OlService.afterObstruction = function afterObstruction(event, formDetails) {
   //   var feature = event.feature;
@@ -112,7 +117,7 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
 
     // make a gutter feature to draw & push to gutterOverlay's feature collection
     var gutterLineGeom = wkt.readGeometry(gutterLineWkt);
-    var gutterFeature = wkt.readFeature(gutterLineWkt);
+    var gutterFeature  = wkt.readFeature(gutterLineWkt);
 
     // set gutter geometry and key for stylefunction
     gutterFeature.setProperties({

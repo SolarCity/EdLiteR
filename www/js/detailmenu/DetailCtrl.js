@@ -1,5 +1,6 @@
 function FeatureCtrl_($scope, $ionicSideMenuDelegate, $state, $stateParams, FeatureOptionService, MapService, OlService) {
 	var vm = this;
+	// this is entirely unused right now, but plan.js looks for this controller. 
 	
 }
 controllers.controller('FeatureCtrl',FeatureCtrl_);
@@ -86,27 +87,16 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
 
 	vm.submitFeature = function() {
 		var feature = vm.feature();
-		var properties = {};
-		properties.edl = vm.featureProperties;
-		console.log('hi', properties)
-		feature.edl = properties.edl;
+		// var properties = {}; // can probably be removed. 
+		// properties.edl = vm.featureProperties;
+		// console.log('hi', properties);
+		// feature.edl = properties.edl;
 		var result = feature.edl;
 		console.log('feature & properties', feature, result);
 
 		return result;
 	};
 
-	vm.removeFeature = function() {
-		var f = {
-			id: $scope.selectedFeatureId,
-			type: $scope.selectedFeatureType
-		};
-
-		var layer = layers[f.type];
-		feature = getFeatureFromLayerByIdAndType(layer, f.id, f.type);
-
-		OlService.removeFeatureById(f.id, layer);
-	};
 }
 
 controllers.controller("DetailCtrl", DetailCtrl_);

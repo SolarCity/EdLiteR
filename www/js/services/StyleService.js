@@ -16,6 +16,10 @@ function StyleService_ ($q) {
   c.greenFill               = "rgba(30, 173, 83, 0.3)";
   c.highlightBGlightGreen   = "rgba(235, 246, 238, 1)";
   c.grey_btns               = "rgba(131, 131, 131, 1)";
+  c.panelBorderHighlight    = "rgba(223, 215, 191, 1)";
+  c.panelFillHighlight      = "rgba(41, 49, 69, 0.5)";
+  c.panelBorder             = "rgba(0,  66, 99, 1)";
+  c.panelFill               = "rgba(33, 22, 45, 0.8)";
 
   var StyleService = {};
   StyleService.colors = c;
@@ -71,6 +75,21 @@ function StyleService_ ($q) {
                 })
               })
             })];
+    styles['panel'] =  [new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: c.panelFill,
+        }),
+        stroke: new ol.style.Stroke({
+          color: c.panelBorder,
+          width: 2
+        }),
+        image: new ol.style.Circle({
+          radius: 7,
+          fill: new ol.style.Fill({
+            color: c.orangeBorder,
+          })
+        })
+      })];
     // obstruction style
     // styles['obstruction'] = [new ol.style.Style({
     //           image: new ol.style.Circle({
@@ -98,6 +117,7 @@ function StyleService_ ($q) {
       if (radius) {
         return styles[feature.getGeometryName()](radius.radius, resolution);
       }
+      console.log(feature.getGeometryName())
       return styles[feature.getGeometryName()];
     };
     /* jshint +W069 */
@@ -147,7 +167,6 @@ function StyleService_ ($q) {
                 color: c.orangeBorder,
                 width: 5
               }),
-            
               image: new ol.style.Circle({
                 radius: 7,
                 fill: new ol.style.Fill({
@@ -155,7 +174,22 @@ function StyleService_ ($q) {
                 })
               })
             })];
-    // obstruction style
+    styles['panel'] =  [new ol.style.Style({
+            fill: new ol.style.Fill({
+              color: c.panelFillHighlight,
+            }),
+            stroke: new ol.style.Stroke({
+              color: c.panelBorderHighlight,
+              width: 2
+            }),
+            image: new ol.style.Circle({
+              radius: 7,
+              fill: new ol.style.Fill({
+                color: c.orangeBorder,
+              })
+            })
+          })];
+  // obstruction style
     styles['obstruction'] = function(rad, res) {
       return [new ol.style.Style({
               image: new ol.style.Circle({
@@ -170,7 +204,6 @@ function StyleService_ ($q) {
     /*jshint +W069 */
 
     return function(feature, resolution) {
-      
       var radius = feature.get('radius');
       if (radius) {
         return styles[feature.getGeometryName()](radius.radius, resolution);

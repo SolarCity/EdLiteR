@@ -12,11 +12,13 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 		
     $ionicSideMenuDelegate.toggleRight();
 	};
+
   var getFeatureFromLayerByIdAndType = OlService.getFeatureFromLayerByIdAndType;
 
   vm.featureProperties = {};
   vm.featureProperties.radius = 10;
-  // vm.featureArray = $scope.selectedFeatureId;
+
+  vm.selectedFeatureId = $scope.selectedFeatureId;
   vm.selectedFeatureId = $scope.selectedFeatureId;
   vm.selectedFeatureType = $scope.selectedFeatureType;
   vm.selectedFeature = {
@@ -36,6 +38,7 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
   var layers = {};
   layers.mount = OlService.mounts;
   layers.obstruction = OlService.obstructions;
+  
   vm.getFeatureDetails = function () {
     var f = {};
     if ($scope.selectedFeatureId) {
@@ -55,14 +58,14 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
         
       } else {
         result = new FeatureOptionService.options(f.type);
-        console.log('no feature.edl', result);
         feature.edl = result;
+        console.log('no feature.edl', [feature.edl]);
       }
     } else {
       result = new FeatureOptionService.options(f.type);
-      console.log('no f.id', result);
       // vm.featureProperties = FeatureOptionService.options[vm.featureType];
-        feature.edl = result;
+      feature.edl = result;
+      console.log('no f.id', [feature.edl]);
       // return new FeatureOptionService.options[f.type]();
     }
     return feature;

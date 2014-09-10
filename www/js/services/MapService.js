@@ -23,7 +23,7 @@ function MapService_ ($q) {
     mapTypeControl: false,
     // zoomControl: true,
     zoomControlOptions: {
-      style: google.maps.ZoomControlStyle.LARGE
+      style: google.maps.ZoomControlStyle.SMALL
     }
   };
 

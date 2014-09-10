@@ -1,6 +1,5 @@
 <ion-content>
-<button class="button button-small button-balanced" ng-click="detail.submitFeature()">COMPLETE</button>
-<button class="button button-small button-assertive" ng-click="plan.removeFeature()">DELETE</button>
+  <button class="button button-small button-balanced" ng-click="detail.submitFeature()">COMPLETE</button>
   <form>
     <label ng-if="detail.featureType==='obstruction'">
       <span class="input-label">Radius</span>
@@ -31,9 +30,10 @@
     <label class="item item-radio" ng-repeat="property in plan.feature.edl">
       <span class="input-label">{{property.propertyName}}</span>
       <ion-radio  type="radio" 
-                  name="{{option.value}}"
+                  ng-selected="{{property.value}}==={{option.value}}"
+                  name="{{property.value}}"
                   ng-repeat="option in property.options"
-                  ng-model="plan.feature.edl[property.propertyValue]"                   
+                  ng-model="property.value"
       						value="{{option.value}}"
       >{{option.text}}</ion-radio>
     </label>

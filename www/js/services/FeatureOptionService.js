@@ -36,7 +36,18 @@ function FeatureOptionService_ () {
 		{
 			propertyName: 'Gutter Height',
 			propertyValue: 'gutterHeight',
-			options:  [{value: 'fixme', text: 'fixme'}]
+			options:  [{
+				value: 'one',
+				text:  'One Story'
+			},{
+				value: 'two',
+				text:  'Two Story'
+			},{
+				value: 'more',
+				text:  'More than that'
+			}],
+			value: null
+
 		},
 		{
 			propertyName: 'Overall Shading',
@@ -53,7 +64,8 @@ function FeatureOptionService_ () {
 			},{
 				value: 'none',
 				text:  'None'
-			}]
+			}],
+			value: null
 		},{
 			propertyName: 'Roof Type',
 			propertyValue: 'roofType',
@@ -69,16 +81,9 @@ function FeatureOptionService_ () {
 			},{
 				value: 'rolled',
 				text:  'Rolled Roof'
-			}]
-		},{
-			propertyName: 'AHJ',
-			propertyValue: 'AHJ',
-			options: [{value: 'fixme', text: 'fixme'}]
-		},{
-			propertyName: 'planeId',
-			propertyValue: 'MP#',
-			options: [{value: 'fixme', text: 'fixme'}]
-	}];
+			}],
+			value: null
+		}];
 
 	options.obstruction = [
 	// {

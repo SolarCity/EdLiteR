@@ -173,9 +173,13 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
     // add the right begin & end details
     wkt_string_from_points_array = "POLYGON((" + wkt_string_from_points_array + "))";
 
-		feature_to_return = wkt.readFeature(wkt_string_from_points_array); //TODO: projection?
-		var fCoord = feature_to_return.getGeometry().getCoordinates();
+		feature_to_return = wkt.readFeature(wkt_string_from_points_array); 
+		var fGeometry     = wkt.readGeometry(wkt_string_from_points_array);
 
+		feature_to_return.setProperties({
+			panel: fGeometry,
+		});
+		feature_to_return.setGeometryName('panel');
 		return feature_to_return;
   };
 

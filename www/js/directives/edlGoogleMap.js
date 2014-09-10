@@ -23,6 +23,10 @@ function edlGoogleMap($timeout, $document, $window, MapService) {
         var autocomplete = MapService.setAutocomplete(input);
         autocomplete.bindTo('bounds', map);
         google.maps.event.addListener(autocomplete, 'place_changed', function(){
+        //   $('.pac-container').on('touchstart', function(e) { 
+        //     console.log('touchend');
+        //     e.stopPropagation(); 
+        // });
           var place = autocomplete.getPlace();
           if (!place.geometry) {
             return;
@@ -46,7 +50,7 @@ function edlGoogleMap($timeout, $document, $window, MapService) {
         });
         var center =  MapService.getCenter();
         map.setCenter(center);
-        // map.setZoom(20);
+        map.setZoom(19);
 
         var saveCenter = function saveCenter () {
           var center = map.getCenter();
@@ -56,6 +60,7 @@ function edlGoogleMap($timeout, $document, $window, MapService) {
 
         };
         google.maps.event.addListener(map, 'center_changed', saveCenter);
+        $('body').on('touchstart','.pac-container', function(e){e.stopPropagation();}); //HACK: to get touch events working with Google Api
       }
       // var mapDiv = document.getElementById('gmap');
 

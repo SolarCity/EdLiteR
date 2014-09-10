@@ -1,4 +1,4 @@
-function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapService, OlService, StyleService, FeatureOptionService) {
+function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDelegate, $timeout, MapService, OlService, StyleService, FeatureOptionService) {
   return {
     restrict: "A",
     transclude: false,
@@ -13,15 +13,20 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
     link: function edlOlMapLink(scope, ele, attrs) {
       /* Leftside controls. See init() for instantiation */
       var controllerbox = angular.element('<div></div>');
-      controllerbox.addClass('mapboxcontrols');
+      var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
+      controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
+
       var mountbutton = angular.element('<button ></button>');
       var obstructionbutton = angular.element('<button ></button>');
       var selectbutton = angular.element('<button >Select</button>');
-      var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
+      var deletebutton = angular.element('<button >Delete</button>');
+      var fillbutton   = angular.element('<button >Fill</button>');
       controllerbox.append(mountbutton);
       controllerbox.append(obstructionbutton);
       controllerbox.append(selectbutton);
+      controllerbox.append(deletebutton);
+      controllerbox.append(fillbutton);
       
       /*
        *  ControllButton constructor
@@ -127,7 +132,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
         var panelLayer = new ol.layer.Vector({
           source: panels, 
           projection: pixelProjection,
-          // style:  StyleService.defaultStyleFunction,
+          style:  StyleService.defaultStyleFunction,
         });
         panelLayer.set('name', 'panelLayer');
         OlService.panelLayer = panelLayer;
@@ -233,12 +238,31 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           // add select and modify interactions
           map.addInteraction(selectInteraction);
           map.addInteraction(modifyInteraction);
+
+        };        
+        var handleDeleteButton = function handleDeleteButton (e) {
+          e.preventDefault();
+          var feature = selectInteraction.getFeatures().getArray().pop();
+          console.log(OlService.layers[feature.getGeometryName()]);
+
+          var layer   = OlService.layers[feature.getGeometryName()];
+          console.log('layer in delete button ',layer);
+          if (feature) {
+            OlService.removeFeatureById(feature.getId(), layer);
+          } else {
+            console.log('balls!', arguments);
+          }
+        };
+        var handleFillButton = function handleFillButton (e) {
+          e.preventDefault();
+          console.log('fill!!', arguments);
+          
         };
         /* Left controller buttons */ 
         var top_button_options = {
           buttonText:   'Mount', 
-          topButton:    true,
-          bottomButton: false, 
+          // topButton:    true,
+          // bottomButton: false, 
           callback:     handleMountButton, 
           target:       mountbutton,
           // map: map,
@@ -246,8 +270,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
         
         var bottom_button_options = {
           buttonText:   'Obstruction', 
-          topButton:    false,
-          bottomButton: true, 
+          // topButton:    false,
+          // bottomButton: true, 
           callback:     handleObstructionButton,
           target:       obstructionbutton,
           // map: map,
@@ -259,11 +283,31 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           callback:     handleSelectButton,
           target:       selectbutton,
           // map: map,
+        };        
+
+        var delete_button_options = {
+          buttonText:   'Delete', 
+          // topButton:    false,
+          // bottomButton: true,
+          callback:     handleDeleteButton,
+          target:       deletebutton,
+          // map: map,
+        };
+        var fill_button_options = {
+          buttonText:   'FillMount', 
+          // topButton:    false,
+          // bottomButton: true,
+          callback:     handleFillButton,
+          target:       fillbutton,
+          // map: map,
         };
 
-        var mountDrawbutton       = new DrawControlButton(top_button_options);
-        var obstructionDrawbutton = new DrawControlButton(bottom_button_options);
-        var selectDrawbutton      = new DrawControlButton(select_button_options);
+
+        var OLmountDrawbutton       = new DrawControlButton(top_button_options);
+        var OLobstructionDrawbutton = new DrawControlButton(bottom_button_options);
+        var OLselectButton          = new DrawControlButton(select_button_options);
+        var OLdeleteButton          = new DrawControlButton(delete_button_options);
+        var OLfillButton            = new DrawControlButton(fill_button_options);
 
         var handlechange = function handlechange(c){
           console.log('handlechange', arguments);
@@ -288,14 +332,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, MapServic
           var featureId = obstructions.getFeatures().length;
           console.log('featureId (for removing feature if needed)',featureId);
           OlService.setIdsOfFeaturearray([feature], featureId);
-          var radius = scope.planRadius ? scope.planRadius : 10;
+          var radius = scope.planRadius ? scope.planRadius : {radius: "50"};
           feature.set('radius', radius );
-          OlService.setRecent([feature], 'obstruction');
-          OlService.currentModify = selectInteraction.getFeatures().push(feature);
-          console.log(OlService.currentModify);
+          $ionicSideMenuDelegate.toggleRight();
+          // OlService.setRecent([feature], 'obstruction');
+          // OlService.currentModify = selectInteraction.getFeatures().push(feature);
+          // console.log(OlService.currentModify);
 
-          var selected = selectInteraction.getFeatures();
-          selected.insertAt(selected.length, feature);
+          // var selected = selectInteraction.getFeatures();
+          // selected.insertAt(selected.length, feature);
 
         };
 

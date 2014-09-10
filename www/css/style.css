@@ -43,11 +43,11 @@ edl-map {
   height: 100%;
 }
 
-.mapboxcontrols { /* TODO: styling */
+.buttoncontrols { /* TODO: styling */
   position: absolute;
-  top: 65px;
-  left: 8px;
-  display: block;
+  bottom: 1%;
+  left: 1%;
+  display: inline;
 }
 
 .topbutton {
@@ -64,7 +64,7 @@ edl-map {
 }
 
 .controls {
-  z-index: 11;
+  /*z-index: 11;*/
   margin-top: 16px;
   border: 1px solid transparent;
   border-radius: 2px 0 0 2px;
@@ -94,18 +94,13 @@ edl-map {
   text-overflow: ellipsis;
 }
 
-#place-input:focus {
-  border-color: #4d90fe;
-  margin-left: -1px;
-  padding-left: 14px;  /* Regular padding-left + 1. */
-  width: 401px;
-}
-
 .pac-container {
+  /*z-index: 20000;*/
   font-family: Roboto;
+  /*data-tap-disabled: true;*/
 }
 
-/*#type-selector {
+#type-selector {
   color: #fff;
   background-color: #4d90fe;
   padding: 5px 11px 0px 11px;
@@ -115,4 +110,4 @@ edl-map {
   font-family: Roboto;
   font-size: 13px;
   font-weight: 300;
-}*/
+}
