@@ -156,7 +156,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
                 
         var selectInteraction = new ol.interaction.Select({
           features: [mounts.getFeatures(), obstructions.getFeatures()],
-          condition: ol.events.condition.targetNotEditable,
           style: StyleService.highlightStyleFunction,
         });
         OlService.selectInteraction = selectInteraction;
