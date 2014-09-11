@@ -13,9 +13,5 @@ angular.module('states.search',[]).config( function searchState($stateProvider) 
   .state("search.find", {
     url: "/find",
     templateUrl: "templates/states/search/search.find.html",
-  })
-  .state("search.grab", {
-    url: "/grab",
-    templateUrl: "templates/states/search/search.grab.html",
   });
 });
