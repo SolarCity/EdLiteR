@@ -293,6 +293,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           callback:     handleDeleteButton,
           target:       deletebutton,
         };
+        
         var fill_button_options = {
           buttonText:   'FillMount', 
           callback:     handleFillButton,
@@ -304,7 +305,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var OLselectButton          = new DrawControlButton(select_button_options);
         var OLdeleteButton          = new DrawControlButton(delete_button_options);
         var OLfillButton            = new DrawControlButton(fill_button_options);
-        
+
         var gutterLineFinder = OlService.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
         drawMount.on('drawend', function(){

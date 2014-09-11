@@ -16,7 +16,7 @@ function MapService_ ($q) {
     scrollwheel: true,
     streetViewControl: false,
     // center: new google.maps.LatLng(37.5516671,-122.31563), //TODO: device location
-    zoom: 19,
+    zoom: 20,
     mapTypeId: google.maps.MapTypeId.SATELLITE, 
     tilt: 0, 
     rotateControl: true,

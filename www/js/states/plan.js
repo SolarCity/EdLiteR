@@ -25,17 +25,18 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
         controller: "DetailCtrl as detail",
       }
     },
-  }).state("plan.fill", {
-    url:         "/fill",
-    views: {
-      'planContent' :{
-        templateUrl: 'templates/states/fill/fillContent.html',
-        controller:  "FillCtrl as fill",
-      },
-      'detailMenu' :{
-        templateUrl: 'templates/states/fill/detailMenu.html', 
-        controller: "",
-      }
-    },
   })
+  // .state("plan.fill", {
+  //   url:         "/fill",
+  //   views: {
+  //     'planContent' :{
+  //       templateUrl: 'templates/states/fill/fillContent.html',
+  //       controller:  "FillCtrl as fill",
+  //     },
+  //     'detailMenu' :{
+  //       templateUrl: 'templates/states/fill/detailMenu.html', 
+  //       controller: "",
+  //     }
+  //   },
+  // })
 ;});

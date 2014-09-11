@@ -48,7 +48,6 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   OlService.removeFeatureById = function(id, layer){
     var removeus = [];
     function findforremove(f) {
-      console.log(id, f.getId());
       if (f.getId() === id) {
         removeus.push(f);
       }

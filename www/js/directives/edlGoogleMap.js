@@ -50,7 +50,7 @@ function edlGoogleMap($timeout, $document, $window, MapService) {
         });
         var center =  MapService.getCenter();
         map.setCenter(center);
-        map.setZoom(19);
+        map.setZoom(20);
 
         var saveCenter = function saveCenter () {
           var center = map.getCenter();
