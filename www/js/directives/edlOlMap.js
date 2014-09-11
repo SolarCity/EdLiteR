@@ -12,21 +12,33 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
     },
     link: function edlOlMapLink(scope, ele, attrs) {
       /* Leftside controls. See init() for instantiation */
+      var Ol = OlService;
       var controllerbox = angular.element('<div></div>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
       controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
 
-      var mountbutton = angular.element('<button id="mountbutton" ></button>');
-      var selectbutton = angular.element('<button id="selectbutton">Select</button>');
+      var mountbutton       = angular.element('<button id="mountbutton" ></button>');
+      var selectbutton      = angular.element('<button id="selectbutton"></button>');
       var obstructionbutton = angular.element('<button id="obstructionbutton" ></button>');
-      var deletebutton = angular.element('<button id="deletebutton" >Delete</button>');
-      var fillbutton   = angular.element('<button id="fillbutton" >Fill</button>');
+      var deletebutton      = angular.element('<button id="deletebutton" ></button>');
+      var fillbutton        = angular.element('<button id="fillbutton" ></button>');
+      var previewbutton     = angular.element('<button id="previewbutton" ></button>');
       controllerbox.append(selectbutton);
       controllerbox.append(mountbutton);
       controllerbox.append(obstructionbutton);
       controllerbox.append(deletebutton);
       controllerbox.append(fillbutton);
+      controllerbox.append(previewbutton);
+      var buttons = [mountbutton, selectbutton, obstructionbutton, deletebutton, fillbutton, previewbutton];
+      var selectThisButton = function selectThisButton (selected) {
+        Ol.setPreviewMode(false);
+
+        buttons.forEach(function(b){
+          b.removeClass('button-assertive');
+        });
+        selected.addClass('button-assertive');
+      };
       
       /*
        *  ControllButton constructor
@@ -71,7 +83,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
       function init (imgUrl) {
         var olMapDiv = ele[0];
-        OlService.mapDiv = olMapDiv;
+        Ol.mapDiv = olMapDiv;
 
         var gmap = MapService.getGmap();
         var bounds;
@@ -82,15 +94,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
         var pixelProjection = new ol.proj.Projection({
           units: 'pixels',
-          extent: OlService.extent
+          extent: Ol.extent
         });
         
-        OlService.pixelProjection = pixelProjection;
+        Ol.pixelProjection = pixelProjection;
         var view =  MapService.setOview( 
           new ol.View({
             projection: pixelProjection,
             center: ol.extent.getCenter(pixelProjection.getExtent()),
-            zoom: OlService.defaultZoom,
+            zoom: Ol.defaultZoom,
           })
         );
         // the picture we'll display our drawn features on
@@ -99,7 +111,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
                                              // instead of in this map. 
           source: new ol.source.ImageStatic({
             url: imgUrl,
-            imageSize: [OlService.extent[2], OlService.extent[3]],
+            imageSize: [Ol.extent[2], Ol.extent[3]],
             projection: pixelProjection,
             imageExtent: pixelProjection.getExtent()
           }),
@@ -107,7 +119,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         mapCapture.set('name', 'mapCapture');
 
         // layer for mounts
-        var mounts = OlService.mounts;
+        var mounts = Ol.mounts;
         var mountLayer = new ol.layer.Vector({
           source: mounts, 
           projection: pixelProjection,
@@ -116,7 +128,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         mountLayer.set('name', 'mountLayer');
 
         // layer for obstructions
-        var obstructions = OlService.obstructions;
+        var obstructions = Ol.obstructions;
         var obstructionLayer = new ol.layer.Vector({
           source: obstructions, 
           projection: pixelProjection,
@@ -125,15 +137,19 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         obstructionLayer.set('name', 'obstructionLayer');
 
         // layer for panels
-        var panels = OlService.panels;
+        var panels = Ol.panels;
         var panelLayer = new ol.layer.Vector({
           source: panels, 
           projection: pixelProjection,
           style:  StyleService.defaultStyleFunction,
         });
         panelLayer.set('name', 'panelLayer');
-        OlService.panelLayer = panelLayer;
+        Ol.panelLayer = panelLayer;
         
+        Ol.hideLayers = new ol.layer.Group({
+          layers: new ol.Collection([mountLayer, obstructionLayer])
+        });
+
         /* Mount interactions */
         var drawMount = new ol.interaction.Draw({
           source: mounts,
@@ -155,7 +171,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           features: [mounts.getFeatures(), obstructions.getFeatures()],
           style: StyleService.highlightStyleFunction,
         });
-        OlService.selectInteraction = selectInteraction;
+        Ol.selectInteraction = selectInteraction;
 
         var modifyInteraction = new ol.interaction.Modify({
           features: selectInteraction.getFeatures(),
@@ -184,11 +200,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         /* left controls callbacks */
         var handleMountButton = function handleMountButton(e){
           e.preventDefault();
-
           // change button styling
-          mountbutton.addClass('button-assertive');
-          obstructionbutton.removeClass('button-assertive');
-          selectbutton.removeClass('button-assertive');
+          selectThisButton(mountbutton);
 
           // remove Obstruction interactions
           map.removeInteraction(drawObstruction);
@@ -205,9 +218,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var handleObstructionButton = function handleObstructionButton(e) {
           e.preventDefault();
           // change button styling
-          obstructionbutton.addClass('button-assertive');
-          mountbutton.removeClass('button-assertive');
-          selectbutton.removeClass('button-assertive');
+          selectThisButton(obstructionbutton);
 
           // remove interactions
           map.removeInteraction(drawMount);
@@ -223,9 +234,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
         var handleSelectButton = function handleSelectButton (e) {
           e.preventDefault();
-          selectbutton.addClass('button-assertive');
-          mountbutton.removeClass('button-assertive');
-          obstructionbutton.removeClass('button-assertive');
+          selectThisButton(selectbutton);
 
           // remove Draw interactions
           map.removeInteraction(drawMount);
@@ -239,30 +248,35 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var handleDeleteButton = function handleDeleteButton (e) {
           e.preventDefault();
           var layer;
-          var feature = OlService.getSelectedFeature().pop();
+          var feature = Ol.getSelectedFeature().pop();
           if (!!feature && feature.getGeometryName() === 'mount') {
-            layer = OlService.layers.mount;
-            OlService.removeFeatureById(feature.getId(), layer);
-            layer = OlService.layers.panel;
-            OlService.removeFeatureById(feature.getId(), layer);
+            layer = Ol.layers.mount;
+            Ol.removeFeatureById(feature.getId(), layer);
+            layer = Ol.layers.panel;
+            Ol.removeFeatureById(feature.getId(), layer);
           } else if (!!feature) {
-            layer = OlService.layers[feature.getGeometryName()];
-            OlService.removeFeatureById(feature.getId(), layer);
+            layer = Ol.layers[feature.getGeometryName()];
+            Ol.removeFeatureById(feature.getId(), layer);
           }
+          
+          // this may help solve the problem of latent objects 
+          Ol.modifyInteraction.getFeatures().clear();
+          Ol.selectInteraction.getFeatures().clear();
+
         };
 
         var handleFillButton = function handleFillButton (e) {
           e.preventDefault();
           // get selected feature
-          var feature = OlService.getSelectedFeature()[0];
+          var feature = Ol.getSelectedFeature()[0];
             // if selected feature has panels, delete them
           var id = feature.getId();
-          var panellayer = OlService.layers.panel;
+          var panellayer = Ol.layers.panel;
           var existing = panellayer.getFeatureById(id);
           if (existing) {
-            OlService.removeFeatureById(id, panellayer);
+            Ol.removeFeatureById(id, panellayer);
           }
-          var msg = OlService.fillMessageForSingleMount(feature);
+          var msg = Ol.fillMessageForSingleMount(feature);
           // create api message with Process Features
           var api = PanelFillService.processFeatures(msg.m, msg.o);
 
@@ -271,7 +285,17 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
               PanelFillService.addPanelsFromApi(data, id);              
           });
         };
+        
+        var handlePreviewButton = function handlePreviewButton (e) {
+          e.preventDefault();
+          // change button styling
+          selectThisButton(previewbutton);
 
+          OlService.setPreviewMode(true);
+
+        };
+
+          
         /* Map controller button options */ 
         var top_button_options = {
           buttonText:   'Mount', 
@@ -297,9 +321,14 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         };
         
         var fill_button_options = {
-          buttonText:   'FillMount', 
+          buttonText:   'Fill Selected',
           callback:     handleFillButton,
           target:       fillbutton,
+        };
+        var preview_button_options = {
+          buttonText:   'Preview',
+          callback:     handlePreviewButton,
+          target:       previewbutton,
         };
 
         var OLmountDrawbutton       = new DrawControlButton(top_button_options);
@@ -307,8 +336,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var OLselectButton          = new DrawControlButton(select_button_options);
         var OLdeleteButton          = new DrawControlButton(delete_button_options);
         var OLfillButton            = new DrawControlButton(fill_button_options);
+        var OLpreviewButton         = new DrawControlButton(preview_button_options);
 
-        var gutterLineFinder = OlService.gutterLineFinder;
+        var gutterLineFinder = Ol.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
         drawMount.on('drawend', function(){
           scope.$emit('controlbutton', {featureType: 'mount'});
@@ -323,7 +353,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
           var featureId = obstructions.getFeatures().length;
   
-          OlService.setIdsOfFeaturearray([feature], featureId);
+          Ol.setIdsOfFeaturearray([feature], featureId);
           var radius = scope.planRadius ? scope.planRadius : {radius: "50"};
           feature.set('radius', radius );
           $ionicSideMenuDelegate.toggleRight();

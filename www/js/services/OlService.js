@@ -28,6 +28,7 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   //   return OlService.recentFeature;
   // };
 
+
   OlService.getRecent = function(opt) {
     console.log('getting recent', opt, OlService.recentFeature[opt]);
     if (opt === undefined) console.log('getRecent needs a type to get, dummy'); //TODO: check error in prettier way
@@ -86,7 +87,18 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     obstruction: OlService.obstructions, 
     panel: OlService.panels,
   };
-  
+  OlService.hideLayersForPreview = false;
+
+  OlService.setPreviewMode = function setPreviewMode(status) {
+
+    OlService.hideLayers.getLayers().getArray().forEach(function(f){
+      f.setVisible(!status);
+    });
+    OlService.hideLayersForPreview = status;
+  };
+
+
+
   OlService.fillMessageForSingleMount = function(mount){
     if (mount.getGeometryName() !== "mount") throw 'err must be a mount'; 
     var wkt = OlService.wkt;
