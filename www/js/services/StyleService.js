@@ -45,9 +45,6 @@ function StyleService_ ($q) {
             })];
 
     styles['gutter'] =  [new ol.style.Style({
-              // fill: new ol.style.Fill({
-              //   color: c.greenGutter
-              // }),
               stroke: new ol.style.Stroke({
                 color: c.greenGutter,
                 width: 5
@@ -75,6 +72,7 @@ function StyleService_ ($q) {
                 })
               })
             })];
+
     styles['panel'] =  [new ol.style.Style({
         fill: new ol.style.Fill({
           color: c.panelFill,
@@ -90,21 +88,12 @@ function StyleService_ ($q) {
           })
         })
       })];
-    // obstruction style
-    // styles['obstruction'] = [new ol.style.Style({
-    //           image: new ol.style.Circle({
-    //             radius: 15,
-    //             fill: new ol.style.Fill({
-    //               color: c.greenGutter
-    //             })
-    //           })
-    //         })];
 
-    // create a separate style function: 
+    // create a separate style function for obstructions because they need to update on the fly: 
     styles['obstruction'] = function(rad, res) {
       return [new ol.style.Style({
               image: new ol.style.Circle({
-                radius: rad / (res*8.2) ,
+                radius: rad / (res*4.5) ,
                 fill: new ol.style.Fill({
                   color: c.greenGutter
                 })
@@ -173,6 +162,7 @@ function StyleService_ ($q) {
                 })
               })
             })];
+
     styles['panel'] =  [new ol.style.Style({
             fill: new ol.style.Fill({
               color: c.panelFillHighlight,
@@ -192,7 +182,7 @@ function StyleService_ ($q) {
     styles['obstruction'] = function(rad, res) {
       return [new ol.style.Style({
               image: new ol.style.Circle({
-                radius: rad / (res*8.2),
+                radius: rad / (res*4.5) ,
                 fill: new ol.style.Fill({
                   color: c.orangeGutter
                 })

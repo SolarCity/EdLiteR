@@ -18,19 +18,19 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
       controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
 
-      var mountbutton       = angular.element('<button id="mountbutton" ></button>');
       var selectbutton      = angular.element('<button id="selectbutton"></button>');
+      var drawbutton        = angular.element('<button id="drawbutton" ></button>');
       var obstructionbutton = angular.element('<button id="obstructionbutton" ></button>');
       var deletebutton      = angular.element('<button id="deletebutton" ></button>');
       var fillbutton        = angular.element('<button id="fillbutton" ></button>');
       var previewbutton     = angular.element('<button id="previewbutton" ></button>');
       controllerbox.append(selectbutton);
-      controllerbox.append(mountbutton);
+      controllerbox.append(drawbutton);
       controllerbox.append(obstructionbutton);
       controllerbox.append(deletebutton);
       controllerbox.append(fillbutton);
       controllerbox.append(previewbutton);
-      var buttons = [mountbutton, selectbutton, obstructionbutton, deletebutton, fillbutton, previewbutton];
+      var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, fillbutton, previewbutton];
       var selectThisButton = function selectThisButton (selected) {
         Ol.setPreviewMode(false);
 
@@ -199,10 +199,10 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var map = MapService.setOmap(mapOptions);
         
         /* left controls callbacks */
-        var handleMountButton = function handleMountButton(e){
+        var handleDrawButton = function handleDrawButton(e){
           e.preventDefault();
           // change button styling
-          selectThisButton(mountbutton);
+          selectThisButton(drawbutton);
 
           // remove Obstruction interactions
           map.removeInteraction(drawObstruction);
@@ -299,8 +299,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         /* Map controller button options */ 
         var top_button_options = {
           buttonText:   'Draw', 
-          callback:     handleMountButton, 
-          target:       mountbutton,
+          callback:     handleDrawButton,
+          target:       drawbutton,
         };
         
         var bottom_button_options = {
