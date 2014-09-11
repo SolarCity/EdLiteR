@@ -7,9 +7,6 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
   })
   .state("plan.type", {
     url:         "",
-    // data: { //TODO: this should be removed
-    //   featureType: "mount"
-    // },
     resolve: {
       featureArray: function resolveMountFeature($stateParams, OlService) {
         return OlService.getRecent('mount');
@@ -26,17 +23,4 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
       }
     },
   })
-  // .state("plan.fill", {
-  //   url:         "/fill",
-  //   views: {
-  //     'planContent' :{
-  //       templateUrl: 'templates/states/fill/fillContent.html',
-  //       controller:  "FillCtrl as fill",
-  //     },
-  //     'detailMenu' :{
-  //       templateUrl: 'templates/states/fill/detailMenu.html', 
-  //       controller: "",
-  //     }
-  //   },
-  // })
 ;});

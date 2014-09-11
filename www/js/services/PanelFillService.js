@@ -18,7 +18,6 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 	    arrayOfPanels.forEach(function(points_for_panel, key, obj){
 	      // turn each array of points into a WKT
 	      var feature = PanelFillService.panelFromJson(points_for_panel);
-	      // var features = OlService.panels.getFeatures();
 	      featurestoadd.push(feature);
 	    	OlService.setIdsOfFeaturearray([feature], panelid);
 	    });

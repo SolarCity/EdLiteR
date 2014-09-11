@@ -81,10 +81,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         }
 
         var pixelProjection = new ol.proj.Projection({
-          // code: 'pixelsweknownalove',
-          // code: 'EPSG:3857',
           units: 'pixels',
-          // global: false,
           extent: OlService.extent
         });
         
