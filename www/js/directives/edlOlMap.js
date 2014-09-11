@@ -243,7 +243,12 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           e.preventDefault();
           var layer;
           var feature = OlService.getSelectedFeature().pop();
-          if (!!feature) {
+          if (!!feature && feature.getGeometryName() === 'mount') {
+            layer = OlService.layers.mount;
+            OlService.removeFeatureById(feature.getId(), layer);
+            layer = OlService.layers.panel;
+            OlService.removeFeatureById(feature.getId(), layer);
+          } else if (!!feature) {
             layer = OlService.layers[feature.getGeometryName()];
             OlService.removeFeatureById(feature.getId(), layer);
           }
