@@ -142,6 +142,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           source: panels, 
           projection: pixelProjection,
           style:  StyleService.defaultStyleFunction,
+          opacity: 0.6,
         });
         panelLayer.set('name', 'panelLayer');
         Ol.panelLayer = panelLayer;
@@ -290,7 +291,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           e.preventDefault();
           // change button styling
           selectThisButton(previewbutton);
-
           OlService.setPreviewMode(true);
 
         };
@@ -298,7 +298,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           
         /* Map controller button options */ 
         var top_button_options = {
-          buttonText:   'Mount', 
+          buttonText:   'Draw', 
           callback:     handleMountButton, 
           target:       mountbutton,
         };

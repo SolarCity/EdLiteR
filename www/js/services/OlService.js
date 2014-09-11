@@ -95,6 +95,11 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
       f.setVisible(!status);
     });
     OlService.hideLayersForPreview = status;
+    if (status){ 
+      OlService.panelLayer.setOpacity(1);
+    } else {
+      OlService.panelLayer.setOpacity(0.6);
+    }
   };
 
 
