@@ -12,7 +12,7 @@ function MapService_ ($q) {
     disableDefaultUI: true,
     keyboardShortcuts: false,
     draggable: true,
-    disableDoubleClickZoom: true,
+    disableDoubleClickZoom: false,
     scrollwheel: true,
     streetViewControl: false,
     // center: new google.maps.LatLng(37.5516671,-122.31563), //TODO: device location
@@ -29,8 +29,6 @@ function MapService_ ($q) {
 
   // MapService.o.staticMap = null;  
   MapService.o.staticMap = null;  
-  // MapService.o.inteactions;
-  // MapService.o.projection;
 
   // google map
   MapService.g.gmap = null;
@@ -39,9 +37,6 @@ function MapService_ ($q) {
   // openlayer map
   MapService.o.omap = null;
   MapService.o.view = null; 
-  // MapService.o.view = new ol.View({
-  //   maxZoom: 21
-  // });
 
   MapService.o.layers = null;  
 
@@ -96,7 +91,6 @@ function MapService_ ($q) {
   };
 
   MapService.setCenter = function(center) {
-    console.log(center)
     MapService.g.center = center;
     return MapService.g.center;
   };

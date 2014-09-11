@@ -9,7 +9,6 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
    * functions we use
    */
 
-
   PanelFillService.addPanelsFromApi = function(data, panelid){
 	
 	  var responseIterator = function(arrayOfPanels, key){
@@ -29,7 +28,6 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
   	
   	angular.forEach(data, responseIterator);
   };
-
 
   PanelFillService.processFeatures = function(mounts, obstructions ){
 
