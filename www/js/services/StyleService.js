@@ -19,7 +19,7 @@ function StyleService_ ($q) {
   c.panelBorderHighlight    = "rgba(223, 215, 191, 0.8)";
   c.panelFillHighlight      = "rgba(41, 49, 69, 0.4)";
   c.panelBorder             = "rgba(0,  66, 99, 1)";
-  c.panelFill               = "rgba(33, 22, 45, 0.4)";
+  c.panelFill               = "rgba(33, 22, 45, 1)";
 
   var StyleService = {};
   StyleService.colors = c;
