@@ -18,12 +18,12 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
       controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
 
-      var selectbutton      = angular.element('<button id="selectbutton"></button>');
-      var drawbutton        = angular.element('<button id="drawbutton" ></button>');
-      var obstructionbutton = angular.element('<button id="obstructionbutton" ></button>');
-      var deletebutton      = angular.element('<button id="deletebutton" ></button>');
-      var fillbutton        = angular.element('<button id="fillbutton" ></button>');
-      var previewbutton     = angular.element('<button id="previewbutton" ></button>');
+      var selectbutton = angular.element('<i class="icon ion-ios7-search"></i>');
+      var drawbutton = angular.element('<i class="icon ion-edit"></i>');
+      var obstructionbutton = angular.element('<i class="icon ion-disc"></i>');
+      var deletebutton = angular.element('<i class="icon ion-ios7-trash"></i>');
+      var fillbutton = angular.element('<i class="icon ion-grid"></i>');
+      var previewbutton = angular.element('<i class="icon ion-ios7-play"></i>');
       controllerbox.append(selectbutton);
       controllerbox.append(drawbutton);
       controllerbox.append(obstructionbutton);
@@ -179,9 +179,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           style: StyleService.highlightStyleFunction,
         });
 
-        /* Map Options */
+          /* Map Options */
         var mapOptions = {
-          layers: [mapCapture, mountLayer, obstructionLayer, panelLayer],
+            layers: [mapCapture, mountLayer, obstructionLayer, panelLayer],
           controls: ol.control.defaults({
               attributionOptions: ({
                 collapsible: false
@@ -260,31 +260,34 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
             Ol.removeFeatureById(feature.getId(), layer);
           }
           
-          // this may help solve the problem of latent objects 
-          Ol.modifyInteraction.getFeatures().clear();
-          Ol.selectInteraction.getFeatures().clear();
-
+          if (Ol.modifyInteraction != null) {
+              // this may help solve the problem of latent objects 
+              Ol.modifyInteraction.getFeatures().clear();
+              Ol.selectInteraction.getFeatures().clear();
+          }
         };
 
         var handleFillButton = function handleFillButton (e) {
           e.preventDefault();
           // get selected feature
           var feature = Ol.getSelectedFeature()[0];
-            // if selected feature has panels, delete them
-          var id = feature.getId();
-          var panellayer = Ol.layers.panel;
-          var existing = panellayer.getFeatureById(id);
-          if (existing) {
-            Ol.removeFeatureById(id, panellayer);
-          }
-          var msg = Ol.fillMessageForSingleMount(feature);
-          // create api message with Process Features
-          var api = PanelFillService.processFeatures(msg.m, msg.o);
+          if (feature != null) {
+              // if selected feature has panels, delete them
+              var id = feature.getId();
+              var panellayer = Ol.layers.panel;
+              var existing = panellayer.getFeatureById(id);
+              if (existing) {
+                  Ol.removeFeatureById(id, panellayer);
+              }
+              var msg = Ol.fillMessageForSingleMount(feature);
+              // create api message with Process Features
+              var api = PanelFillService.processFeatures(msg.m, msg.o);
 
-          ApiService.uploadMounts(api) //TODO: change from sample
-            .then(function(data){
-              PanelFillService.addPanelsFromApi(data, id);              
-          });
+              ApiService.uploadMounts(api) //TODO: change from sample
+                .then(function (data) {
+                    PanelFillService.addPanelsFromApi(data, id);
+                });
+          }
         };
         
         var handlePreviewButton = function handlePreviewButton (e) {
@@ -295,38 +298,38 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
         };
 
-          
+         
         /* Map controller button options */ 
         var top_button_options = {
-          buttonText:   'Draw', 
+          //buttonText:   'Draw', 
           callback:     handleDrawButton,
           target:       drawbutton,
         };
         
         var bottom_button_options = {
-          buttonText:   'Obstruction', 
+          //buttonText:   'Obstruction', 
           callback:     handleObstructionButton,
           target:       obstructionbutton,
         };
         var select_button_options = {
-          buttonText:   'Select', 
+          //buttonText:   'Select', 
           callback:     handleSelectButton,
           target:       selectbutton,
         };        
 
         var delete_button_options = {
-          buttonText:   'Delete', 
+          //buttonText:   'Delete', 
           callback:     handleDeleteButton,
           target:       deletebutton,
         };
         
         var fill_button_options = {
-          buttonText:   'Fill Selected',
+          //buttonText:   'Fill Selected',
           callback:     handleFillButton,
           target:       fillbutton,
         };
         var preview_button_options = {
-          buttonText:   'Preview',
+          //buttonText:   'Preview',
           callback:     handlePreviewButton,
           target:       previewbutton,
         };

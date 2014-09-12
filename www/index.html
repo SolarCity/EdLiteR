@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -17,8 +17,8 @@
     <!-- Libraries -->
     <!-- openlayers v3 (experimental) -->
     <!-- <script src="js/ol3/ol.js"></script> this was the original version we began development with -->
-    <!-- <script src="js/ol3/ol3stable.js"></script> this is the current stable version with whitespace --> 
-    <script src="js/ol3/ol3stable.min.js"></script> <!-- this is the current stable version with whitespace --> 
+    <script src="js/ol3/ol3stable.js"></script> <!--this is the current stable version with whitespace-->
+    <!--<script src="js/ol3/ol3stable.min.js"></script> <!-- this is the current stable version with whitespace --> 
     <!-- <script src="js/ol3/ol-whitespace.js"></script> -->
     <!-- html2canvas util (experimental) -->
     <!-- <script src="lib/html2canvas/build/html2canvas.js"></script> -->
@@ -60,6 +60,7 @@
     <script src="js/controllers/plan/PlanDrawingCtrl.js"></script>
     <!-- begin organize files by feature -->
     <script src="js/detailmenu/DetailCtrl.js"></script>
+    <script src="js/helpmenu/HelpCtrl.js"></script>
     <!-- <script src="js/directives/ *** .js"></script> -->
     <!-- <script src="js/directives/edlSvg.js"></script> -->
     <!-- <script src="js/directives/edlMap.js"></script> -->
@@ -78,8 +79,10 @@
   <body ng-app="edliter">
     <ion-nav-bar class="bar-positive">
       <ion-nav-back-button class="button-clear">
-        <i class="ion-arrow-left-c">Go Back</i>
-      </ion-nav-back-button>
+          <button class="button button-large button-energized">
+              <i class="ion-arrow-left-c"></i>
+              </button>
+        </ion-nav-back-button>
     </ion-nav-bar>
     <ion-nav-view animation="slide-left-right"></ion-nav-view>
 <!-- </ion-nav-buttons> -->
