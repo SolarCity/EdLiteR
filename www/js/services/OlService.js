@@ -19,22 +19,6 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   OlService.extent = [0, 0, $window.innerWidth, OlService.mapDiv.clientHeight ];
   OlService.defaultZoom = 2;
 
-  // OlService.setRecent = function(featureArray, opt) {
-  //   if (opt === undefined) console.log('setRecent needs a type to set, dummy'); //TODO: check error in prettier way
-  //   featureArray = Array.isArray(featureArray) ? featureArray : [ featureArray ];
-  //   OlService.recentFeature[opt] = new ol.Collection(featureArray);
-  //   console.log('setting recent', opt, 'as: ', OlService.recentFeature);
-  //   $ionicSideMenuDelegate.toggleRight();
-  //   return OlService.recentFeature;
-  // };
-
-
-  OlService.getRecent = function(opt) {
-    console.log('getting recent', opt, OlService.recentFeature[opt]);
-    if (opt === undefined) console.log('getRecent needs a type to get, dummy'); //TODO: check error in prettier way
-    return OlService.recentFeature[opt];
-  };
-
   OlService.getSelectedFeature = function(){
     return OlService.selectInteraction.getFeatures().getArray();
   };
@@ -66,7 +50,9 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
         result = f;
       }
     };
-    layer.forEachFeature(matchType);
+    if (layer) {
+      layer.forEachFeature(matchType);
+    }
     return result;
   };
 
@@ -174,7 +160,6 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
 
     // put the features in the source
     var featureArray = [feature, gutterFeature];
-    console.log('setting mount id as', OlService.mounts.getFeatures().length);
     OlService.setIdsOfFeaturearray(featureArray, OlService.mounts.getFeatures().length);
 
     mounts.addFeature(gutterFeature);

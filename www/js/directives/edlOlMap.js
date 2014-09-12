@@ -31,6 +31,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
       controllerbox.append(fillbutton);
       controllerbox.append(previewbutton);
       var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, fillbutton, previewbutton];
+      
       var selectThisButton = function selectThisButton (selected) {
         Ol.setPreviewMode(false);
 
@@ -200,7 +201,10 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         
         /* left controls callbacks */
         var handleDrawButton = function handleDrawButton(e){
-          e.preventDefault();
+          if (e) {
+            e.preventDefault();
+            
+          }
           // change button styling
           selectThisButton(drawbutton);
 
@@ -217,7 +221,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         };
 
         var handleObstructionButton = function handleObstructionButton(e) {
-          e.preventDefault();
+          if (e) {
+            e.preventDefault();
+          }
           // change button styling
           selectThisButton(obstructionbutton);
 
@@ -234,7 +240,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         };
 
         var handleSelectButton = function handleSelectButton (e) {
-          e.preventDefault();
+          if (e) {
+            e.preventDefault();
+          }
           selectThisButton(selectbutton);
 
           // remove Draw interactions
@@ -247,7 +255,10 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
         };        
         var handleDeleteButton = function handleDeleteButton (e) {
-          e.preventDefault();
+          if (e) {
+            e.preventDefault();
+
+          }
           var layer;
           var feature = Ol.getSelectedFeature().pop();
           if (!!feature && feature.getGeometryName() === 'mount') {
@@ -268,7 +279,10 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         };
 
         var handleFillButton = function handleFillButton (e) {
-          e.preventDefault();
+          if (e) {
+            e.preventDefault();
+            
+          }
           // get selected feature
           var feature = Ol.getSelectedFeature()[0];
           if (feature != null) {
@@ -298,7 +312,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
         };
 
-         
         /* Map controller button options */ 
         var top_button_options = {
           //buttonText:   'Draw', 
@@ -349,20 +362,18 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
         var afterObstruction =  function (event) {
           var feature = event.feature;
-          // var redrawOnChangeRadius = function (){
-          //   console.log('resetStyleAfterRadius');
-          //   this.setStyle(StyleService.defaultStyleFunction);
-          // };
-
           var featureId = obstructions.getFeatures().length;
-  
+          
           Ol.setIdsOfFeaturearray([feature], featureId);
-          var radius = scope.planRadius ? scope.planRadius : {radius: "50"};
+
+
+          var radius = scope.planRadius ? scope.planRadius : 50;
           feature.set('radius', radius );
-          $ionicSideMenuDelegate.toggleRight();
+          feature.set('type', 'obstruction' );
 
-
-  
+          Ol.selectInteraction.getFeatures().push(feature); 
+          handleSelectButton();
+          // $ionicSideMenuDelegate.toggleRight();
         };
         drawObstruction.on('drawend', afterObstruction);
 

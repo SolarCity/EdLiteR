@@ -7,15 +7,10 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
   })
   .state("plan.type", {
     url:         "",
-    resolve: {
-      featureArray: function resolveMountFeature($stateParams, OlService) {
-        return OlService.getRecent('mount');
-      },
-    },
     views: {
       'planContent' :{
         templateUrl: 'templates/states/plan/planContent.html',
-        controller:  "FeatureCtrl as feature",
+        controller:  "",
       },
       'detailMenu' :{
         templateUrl: 'templates/states/plan/detailMenu.html', 
