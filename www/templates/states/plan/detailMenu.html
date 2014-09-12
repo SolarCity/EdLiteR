@@ -1,15 +1,15 @@
 <ion-content>
-  <button class="button button-small button-balanced" ng-click="detail.submitFeature()">COMPLETE</button>
+  <button class="button button-small button-balanced" ng-click="detail.submitFeature(detail.feature)">COMPLETE</button>
   <form>
     <label ng-if="detail.featureType==='obstruction'">
       <span class="input-label">Radius</span>
       <div class="item range range-positive">
         <input  type="range"
                 name="radius"
-                min="10"
-                max="500"
-                ng-change="plan.setRadius()"
-                ng-model="plan.feature.radius"
+                min="5"
+                max="200"
+                ng-change="detail.updateFeatureRadius(plan.feature, 'radius')"
+                ng-model="detail.featureRadius"
                 value="{{plan.feature.radius}}">
       </div>
     </label>
@@ -39,9 +39,6 @@
     </label>
   </form>
 </ion-content>
-
-
-
 
 <!-- <ion-radio ng-repeat="item in feature.featureOptions" ng-value="item.value" ng-model="data.featureDetails">{{ item.text }}</ion-radio> -->
 <div class="item item-divider">

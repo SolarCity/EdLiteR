@@ -6,33 +6,18 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
     $scope.selectedFeatureId = OlService.selectInteraction.getFeatures().getArray()[0].getId();
     $scope.selectedFeatureType=OlService.selectInteraction.getFeatures().getArray()[0].getGeometryName();
     
-
     vm.feature = vm.getFeatureDetails();
-    console.log(vm.feature);
-		
+
     $ionicSideMenuDelegate.toggleRight();
 	};
 
   var getFeatureFromLayerByIdAndType = OlService.getFeatureFromLayerByIdAndType;
 
-  vm.featureProperties = {};
-  vm.featureProperties.radius = 10;
-
-  vm.selectedFeatureId = $scope.selectedFeatureId;
   vm.selectedFeatureId = $scope.selectedFeatureId;
   vm.selectedFeatureType = $scope.selectedFeatureType;
   vm.selectedFeature = {
     id: $scope.selectedFeatureId,
     type: $scope.selectedFeatureType
-  };
-
-  vm.setRadius = function (){
-    var newval = vm.feature.radius;
-    var recent = OlService.getRecent('obstruction');
-    if (recent) {
-      recent.set('radius', newval);
-    }
-    $scope.$emit('new radius', {radius: newval});
   };
 
   var layers = {};
@@ -53,20 +38,15 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
     if (f.id) {
       feature = getFeatureFromLayerByIdAndType(layer, f.id, f.type);
       if (feature.edl) {
-        console.log('yes feature.edl', [feature.edl]);
         return feature;
         
       } else {
         result = new FeatureOptionService.options(f.type);
         feature.edl = result;
-        console.log('no feature.edl', [feature.edl]);
       }
     } else {
       result = new FeatureOptionService.options(f.type);
-      // vm.featureProperties = FeatureOptionService.options[vm.featureType];
       feature.edl = result;
-      console.log('no f.id', [feature.edl]);
-      // return new FeatureOptionService.options[f.type]();
     }
     return feature;
 
@@ -75,7 +55,6 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 	// detail and feature listen for this event fired on controlbutton
 	function controlbutton(e, args){
 		e.preventDefault();
-    console.log('broadcast', args);
 		$scope.$broadcast('update details', args); 
 	}
 	$scope.$on(	'controlbutton', controlbutton);

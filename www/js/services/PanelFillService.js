@@ -52,7 +52,7 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
   			o.push(PanelFillService.pointToLatLng(obstructions[ix][center], ix, obstructions));
   		}
   		msg.o.push({
-					radius: parseInt(OlService.obstructions.getFeatures()[ix].get('radius').radius),
+					radius: parseInt(OlService.obstructions.getFeatures()[ix].get('radius')),
 					height: 0,
 					center: {
 						lon: o[0][0],
