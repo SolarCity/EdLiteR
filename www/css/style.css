@@ -46,10 +46,13 @@ edl-map {
 .buttoncontrols { /* TODO: styling */
   z-index: 20000;
   position: absolute;
-  bottom: 1%;
-  left: 1%;
   display: inline;
   data-tap-disabled: true;
+  bottom: 1%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  
 }
 
 .topbutton {

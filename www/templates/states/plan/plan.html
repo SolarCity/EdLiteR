@@ -7,11 +7,16 @@
     </ion-header-bar>
     
     <ion-nav-buttons side="right">
-      <button class="button button button-large button-energized" ng-click="plan.toggleDetailView()">
-        Edit Attributes
+      <button class="button button-large button-energized" ng-click="plan.toggleDetailView()">
+        Attributes
       </button>
     </ion-nav-buttons>
     
+      <ion-nav-buttons side="left">
+          <button class="button button-large button-energized" ng-click="plan.toggleHelpView()">
+              ?
+          </button>
+      </ion-nav-buttons>
     <ion-nav-view animation="no-animation" name="planContent"></ion-nav-view>
   </ion-side-menu-content> 
   
@@ -19,5 +24,10 @@
     <ion-nav-view name="detailMenu">
     </ion-nav-view>
   </ion-side-menu>
+
+    <ion-side-menu side="left">
+        <ion-nav-view name="helpMenu">
+        </ion-nav-view>
+    </ion-side-menu>
   
 </ion-side-menus>

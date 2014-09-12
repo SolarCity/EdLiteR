@@ -2,6 +2,7 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 	var vm = this;
 
  	vm.toggleDetailView = function(e, args) {
+<<<<<<< HEAD
     // request update of values in detail control
     $scope.selectedFeatureId = OlService.selectInteraction.getFeatures().getArray()[0].getId();
     $scope.selectedFeatureType=OlService.selectInteraction.getFeatures().getArray()[0].getGeometryName();
@@ -10,6 +11,25 @@ function PlanCtrl_($scope, $ionicSideMenuDelegate, FeatureOptionService, OlServi
 
     $ionicSideMenuDelegate.toggleRight();
 	};
+=======
+ 	    // request update of values in detail control
+ 	    if (OlService.selectInteraction.getFeatures().getArray().length > 0) {
+ 	        $scope.selectedFeatureId = OlService.selectInteraction.getFeatures().getArray()[0].getId();
+ 	        $scope.selectedFeatureType = OlService.selectInteraction.getFeatures().getArray()[0].getGeometryName();
+
+
+ 	        vm.feature = vm.getFeatureDetails();
+ 	        console.log(vm.feature);
+
+ 	        $ionicSideMenuDelegate.toggleRight();
+ 	    }
+ 	};
+
+ 	vm.toggleHelpView = function (e, args) {
+ 	    // request update of values in detail control
+ 	    $ionicSideMenuDelegate.toggleLeft();
+ 	};
+>>>>>>> master
 
   var getFeatureFromLayerByIdAndType = OlService.getFeatureFromLayerByIdAndType;
 
