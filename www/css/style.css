@@ -39,6 +39,13 @@ edl-map {
 
 }
 
+#obstructionRangeInput{
+    
+    width: 20px;
+    height: 300px;
+    -webkit-appearance: slider-vertical;
+}
+
 .scroll {
   height: 100%;
 }
@@ -51,21 +58,10 @@ edl-map {
   bottom: 1%;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, -50%);
-  
+  transform: translate(-50%, -50%);  
 }
 
-.topbutton {
-  position: absolute;
-  top: 65px;
-  left: 8px;
-}
-.bottombutton {
-  position: absolute;
-  top: 120px;
-  left: 8px;
-  /*z-index: 1000;*/
-}
+
 
 .controls {
   z-index: 11000;

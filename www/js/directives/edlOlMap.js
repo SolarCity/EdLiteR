@@ -11,8 +11,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
       featureType:           "=",
     },
     link: function edlOlMapLink(scope, ele, attrs) {
-      /* Leftside controls. See init() for instantiation */
-      var Ol = OlService;
+        /* Leftside controls. See init() for instantiation */
+        var Ol = OlService;
+
       var controllerbox = angular.element('<div></div>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
       controllerbox.addClass('buttoncontrols');
@@ -60,8 +61,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var anchor = options.target;
         anchor.addClass('button button-stable');
         if (options.buttonText) anchor.text(options.buttonText);
-        if (!!options.topButton) anchor.addClass('topbutton');
-        if (!!options.bottomButton) anchor.addClass('bottombutton');
 
         anchor.on('click', options.callback);
         anchor.on('touchstart', options.callback);
@@ -183,9 +182,10 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           /* Map Options */
         var mapOptions = {
             layers: [mapCapture, mountLayer, obstructionLayer, panelLayer],
-          controls: ol.control.defaults({
+            controls: ol.control.defaults({
+                zoom:false,
               attributionOptions: ({
-                collapsible: false
+                  collapsible: false,
               })
             }).extend([leftsidecontrolbox]),
           interactions: ol.interaction.defaults({
@@ -251,33 +251,39 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
           // add select and modify interactions
           map.addInteraction(selectInteraction);
-          map.addInteraction(modifyInteraction);
-
-        };        
-        var handleDeleteButton = function handleDeleteButton (e) {
-          if (e) {
-            e.preventDefault();
-
-          }
-          var layer;
-          var feature = Ol.getSelectedFeature().pop();
-          if (!!feature && feature.getGeometryName() === 'mount') {
-            layer = Ol.layers.mount;
-            Ol.removeFeatureById(feature.getId(), layer);
-            layer = Ol.layers.panel;
-            Ol.removeFeatureById(feature.getId(), layer);
-          } else if (!!feature) {
-            layer = Ol.layers[feature.getGeometryName()];
-            Ol.removeFeatureById(feature.getId(), layer);
-          }
-          
-          if (Ol.modifyInteraction != null) {
-              // this may help solve the problem of latent objects 
-              Ol.modifyInteraction.getFeatures().clear();
-              Ol.selectInteraction.getFeatures().clear();
-          }
+          //map.addInteraction(modifyInteraction);
         };
 
+
+
+        var handleDeleteButton = function handleDeleteButton(e) {
+            if (e) {
+                e.preventDefault();
+
+            }
+            var layer;
+            var feature = Ol.getSelectedFeature().pop();
+            if (!!feature && feature.getGeometryName() === 'mount') {
+                layer = Ol.layers.mount;
+                Ol.removeFeatureById(feature.getId(), layer);
+                layer = Ol.layers.panel;
+                Ol.removeFeatureById(feature.getId(), layer);
+            } else if (!!feature && feature.getGeometryName() === 'panel') {
+                layer = Ol.layers[feature.getGeometryName()];
+                layer.removeFeature(feature);
+            }
+            else if (!!feature && feature.getGeometryName() === 'obstruction') {
+                layer = Ol.layers[feature.getGeometryName()];
+                layer.removeFeature(feature);
+            }
+
+            if (Ol.modifyInteraction != null) {
+                // this may help solve the problem of latent objects
+                Ol.modifyInteraction.getFeatures().clear();
+                Ol.selectInteraction.getFeatures().clear();
+            }
+        };
+        
         var handleFillButton = function handleFillButton (e) {
           if (e) {
             e.preventDefault();
@@ -305,7 +311,11 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         };
         
         var handlePreviewButton = function handlePreviewButton (e) {
-          e.preventDefault();
+            e.preventDefault();
+
+            //tzb - removing selecting interaction so preview mode works properly even if an MP is selected
+            map.removeInteraction(selectInteraction);
+
           // change button styling
           selectThisButton(previewbutton);
           OlService.setPreviewMode(true);
@@ -360,6 +370,11 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           scope.$emit('controlbutton', {featureType: 'mount'});
         });
 
+        selectInteraction.getFeatures().on('change:length', function () {
+            var length = selectInteraction.getFeatures().getArray().length;
+            scope.$emit('selected', length);
+        });
+
         var afterObstruction =  function (event) {
           var feature = event.feature;
           var featureId = obstructions.getFeatures().length;
@@ -373,12 +388,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
           Ol.selectInteraction.getFeatures().push(feature); 
           handleSelectButton();
-          // $ionicSideMenuDelegate.toggleRight();
+            // $ionicSideMenuDelegate.toggleRight();
+
         };
         drawObstruction.on('drawend', afterObstruction);
 
         // initialize buttons
         selectbutton.addClass('button-assertive');
+
+        $('#attributeButton').addClass('button-stable');
 
         // initialize interactions
         map.addInteraction(modifyInteraction);

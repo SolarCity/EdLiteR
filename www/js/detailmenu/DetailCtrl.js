@@ -2,7 +2,8 @@ function DetailCtrl_($scope, $stateParams, $state, OlService, FeatureOptionServi
 	
 	function detailsUpdate(event, args){
 		event.preventDefault();
-		vm.featureType   	= args.featureType;
+		vm.featureType = args.featureType;
+       
 	}
 	$scope.$on('update details', detailsUpdate); 
 

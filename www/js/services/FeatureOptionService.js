@@ -44,7 +44,7 @@ function FeatureOptionService_ () {
 				text:  'Two Story'
 			},{
 				value: 'more',
-				text:  'More than that'
+				text: 'More Than Two Stories'
 			}],
 			value: null
 

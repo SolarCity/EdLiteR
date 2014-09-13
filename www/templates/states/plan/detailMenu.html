@@ -1,32 +1,31 @@
+
 <ion-content>
-  <button class="button button-small button-balanced" ng-click="detail.submitFeature(detail.feature)">COMPLETE</button>
+    <!--<button ng-if="selectedFeatureType==='mount'" class="button button-small button-balanced" ng-click="detail.submitFeature(detail.feature)">COMPLETE</button>-->
   <form>
-    <label ng-if="detail.featureType==='obstruction'">
-      <span class="input-label">Radius</span>
-      <div class="item range range-positive">
-        <input  type="range"
-                name="radius"
-                min="5"
-                max="200"
-                ng-change="detail.updateFeatureRadius(plan.feature, 'radius')"
-                ng-model="detail.featureRadius"
-                value="{{plan.feature.radius}}">
-      </div>
-    </label>
-    <label ng-if="detail.featureType==='mount'">
-      <span class="input-label">Slope</span>
-      <div class="item item-input-inset">
-        <label class="item-input-wrapper">
-          <input type="number"
-                 placeholder="Slope"
-                 ng-model="detail.feature.slope"
-                 value="plan.feature.slope">
-        </label>
-        <button class="button button-small">
-          Set
-        </button>
-      </div>
-    </label>
+      <label ng-if="selectedFeatureType==='obstruction'">
+
+          <div class="item range range-positive">
+              <input type="range"
+                     name="radius"
+                     id="obstructionRangeInput"
+                     min="5"
+                     max="200"
+                     ng-change="detail.updateFeatureRadius(plan.feature, 'radius')"
+                     ng-model="detail.featureRadius"
+                     value="{{plan.feature.radius}}">
+          </div>
+      </label>
+      <label ng-if="selectedFeatureType==='mount'">
+          <span class="input-label">Slope</span>
+          <div class="item item-input-inset">
+              <label class="item-input-wrapper">
+                  <input type="number"
+                         placeholder="Slope"
+                         ng-model="detail.feature.slope"
+                         value="plan.feature.slope">
+              </label>
+          </div>
+      </label>
     <label class="item item-radio" ng-repeat="property in plan.feature.edl">
       <span class="input-label">{{property.propertyName}}</span>
       <ion-radio  type="radio" 
