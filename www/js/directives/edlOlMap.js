@@ -54,6 +54,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
        *    container: {DOM element into which button gets appended}, 
        *  } 
        */  
+
       var DrawControlButton = function DrawControlButton(opt_options){
         var options = opt_options || {};
 
@@ -63,10 +64,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         if (options.buttonText) anchor.text(options.buttonText);
 
         anchor.on('click', options.callback);
-        anchor.on('touchstart', options.callback);
+        anchor.on('tap', options.callback);
+        // anchor.on('touchstart', options.callback);
 
-        return new ol.control.Control({
+        // return new ol.control.Control({
+        //   element: anchor[0],
+        // });
+        ol.control.Control.call(this,{
           element: anchor[0],
+          target: map
         });
       };
       ol.inherits(DrawControlButton , ol.control.Control);
@@ -327,34 +333,40 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
           //buttonText:   'Draw', 
           callback:     handleDrawButton,
           target:       drawbutton,
+          map:          map,
         };
         
         var bottom_button_options = {
           //buttonText:   'Obstruction', 
           callback:     handleObstructionButton,
           target:       obstructionbutton,
+          map:          map,
         };
         var select_button_options = {
           //buttonText:   'Select', 
           callback:     handleSelectButton,
           target:       selectbutton,
+          map:          map,
         };        
 
         var delete_button_options = {
           //buttonText:   'Delete', 
           callback:     handleDeleteButton,
           target:       deletebutton,
+          map:          map,
         };
         
         var fill_button_options = {
           //buttonText:   'Fill Selected',
           callback:     handleFillButton,
           target:       fillbutton,
+          map:          map,
         };
         var preview_button_options = {
           //buttonText:   'Preview',
           callback:     handlePreviewButton,
           target:       previewbutton,
+          map:          map,
         };
 
         var OLmountDrawbutton       = new DrawControlButton(top_button_options);
@@ -363,6 +375,14 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var OLdeleteButton          = new DrawControlButton(delete_button_options);
         var OLfillButton            = new DrawControlButton(fill_button_options);
         var OLpreviewButton         = new DrawControlButton(preview_button_options);
+
+        var controllerarray = [
+          OLmountDrawbutton       ,
+          OLobstructionDrawbutton ,
+          OLselectButton          ,
+          OLdeleteButton          ,
+          OLfillButton            ,
+          OLpreviewButton         ];
 
         var gutterLineFinder = Ol.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
