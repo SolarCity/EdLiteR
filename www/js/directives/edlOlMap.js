@@ -251,7 +251,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
           // add select and modify interactions
           map.addInteraction(selectInteraction);
-          //map.addInteraction(modifyInteraction);
+          map.addInteraction(modifyInteraction);
         };
 
 
