@@ -1,67 +1,50 @@
 function PlanCtrl_($scope, $timeout, $ionicSideMenuDelegate, FeatureOptionService, OlService, MapService, PanelFillService, ApiService) {
-	var vm = this;
+  var vm = this;
+  $('#attributeButton').addClass('button-stable');
+  $scope.$on('selected', function(args, count){
+    
+    if (count > 0) {
+      $('#attributeButton').addClass('button-energized');
+      $('#attributeButton').removeClass('button-stable');
 
-	$scope.$on('selected', function (args, count) {
+    } else {
+      $('#attributeButton').addClass('button-stable');
+      $('#attributeButton').removeClass('button-energized');
+    }
+    console.log(arguments);
+    console.log(count);
+    console.log(vm.attributesAvailable);
+  });
 
-	    if (count > 0) {
-	        $('#attributeButton').addClass('button-energized');
-	        $('#attributeButton').removeClass('button-stable');
+  vm.toggleDetailView = function(e, args) {
+    // request update of values in detail control
+    $scope.selectedFeatureId = OlService.selectInteraction.getFeatures().getArray()[0].getId();
+    $scope.selectedFeatureType=OlService.selectInteraction.getFeatures().getArray()[0].getGeometryName();
+    
+    vm.feature = vm.getFeatureDetails();
 
-	    } else {
-	        $('#attributeButton').addClass('button-stable');
-	        $('#attributeButton').removeClass('button-energized');
-	    }
-	    console.log(arguments);
-	    console.log(count);
-	    console.log(vm.attributesAvailable);
-	});
-
-
-	vm.toggleDetailView = function (e, args) {
-	    if (OlService.selectInteraction.getFeatures().getArray().length > 0) {
-	        // request update of values in detail control
-	        $scope.selectedFeatureId = OlService.selectInteraction.getFeatures().getArray()[0].getId();
-	        $scope.selectedFeatureType = OlService.selectInteraction.getFeatures().getArray()[0].getGeometryName();
-	       
-	        vm.feature = vm.getFeatureDetails();
-
-	        if (vm.feature.get('type') !== 'obstruction') {
-	            $scope.detailpanelwidth = 275;
-	        } else {
-	            $scope.detailpanelwidth = 50;
-	        }
-	        console.log($scope.detailpanelwidth);
-	        $timeout($ionicSideMenuDelegate.toggleRight, 1);
-
-	    }
-	};
+    if ($scope.selectedFeatureType !== 'obstruction') { 
+      $scope.detailpanelwidth = 275;
+    } else {
+      $scope.detailpanelwidth = 50;
+    }
+    console.log($scope.detailpanelwidth);
+    $timeout($ionicSideMenuDelegate.toggleRight,1 );
+  };
 
 
- 	vm.toggleHelpView = function (e, args) {
- 	    // request update of values in detail control
- 	    $ionicSideMenuDelegate.toggleLeft();
- 	};
+  vm.toggleHelpView = function (e, args) {
+    // request update of values in detail control
+    $ionicSideMenuDelegate.toggleLeft();
+  };
 
   var getFeatureFromLayerByIdAndType = OlService.getFeatureFromLayerByIdAndType;
 
-  vm.featureProperties = {};
-  vm.featureProperties.radius = 10;
-
-  vm.selectedFeatureId = $scope.selectedFeatureId;
-  vm.selectedFeatureId = $scope.selectedFeatureId;
+  vm.selectedFeatureId   = $scope.selectedFeatureId;
   vm.selectedFeatureType = $scope.selectedFeatureType;
   vm.selectedFeature = {
     id: $scope.selectedFeatureId,
     type: $scope.selectedFeatureType
-  };
-
-  vm.setRadius = function (){
-    var newval = vm.feature.radius;
-    var recent = OlService.getRecent('obstruction');
-    if (recent) {
-      recent.set('radius', newval);
-    }
-    $scope.$emit('new radius', {radius: newval});
   };
 
   var layers = {};
@@ -82,55 +65,49 @@ function PlanCtrl_($scope, $timeout, $ionicSideMenuDelegate, FeatureOptionServic
     if (f.id) {
       feature = getFeatureFromLayerByIdAndType(layer, f.id, f.type);
       if (feature.edl) {
-        console.log('yes feature.edl', [feature.edl]);
         return feature;
         
       } else {
         result = new FeatureOptionService.options(f.type);
         feature.edl = result;
-        console.log('no feature.edl', [feature.edl]);
       }
     } else {
       result = new FeatureOptionService.options(f.type);
-      // vm.featureProperties = FeatureOptionService.options[vm.featureType];
       feature.edl = result;
-      console.log('no f.id', [feature.edl]);
-      // return new FeatureOptionService.options[f.type]();
     }
     return feature;
 
   };
 
-	// detail and feature listen for this event fired on controlbutton
-	function controlbutton(e, args){
-		e.preventDefault();
-    console.log('broadcast', args);
-		$scope.$broadcast('update details', args); 
-	}
-	$scope.$on(	'controlbutton', controlbutton);
+  // detail and feature listen for this event fired on controlbutton
+  function controlbutton(e, args){
+    e.preventDefault();
+    $scope.$broadcast('update details', args); 
+  }
+  $scope.$on( 'controlbutton', controlbutton);
 
-	// listen for radius change in detailCtrl
-	function planUpdateRadius(e, args){
-		vm.radius = args;
+  // listen for radius change in detailCtrl
+  function planUpdateRadius(e, args){
+    vm.radius = args;
     console.log(MapService.o.omap);
     MapService.o.omap.render();
-	}
-	$scope.$on('new radius', planUpdateRadius);
+  }
+  $scope.$on('new radius', planUpdateRadius);
 
-	vm.featureCorners = function() {
-		var mountPoints = {}; // we'll send this to the api
-		var wkt = OlService.wkt; // used for turning features to strings
-		//set zoom to initial zoomlevel // HACK: avoid using projection pixel <> latlng 		
-		MapService.getView().setZoom(OlService.defaultZoom);
-		// get features
-		var mounts  = OlService.mounts.getFeatures();
+  vm.featureCorners = function() {
+    var mountPoints = {}; // we'll send this to the api
+    var wkt = OlService.wkt; // used for turning features to strings
+    //set zoom to initial zoomlevel // HACK: avoid using projection pixel <> latlng     
+    MapService.getView().setZoom(OlService.defaultZoom);
+    // get features
+    var mounts  = OlService.mounts.getFeatures();
     mountPoints.m = {};
     var obstructions = OlService.obstructions.getFeatures();
     console.log(obstructions);
     mountPoints.o = {};
-		// for features by type "mount" 
-		mounts.forEach(function(feat, idx, col){
-			if (feat.getGeometryName() === "mount") {
+    // for features by type "mount" 
+    mounts.forEach(function(feat, idx, col){
+      if (feat.getGeometryName() === "mount") {
         idx = parseInt(idx);
         // add their points to mountpoints
         mountPoints.m[idx] = wkt.writeFeature(feat).split(',');
@@ -142,18 +119,21 @@ function PlanCtrl_($scope, $timeout, $ionicSideMenuDelegate, FeatureOptionServic
     obstructions.forEach(function(feat, idx, col){
       if (feat.getGeometryName() === "obstruction") {
         idx = parseInt(idx);
-				// add their points to mountpoints
-				mountPoints.o[idx] = wkt.writeFeature(feat).split(',');
+        // add their points to mountpoints
+        mountPoints.o[idx] = wkt.writeFeature(feat).split(',');
         mountPoints.o[idx][0] = mountPoints.o[idx][0].split('(')[1];
         mountPoints.o[idx][0] = mountPoints.o[idx][0].split(')');
         mountPoints.o[idx].splice(1);
         mountPoints.o[idx] = mountPoints.o[idx][0];
         // mountPoints.o[idx].feat = feat;
-			}
-		});
-		// vm.buildMessage(mountPoints, {});
-		vm.apiMessage = PanelFillService.processFeatures(mountPoints.m, mountPoints.o);
+      }
+    });
+    // vm.buildMessage(mountPoints, {});
+    vm.apiMessage = PanelFillService.processFeatures(mountPoints.m, mountPoints.o);
     $scope.apiMessage = vm.apiMessage;
-	};
+  };
+  
+
+
 }
 controllers.controller('PlanCtrl',PlanCtrl_);
