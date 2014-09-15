@@ -1,18 +1,17 @@
-function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDelegate, $timeout, ApiService, PanelFillService, MapService, OlService, StyleService, FeatureOptionService) {
+function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiService, PanelFillService, MapService, OlService, StyleService, FeatureOptionService) {
   return {
     restrict: "A",
     transclude: false,
     scope: {
-      featureDetails:        "=",
-      mountCollection:       "=",
-      obstructionCollection: "=",
-      planRadius:            "=",
-      // planIncline:           "=",
-      featureType:           "=",
+      featureDetails:        "=", //TODO: jfl - i think this can get destroyed
+      mountCollection:       "=", //TODO: jfl - i think this can get destroyed
+      obstructionCollection: "=", //TODO: jfl - i think this can get destroyed
+      planRadius:            "=", //TODO: jfl - i think this can get destroyed
+      featureType:           "=", 
     },
     link: function edlOlMapLink(scope, ele, attrs) {
-        /* Leftside controls. See init() for instantiation */
-        var Ol = OlService;
+      /* Leftside controls. See init() for instantiation */
+      var Ol = OlService;
 
       var controllerbox = angular.element('<div></div>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
@@ -63,16 +62,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         anchor.addClass('button button-stable');
         if (options.buttonText) anchor.text(options.buttonText);
 
-        anchor.on('click', options.callback);
-        anchor.on('tap', options.callback);
-        // anchor.on('touchstart', options.callback);
-
-        // return new ol.control.Control({
-        //   element: anchor[0],
-        // });
-        ol.control.Control.call(this,{
+        ionic.on('tap', options.callback, anchor[0]);
+        return new ol.control.Control({
           element: anchor[0],
-          target: map
         });
       };
       ol.inherits(DrawControlButton , ol.control.Control);
@@ -207,6 +199,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         
         /* left controls callbacks */
         var handleDrawButton = function handleDrawButton(e){
+
           if (e) {
             e.preventDefault();
             
@@ -317,56 +310,43 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         };
         
         var handlePreviewButton = function handlePreviewButton (e) {
-            e.preventDefault();
+          e.preventDefault();
 
-            //tzb - removing selecting interaction so preview mode works properly even if an MP is selected
-            map.removeInteraction(selectInteraction);
+          //tzb - removing selecting interaction so preview mode works properly even if an MP is selected
+          map.removeInteraction(selectInteraction);
 
           // change button styling
           selectThisButton(previewbutton);
           OlService.setPreviewMode(true);
-
         };
 
         /* Map controller button options */ 
         var top_button_options = {
-          //buttonText:   'Draw', 
           callback:     handleDrawButton,
           target:       drawbutton,
-          map:          map,
         };
         
         var bottom_button_options = {
-          //buttonText:   'Obstruction', 
           callback:     handleObstructionButton,
           target:       obstructionbutton,
-          map:          map,
         };
         var select_button_options = {
-          //buttonText:   'Select', 
           callback:     handleSelectButton,
           target:       selectbutton,
-          map:          map,
         };        
 
         var delete_button_options = {
-          //buttonText:   'Delete', 
           callback:     handleDeleteButton,
           target:       deletebutton,
-          map:          map,
         };
         
         var fill_button_options = {
-          //buttonText:   'Fill Selected',
           callback:     handleFillButton,
           target:       fillbutton,
-          map:          map,
         };
         var preview_button_options = {
-          //buttonText:   'Preview',
           callback:     handlePreviewButton,
           target:       previewbutton,
-          map:          map,
         };
 
         var OLmountDrawbutton       = new DrawControlButton(top_button_options);
@@ -375,14 +355,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         var OLdeleteButton          = new DrawControlButton(delete_button_options);
         var OLfillButton            = new DrawControlButton(fill_button_options);
         var OLpreviewButton         = new DrawControlButton(preview_button_options);
-
-        var controllerarray = [
-          OLmountDrawbutton       ,
-          OLobstructionDrawbutton ,
-          OLselectButton          ,
-          OLdeleteButton          ,
-          OLfillButton            ,
-          OLpreviewButton         ];
 
         var gutterLineFinder = Ol.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
@@ -408,8 +380,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
 
           Ol.selectInteraction.getFeatures().push(feature); 
           handleSelectButton();
-            // $ionicSideMenuDelegate.toggleRight();
-
         };
         drawObstruction.on('drawend', afterObstruction);
 
@@ -422,7 +392,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $ionicSideMenuDeleg
         map.addInteraction(modifyInteraction);
       }
     },
-    // template: [     ].join('')
   };
 
 }

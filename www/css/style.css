@@ -50,10 +50,11 @@ edl-map {
   height: 100%;
 }
 
-#edl-control-box { /* TODO: styling */
+.buttoncontrols { /* TODO: styling */
   z-index: 20000;
   position: absolute;
   display: inline;
+  data-tap-disabled: true;
   bottom: 1%;
   width: 100%;
   text-align: center;
@@ -62,11 +63,10 @@ edl-map {
   /*transform: translate(-50%, -50%);  */
 }
 
-.buttoncontrols {
+.controls {
   z-index: 11000;
   margin-top: 16px;
-  /*data-tap-disabled: true;*/
-  /*display: inline-block;
+  display: inline-block;
   text-align: center;
   border: 1px solid transparent;
   border-radius: 2px 0 0 2px;
@@ -74,7 +74,7 @@ edl-map {
   -moz-box-sizing: border-box;
   height: 32px;
   outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);*/
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 #place-input:focus {
