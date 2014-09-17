@@ -1,4 +1,4 @@
-function edlGoogleMap($timeout, $document, $window, MapService) {
+function edlGoogleMap($timeout, $document, $window, $ionicGesture, MapService) {
   return {
     restrict: "A",
     transclude: true,
@@ -13,21 +13,17 @@ function edlGoogleMap($timeout, $document, $window, MapService) {
       var mapOptions = MapService.g.mapOptions;
       $timeout(timer_init, 1); //HACK: biggest hack evar. 
       function timer_init() {
-
         var map =  MapService.setGmap(ele[0], mapOptions);
-        // scope.onCreate({map:MapService.getGmap()});
 
-        var input = document.getElementById('place-input'); 
+        // create an Autocompleting search box on the map
+        var input = document.getElementById('pac-input');
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+        var searchbox = MapService.setSearchBox(input);
+        searchbox.bindTo('bounds', map);
 
-        var autocomplete = MapService.setAutocomplete(input);
-        autocomplete.bindTo('bounds', map);
-        google.maps.event.addListener(autocomplete, 'place_changed', function(){
-        //   $('.pac-container').on('touchstart', function(e) { 
-        //     console.log('touchend');
-        //     e.stopPropagation(); 
-        // });
-          var place = autocomplete.getPlace();
+        // listen for the 'place_changed' trigger which is fired 
+        google.maps.event.addListener(searchbox, 'place_changed', function(place){
+          // get the place you clicked on
           if (!place.geometry) {
             return;
           }
@@ -46,25 +42,43 @@ function edlGoogleMap($timeout, $document, $window, MapService) {
               (place.address_components[2] && place.address_components[2].short_name || '')
             ].join(' ');
           }
-          
+          $('#pac-input').val(place.formatted_address);
         });
         var center =  MapService.getCenter();
         map.setCenter(center);
         map.setZoom(20);
 
+        // always save the mapcenter when it's changed. 
         var saveCenter = function saveCenter () {
           var center = map.getCenter();
           if (center) {
-            console.log(MapService.setCenter(center));
+            MapService.setCenter(center);
           }
-
         };
         google.maps.event.addListener(map, 'center_changed', saveCenter);
-        $('body').on('touchstart','.pac-container', function(e){e.stopPropagation();}); //HACK: to get touch events working with Google Api
-      }
-      // var mapDiv = document.getElementById('gmap');
 
-      // console.log(ele[0]);
+        // use the contents of the Autocomplete to ask Maps for the specific map location
+        $('body').on('touchend', '.pac-item', touch_or_click_callback);
+        $('body').on('mousedown', '.pac-item', touch_or_click_callback);
+        function touch_or_click_callback(e){
+          var service = new google.maps.places.PlacesService(MapService.getGmap());
+          var request = {
+              location: MapService.getGmap().getCenter(), 
+              query: e.currentTarget.children[1].innerText + ' ' + e.currentTarget.children[2].innerText,
+              radius: 500,
+            };
+
+          function callback(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+              console.log('triggered')
+              google.maps.event.trigger(searchbox, 'place_changed', results[0]);
+            }
+
+          }
+          
+          service.textSearch(request, callback);
+        }
+      } /* end init */
     }
   };
 }
