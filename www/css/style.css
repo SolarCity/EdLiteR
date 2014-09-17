@@ -24,7 +24,6 @@ edl-map {
   top: 0;
   left: 0;
   position: absolute;
-  /*z-index: 0;*/
   width: 100%;
   height: 100%;
 }
@@ -32,15 +31,12 @@ edl-map {
 #omap {
   top: 0;
   left: 0;
-  /*position: relative;*/
-  /*z-index: 10;*/
   width: 100%;
   height: 100%;
 
 }
 
 #obstructionRangeInput{
-    
     width: 20px;
     height: 300px;
     -webkit-appearance: slider-vertical;
@@ -58,13 +54,10 @@ edl-map {
   bottom: 1%;
   width: 100%;
   text-align: center;
-  /*left: 50%;*/
-  /*margin-right: -50%;*/
-  /*transform: translate(-50%, -50%);  */
 }
 
 .controls {
-  z-index: 11000;
+
   margin-top: 16px;
   display: inline-block;
   text-align: center;
@@ -77,15 +70,15 @@ edl-map {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-#place-input:focus {
+#pac-input:focus {
   border-color: #4d90fe;
   margin-left: -1px;
   padding-left: 14px;  /* Regular padding-left + 1. */
-  width: 401px;
 }
 
 
-#place-input {
+#pac-input {
+  width: 60%;
   background-color: #fff;
   padding: 0 11px 0 13px;
   width: 400px;
@@ -99,4 +92,5 @@ edl-map {
 .pac-container {
   /*z-index: 20000;*/
   font-family: Roboto;
+    /*data-tap-disabled: true;*/
 }

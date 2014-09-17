@@ -61,6 +61,10 @@ function MapService_ ($q) {
     MapService.g.autocomplete = new google.maps.places.Autocomplete(element);
     return MapService.g.autocomplete;
   };
+  MapService.setSearchBox = function(element) {
+    MapService.g.SearchBox = new google.maps.places.SearchBox(element);
+    return MapService.g.SearchBox;
+  };
 
   MapService.setGmap = function(element, options) {
     MapService.g.gmap = new google.maps.Map(element, options);
