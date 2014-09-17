@@ -1,4 +1,9 @@
-function SearchCtrl_($scope, $state, MapService) {
+function SearchCtrl_($scope, $state, MapService, OlService) {
+  var omap = MapService.getOmap();
+  if (omap !== null) {
+    OlService.clearAllMapFeatures(omap);
+  }
+
   $scope.mapCreated = function(map) {
     $scope.map = map;
   };

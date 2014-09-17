@@ -13,9 +13,13 @@
         </ion-nav-buttons>
 
         <ion-nav-buttons side="left">
-          <button class="button button-large button-energized button-clear" ng-click="plan.toggleHelpView()">
+          <ion-nav-button class="button button-large button-energized button-clear" ui-sref="home">
+            <i class="icon ion-home"></i>
+          </ion-nav-button>
+          <ion-nav-button class="button button-large button-energized button-clear" ng-click="plan.toggleHelpView()">
             <i class="icon ion-help"></i>
-          </button>
+          </ion-nav-button>
+
         </ion-nav-buttons>
         <ion-nav-view animation="no-animation" name="planContent"></ion-nav-view>
     </ion-side-menu-content>
