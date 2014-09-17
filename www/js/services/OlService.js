@@ -19,6 +19,22 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   OlService.extent = [0, 0, $window.innerWidth, OlService.mapDiv.clientHeight ];
   OlService.defaultZoom = 2;
 
+  OlService.clearAllMapFeatures = function (map) {
+    var layers = map.getLayers().getArray();
+    var overlays = map.getOverlays().getArray();
+
+    angular.forEach(layers, function(layer){
+      if (layer.get('name') !== 'mapCapture') {
+        layer.getSource().clear();
+      }
+    });
+
+    angular.forEach(overlays, function(ovr, key){
+      ovr.getFeatures().clear();
+    });
+    return map;
+  };
+
   OlService.getSelectedFeature = function(){
     return OlService.selectInteraction.getFeatures().getArray();
   };
@@ -150,23 +166,18 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
       gutter: gutterLineGeom,
     });
     gutterFeature.setGeometryName('gutter');
+
     // set drawn geometry and key for stylefunction
     feature.setProperties({
       mount: mountfeature,
     });
     feature.setGeometryName('mount');
 
-    // OlService.setRecent([feature, gutterFeature], 'mount'); //HACK: this should happen elsewhere
-
     // put the features in the source
     var featureArray = [feature, gutterFeature];
     OlService.setIdsOfFeaturearray(featureArray, OlService.mounts.getFeatures().length);
 
     mounts.addFeature(gutterFeature);
-    // feature.on('change', function(event){
-    //   console.log(event.target);
-    //   // this.removeFeature([gutterFeature]);
-    // }, mounts);
 
   };
 
