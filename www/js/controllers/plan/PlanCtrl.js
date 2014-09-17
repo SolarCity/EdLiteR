@@ -11,9 +11,6 @@ function PlanCtrl_($scope, $timeout, $ionicSideMenuDelegate, FeatureOptionServic
       $('#attributeButton').addClass('button-stable');
       $('#attributeButton').removeClass('button-energized');
     }
-    console.log(arguments);
-    console.log(count);
-    console.log(vm.attributesAvailable);
   });
 
   vm.toggleDetailView = function(e, args) {
