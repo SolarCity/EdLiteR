@@ -1,8 +1,6 @@
 .container {
-    /*background: #ccc;*/
     margin-bottom: 100px;
     padding: 10px;
-    /*height: 120px;*/
     -webkit-perspective: 800px;
     -moz-perspective: 800px;
     -ms-perspective: 800px;
@@ -57,7 +55,6 @@ edl-map {
 }
 
 .controls {
-
   margin-top: 16px;
   display: inline-block;
   text-align: center;
@@ -76,7 +73,6 @@ edl-map {
   padding-left: 14px;  /* Regular padding-left + 1. */
 }
 
-
 #pac-input {
   width: 60%;
   background-color: #fff;
@@ -90,7 +86,5 @@ edl-map {
 }
 
 .pac-container {
-  /*z-index: 20000;*/
   font-family: Roboto;
-    /*data-tap-disabled: true;*/
 }
