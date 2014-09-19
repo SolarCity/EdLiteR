@@ -374,8 +374,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           Ol.setIdsOfFeaturearray([feature], featureId);
 
 
-          var radius = scope.planRadius ? scope.planRadius : 50;
-          feature.set('radius', radius );
+          $rootScope.planRadius = $rootScope.planRadius || 50;
+          feature.set('radius', $rootScope.planRadius );
           feature.set('type', 'obstruction' );
 
           Ol.selectInteraction.getFeatures().push(feature); 

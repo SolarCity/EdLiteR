@@ -32,19 +32,22 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 
   	var msg = {};
   	msg.m = [];
+  	var pitch;
   	for (var idx in mounts) {
   		var p = [];
   		idx = parseInt(idx);
   		for (var point in mounts[idx]){ 
   			p.push(PanelFillService.pointToLatLng(mounts[idx][point], idx, mounts));
   		}
+  		pitch = parseInt(OlService.getSelectedFeature()[0].get('pitch')); //TODO: this only works for for single selection
   		msg.m.push({
 					id: idx, 
-					pitch: 0,
+					pitch: pitch,
 					points: p,
+					portrait: OlService.getSelectedFeature()[0].get('edl').panelOrientation === "portrait" ? true: false,
 				});
   	}
-
+  	
   	msg.o = [];
   	for (var ix in obstructions) {
   		var o = [];

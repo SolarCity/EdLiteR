@@ -2,7 +2,8 @@ function ApiService_ ($http, $q) {
   // this Service provides Api access
   var ApiService = {};
 
-  var baseUrl = "http://scexchange.solarcity.com/scfilefactory/testfill.aspx";
+  // var baseUrl = "http://scexchange.solarcity.com/scfilefactory/testfill.aspx";
+  var baseUrl = "http://slc3web00/scexchange/testfill.aspx";
 
   ApiService.uploadMounts = function(data) {
   	var deferred = $q.defer();

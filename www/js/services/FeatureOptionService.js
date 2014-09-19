@@ -1,102 +1,80 @@
 function FeatureOptionService_ () {
   // this is a feature constructor
   // 
-  var options = {};
 
-  // this.currentFeatureType = null;
+  this.detailConstructor = function(type){
+  	var possibleOptions = {};
+  	var obstruction = possibleOptions.obstruction = {};
+  	var mount = possibleOptions.mount = {};
 
-  // this.setFocus = function(focusFeature) {
-  // 	console.log('newTarget', focusFeature);
-  // 	this.focusFeature_ = focusFeature;
+  	// TODO: mount pitch? 
 
-  // 	return this.focusFeature_;
-  // };
+  	mount.panelOrientation = {
+  		name: 		 'Panel Orientation',
+  		options: [{
+					value: 'landscape',
+					text:  'Landscape'
+				},{
+					value: 'portrait',
+					text:  'Portrait'
+			}],
+			chosenValue: null
+		};
 
-  // this.getFocus = function() {
-  // 	return this.focusFeature_;
-  // };
-
-  this.options = function(type){return options[type];};
-  options.mount =  [{
-			propertyName: 'Panel Orientation',
-			propertyValue: 'panelOrientation',
-			options: [{
-				value: 'landscape',
-				text:  'Landscape'
-			},{
-				value: 'portrait',
-				text:  'Portrait'
-			}]
-		},
-		// {
-		// 	propertyName: 'Mount Slope',
-		// 	propertyValue: 'mountSlope',
-		// 	options: [{value: 'fixme', text: 'fixme to numeric input'}]
-		// },
-		{
-			propertyName: 'Gutter Height',
-			propertyValue: 'gutterHeight',
+		mount.gutterHeight = {
+			name: 'Gutter Height',
 			options:  [{
-				value: 'one',
-				text:  'One Story'
-			},{
-				value: 'two',
-				text:  'Two Story'
-			},{
-				value: 'more',
-				text: 'More Than Two Stories'
+					value: 'one',
+					text:  'One Story'
+				},{
+					value: 'two',
+					text:  'Two Story'
+				},{
+					value: 'more',
+					text: 'More Than Two Stories'
 			}],
-			value: null
+			chosenValue: null
+		};
 
-		},
-		{
-			propertyName: 'Overall Shading',
-			propertyValue: 'overallShading',
+		mount.overallShading = {
+			name: 'Overall Shading',
 			options: [{
-				value: 'heavy',
-				text:  'Heavy'
-			},{
-				value: 'medium',
-				text:  'Medium'
-			},{
-				value: 'little',
-				text:  'Little'
-			},{
-				value: 'none',
-				text:  'None'
+					value: 'heavy',
+					text:  'Heavy'
+				},{
+					value: 'medium',
+					text:  'Medium'
+				},{
+					value: 'little',
+					text:  'Little'
+				},{
+					value: 'none',
+					text:  'None'
 			}],
-			value: null
-		},{
-			propertyName: 'Roof Type',
-			propertyValue: 'roofType',
-			options: [{
-				value: 'composite',
-				text:  'Composite'
-			},{
-				value: 'flat-tile',
-				text:  'Flat Tile'
-			},{
-				value: 'round-tile',
-				text:  'Round Tile'
-			},{
-				value: 'rolled',
-				text:  'Rolled Roof'
-			}],
-			value: null
-		}];
+			chosenValue: null
+		};
 
-	options.obstruction = [
-	// {
-	// 		propertyName: 'Height',
-	// 		propertyValue: 'height',
-	// 		options: [{value: 'fixme', text: 'fixme to numeric input'}]
-	// 	},
-	// 	{
-	// 		propertyName: 'obstacleId',
-	// 		propertyValue: 'O#',
-	// 		options: [{value: 'fixme', text: 'fixme'}]
-	// }
-	];
+		mount.roofType = {
+			name: 'Roof Type',
+			options: [{
+					value: 'composite',
+					text:  'Composite'
+				},{
+					value: 'flat-tile',
+					text:  'Flat Tile'
+				},{
+					value: 'round-tile',
+					text:  'Round Tile'
+				},{
+					value: 'rolled',
+					text:  'Rolled Roof'
+			}],
+			chosenValue: null
+		};
+
+  	return possibleOptions[type];
+  };
+
 
 }
 angular.module('edliter').service('FeatureOptionService', FeatureOptionService_);  
