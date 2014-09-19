@@ -3,16 +3,17 @@
     <!--<button ng-if="selectedFeatureType==='mount'" class="button button-small button-balanced" ng-click="detail.submitFeature(detail.feature)">COMPLETE</button>-->
   <form>
       <label ng-if="selectedFeatureType==='obstruction'">
-
+          {{detail.getOrUpdateRadius()}}
           <div class="item range range-positive">
               <input type="range"
                      name="radius"
                      id="obstructionRangeInput"
                      min="5"
                      max="200"
-                     ng-change="detail.updateFeatureRadius(plan.feature, 'radius')"
+                     ng-change="detail.getOrUpdateRadius(detail.featureRadius)"
                      ng-model="detail.featureRadius"
-                     value="{{plan.feature.radius}}">
+                     
+                     >
           </div>
       </label>
       <label ng-if="selectedFeatureType==='mount'">
@@ -20,21 +21,30 @@
           <div class="item item-input-inset">
               <label class="item-input-wrapper">
                   <input type="number"
+                         name="pitch"
+                         id="mountPitchInput"
                          placeholder="Slope"
-                         ng-model="detail.feature.slope"
-                         value="plan.feature.slope">
+                         ng-minlength="0"
+                         ng-maxlength="2"
+                         min="0"
+                         max="89"
+                         ng-change="detail.getOrUpdatePitch(detail.featurePitch)"
+                         ng-model="detail.featurePitch"
+                         
+                         >
               </label>
           </div>
       </label>
-    <label class="item item-radio" ng-repeat="property in plan.feature.edl">
-      <span class="input-label">{{property.propertyName}}</span>
+    <label class="item item-radio" ng-repeat="property in plan.featureAttrs">
+      <span class="input-label">{{property.name}}</span>
       <ion-radio  type="radio" 
-                  ng-selected="{{property.value}}==={{option.value}}"
+
                   name="{{property.value}}"
                   ng-repeat="option in property.options"
-                  ng-model="property.value"
+                  ng-model="property.chosenValue"
       						value="{{option.value}}"
-      >{{option.text}}</ion-radio>
+              >{{option.text}}<br>
+        </ion-radio>
     </label>
   </form>
 </ion-content>

@@ -88,3 +88,7 @@ edl-map {
 .pac-container {
   font-family: Roboto;
 }
+
+form.ng-invalid {
+   background: red;
+ }

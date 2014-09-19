@@ -1,4 +1,4 @@
-function PlanCtrl_($scope, $timeout, $ionicSideMenuDelegate, FeatureOptionService, OlService, MapService, PanelFillService, ApiService) {
+function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, FeatureOptionService, OlService, MapService, PanelFillService, ApiService) {
   var vm = this;
   $('#attributeButton').addClass('button-stable');
   $scope.$on('selected', function(args, count){
@@ -13,66 +13,59 @@ function PlanCtrl_($scope, $timeout, $ionicSideMenuDelegate, FeatureOptionServic
     }
   });
 
+  vm.featureAttrs = {};
+
   vm.toggleDetailView = function(e, args) {
     // request update of values in detail control
     $scope.selectedFeatureId = OlService.selectInteraction.getFeatures().getArray()[0].getId();
     $scope.selectedFeatureType=OlService.selectInteraction.getFeatures().getArray()[0].getGeometryName();
+    var f = {
+      id   : $scope.selectedFeatureId,
+      type : $scope.selectedFeatureType,
+      
+    };
     
-    vm.feature = vm.getFeatureDetails();
+    var layer = layers[f.type];
+    
+    vm.feature = vm.feature || OlService.getFeatureFromLayerByIdAndType(layer, f.id, f.type);
+    vm.featureAttrs = vm.getOrMakeFeatureAttrs();
 
-    if ($scope.selectedFeatureType !== 'obstruction') { 
-      $scope.detailpanelwidth = 275;
-    } else {
-      $scope.detailpanelwidth = 50;
-    }
-    console.log($scope.detailpanelwidth);
-    $timeout($ionicSideMenuDelegate.toggleRight,1 );
+    $scope.detailpanelwidth = $scope.selectedFeatureType !== 'obstruction' ? 
+      275 : 50;
+    vm.featureAttrs.radius = vm.feature.get('radius') || $rootScope.planRadius;
+
+    $timeout($ionicSideMenuDelegate.toggleRight,1 ); //HACK: duh. 
   };
-
 
   vm.toggleHelpView = function (e, args) {
     // request update of values in detail control
     $ionicSideMenuDelegate.toggleLeft();
   };
 
-  var getFeatureFromLayerByIdAndType = OlService.getFeatureFromLayerByIdAndType;
-
-  vm.selectedFeatureId   = $scope.selectedFeatureId;
-  vm.selectedFeatureType = $scope.selectedFeatureType;
-  vm.selectedFeature = {
-    id: $scope.selectedFeatureId,
-    type: $scope.selectedFeatureType
-  };
-
   var layers = {};
   layers.mount = OlService.mounts;
   layers.obstruction = OlService.obstructions;
   
-  vm.getFeatureDetails = function () {
-    var f = {};
-    if ($scope.selectedFeatureId) {
-      f.id   = $scope.selectedFeatureId;
-      f.type = $scope.selectedFeatureType;
-    } else {
-      f.type = vm.featureType;
-    }
-    
+  vm.getOrMakeFeatureAttrs = function () {
+    // var result;
+
+    var f = {
+      id   : $scope.selectedFeatureId,
+      type : $scope.selectedFeatureType,
+      
+    };
     var layer = layers[f.type];
-    var result;
-    if (f.id) {
-      feature = getFeatureFromLayerByIdAndType(layer, f.id, f.type);
-      if (feature.edl) {
-        return feature;
-        
-      } else {
-        result = new FeatureOptionService.options(f.type);
-        feature.edl = result;
-      }
-    } else {
-      result = new FeatureOptionService.options(f.type);
-      feature.edl = result;
+    
+    var feature = OlService.getFeatureFromLayerByIdAndType(layer, f.id, f.type);
+
+    var edl = feature.get('edl');
+
+    if (edl === undefined) {
+      edl = new FeatureOptionService.detailConstructor(feature.getGeometryName());
+      feature.set('edl', edl);
+      return edl;
     }
-    return feature;
+    return feature.get('edl');
 
   };
 
@@ -84,12 +77,12 @@ function PlanCtrl_($scope, $timeout, $ionicSideMenuDelegate, FeatureOptionServic
   $scope.$on( 'controlbutton', controlbutton);
 
   // listen for radius change in detailCtrl
-  function planUpdateRadius(e, args){
-    vm.radius = args;
-    console.log(MapService.o.omap);
-    MapService.o.omap.render();
-  }
-  $scope.$on('new radius', planUpdateRadius);
+  // function planUpdateRadius(e, args){
+  //   vm.radius = args;
+  //   console.log(MapService.o.omap);
+  //   MapService.o.omap.render();
+  // }
+  // $scope.$on('new radius', planUpdateRadius);
 
   vm.featureCorners = function() {
     var mountPoints = {}; // we'll send this to the api
@@ -130,7 +123,5 @@ function PlanCtrl_($scope, $timeout, $ionicSideMenuDelegate, FeatureOptionServic
     $scope.apiMessage = vm.apiMessage;
   };
   
-
-
 }
 controllers.controller('PlanCtrl',PlanCtrl_);
