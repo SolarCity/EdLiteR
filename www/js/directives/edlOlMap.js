@@ -285,7 +285,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
             e.preventDefault();
             
           }
-          console.log(Object.keys(e));
           // get selected feature
           var feature = Ol.getSelectedFeature()[0];
           if (feature !== null) {
