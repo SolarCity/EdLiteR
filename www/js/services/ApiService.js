@@ -2,8 +2,10 @@ function ApiService_ ($http, $q) {
   // this Service provides Api access
   var ApiService = {};
 
-  // var baseUrl = "http://scexchange.solarcity.com/scfilefactory/testfill.aspx";
-  var baseUrl = "http://slc3web00/scexchange/testfill.aspx";
+  // open to the web
+  var baseUrl = "http://scexchange.solarcity.com/scfilefactory/testfill.aspx";
+  // only avail inhouse
+  // var baseUrl = "http://slc3web00/scexchange/testfill.aspx";
 
   ApiService.uploadMounts = function(data) {
   	var deferred = $q.defer();
@@ -29,4 +31,4 @@ function ApiService_ ($http, $q) {
   return ApiService;
 }
 
-angular.module('edliter').service('ApiService', ApiService_);  
+angular.module('edliter').service('ApiService', ApiService_);
