@@ -31,8 +31,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         controllerbox.append(val);
       });
 
-      // controllerbox.append(buttons);
-
       var selectThisButton = function selectThisButton (selected) {
         Ol.setPreviewMode(false);
 
@@ -253,8 +251,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           map.addInteraction(selectInteraction);
           map.addInteraction(modifyInteraction);
         };
-
-
 
         var handleDeleteButton = function handleDeleteButton(e) {
             if (e) {
