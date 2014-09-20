@@ -22,7 +22,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       var drawbutton = angular.element('<i class="icon ion-edit"></i>');
       var obstructionbutton = angular.element('<i class="icon ion-disc"></i>');
       var deletebutton = angular.element('<i class="icon ion-ios7-trash"></i>');
-      var fillbutton = angular.element('<i class="icon ion-grid"></i>');
+      var fillbutton = angular.element('<i class="icon ion-ios7-settings-strong"></i>');
       var previewbutton = angular.element('<i class="icon ion-ios7-play"></i>');
       controllerbox.append(selectbutton);
       controllerbox.append(drawbutton);
@@ -276,7 +276,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
                 layer.removeFeature(feature);
             }
 
-            if (Ol.modifyInteraction != null) {
+            if (Ol.modifyInteraction !== null) {
                 // this may help solve the problem of latent objects
                 Ol.modifyInteraction.getFeatures().clear();
                 Ol.selectInteraction.getFeatures().clear();
@@ -290,7 +290,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           }
           // get selected feature
           var feature = Ol.getSelectedFeature()[0];
-          if (feature != null) {
+          if (feature !== null) {
               // if selected feature has panels, delete them
               var id = feature.getId();
               var panellayer = Ol.layers.panel;
@@ -372,14 +372,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           var featureId = obstructions.getFeatures().length;
           
           Ol.setIdsOfFeaturearray([feature], featureId);
-
-
+          
+          // TODO: this shouldn't get checked every obstruction. 
           $rootScope.planRadius = $rootScope.planRadius || 50;
           feature.set('radius', $rootScope.planRadius );
           feature.set('type', 'obstruction' );
 
+          // clear any selected features, select the feature we just made
+          Ol.selectInteraction.getFeatures().clear();
           Ol.selectInteraction.getFeatures().push(feature); 
-          handleSelectButton();
         };
         drawObstruction.on('drawend', afterObstruction);
 
