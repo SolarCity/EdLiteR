@@ -10,6 +10,7 @@ function DetailCtrl_($scope, $rootScope, $stateParams, $state, OlService, Featur
 
 	$scope.$watch('syncFeature', function(){
 		vm.currR = vm.getOrUpdateRadius();
+		vm.currP = vm.getOrUpdatePitch();
 	});
 
 	vm.featureProperties = {};
