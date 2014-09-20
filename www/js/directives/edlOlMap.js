@@ -22,16 +22,17 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       var drawbutton = angular.element('<i class="icon ion-edit"></i>');
       var obstructionbutton = angular.element('<i class="icon ion-disc"></i>');
       var deletebutton = angular.element('<i class="icon ion-ios7-trash"></i>');
-      var fillbutton = angular.element('<i class="icon ion-ios7-settings-strong"></i>');
+      var togglebutton = angular.element('<i class="icon ion-ios7-settings-strong"></i>');
       var previewbutton = angular.element('<i class="icon ion-ios7-play"></i>');
-      controllerbox.append(selectbutton);
-      controllerbox.append(drawbutton);
-      controllerbox.append(obstructionbutton);
-      controllerbox.append(deletebutton);
-      controllerbox.append(fillbutton);
-      controllerbox.append(previewbutton);
-      var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, fillbutton, previewbutton];
-      
+
+      var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, togglebutton, previewbutton];
+
+      buttons.forEach(function(val){
+        controllerbox.append(val);
+      });
+
+      // controllerbox.append(buttons);
+
       var selectThisButton = function selectThisButton (selected) {
         Ol.setPreviewMode(false);
 
@@ -283,11 +284,12 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
             }
         };
         
-        var handleFillButton = function handleFillButton (e) {
+        var handleToggleButton = function handleToggleButton (e) {
           if (e) {
             e.preventDefault();
             
           }
+          console.log(Object.keys(e));
           // get selected feature
           var feature = Ol.getSelectedFeature()[0];
           if (feature !== null) {
@@ -320,41 +322,37 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           OlService.setPreviewMode(true);
         };
 
-        /* Map controller button options */ 
-        var top_button_options = {
-          callback:     handleDrawButton,
-          target:       drawbutton,
+        /* controller button options */
+        var button_options = {
+          top_button: {
+            callback:     handleDrawButton,
+            target:       drawbutton,
+          },
+          bottom_button: {
+            callback:     handleObstructionButton,
+            target:       obstructionbutton,
+          },
+          select_button: {
+            callback:     handleSelectButton,
+            target:       selectbutton,
+          },
+          delete_button: {
+            callback:     handleDeleteButton,
+            target:       deletebutton,
+          },
+          toggle_button: {
+            callback:     handleToggleButton,
+            target:       togglebutton,
+          },
+          preview_button: {
+            callback:     handlePreviewButton,
+            target:       previewbutton,
+          },
         };
-        
-        var bottom_button_options = {
-          callback:     handleObstructionButton,
-          target:       obstructionbutton,
-        };
-        var select_button_options = {
-          callback:     handleSelectButton,
-          target:       selectbutton,
-        };        
 
-        var delete_button_options = {
-          callback:     handleDeleteButton,
-          target:       deletebutton,
-        };
-        
-        var fill_button_options = {
-          callback:     handleFillButton,
-          target:       fillbutton,
-        };
-        var preview_button_options = {
-          callback:     handlePreviewButton,
-          target:       previewbutton,
-        };
-
-        var OLmountDrawbutton       = new DrawControlButton(top_button_options);
-        var OLobstructionDrawbutton = new DrawControlButton(bottom_button_options);
-        var OLselectButton          = new DrawControlButton(select_button_options);
-        var OLdeleteButton          = new DrawControlButton(delete_button_options);
-        var OLfillButton            = new DrawControlButton(fill_button_options);
-        var OLpreviewButton         = new DrawControlButton(preview_button_options);
+        angular.forEach(button_options, function(val, key) {
+          new DrawControlButton(val);
+        });
 
         var gutterLineFinder = Ol.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
