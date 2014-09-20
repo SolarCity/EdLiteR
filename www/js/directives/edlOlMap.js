@@ -301,8 +301,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
 
               ApiService.uploadMounts(api) //TODO: change from sample
                 .then(function (data) {
-                    PanelFillService.addPanelsFromApi(data, id);
-                });
+                  PanelFillService.addPanelsFromApi(data, id);
+              });
           }
         };
         
