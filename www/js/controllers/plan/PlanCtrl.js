@@ -15,10 +15,13 @@ function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, Feature
 
   vm.featureAttrs = {};
 
-  vm.toggleDetailView = function(e, args) {
+  vm.toggleDetailView = function(feature) {
+    if (!feature) alert('no feature selected');
+    console.log(vm.focusedFeature);
     // request update of values in detail control
-    $scope.selectedFeatureId = OlService.selectInteraction.getFeatures().getArray()[0].getId();
-    $scope.selectedFeatureType=OlService.selectInteraction.getFeatures().getArray()[0].getGeometryName();
+    $scope.selectedFeatureId   = feature.getId();
+    $scope.selectedFeatureType = feature.getGeometryName();
+
     var f = {
       id   : $scope.selectedFeatureId,
       type : $scope.selectedFeatureType,
@@ -33,8 +36,8 @@ function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, Feature
     $scope.detailpanelwidth = $scope.selectedFeatureType !== 'obstruction' ? 
       275 : 50;
     vm.featureAttrs.radius = vm.feature.get('radius') || $rootScope.planRadius;
-
-    $timeout($ionicSideMenuDelegate.toggleRight,1 ); //HACK: duh. 
+    $scope.$apply();
+    $ionicSideMenuDelegate.toggleRight();
   };
 
   vm.toggleHelpView = function (e, args) {

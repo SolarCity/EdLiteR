@@ -1,13 +1,14 @@
 <ion-view title="{{plan.targetLayer}} EdLiteR">
     <ion-content>
-        <div id="omap"
-             feature="detail.feature"
-             feature-details="detail.featureDetails"
-             feature-type="detail.featureType"
-             class="fill"
-             plan-radius="plan.radius"
-             plan-slope="plan.slope"
-             edl-ol-map>
+        <div 
+            edl-ol-map
+            id="omap"
+            class="fill"
+            toggle-right-menu="plan.toggleDetailView"
+            focused-feature="plan.focusedFeature"
+            plan-radius="plan.radius"
+            plan-slope="plan.slope"
+            >
         </div>
     </ion-content>
 </ion-view>

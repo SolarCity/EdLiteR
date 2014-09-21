@@ -3,14 +3,14 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
     restrict: "A",
     transclude: false,
     scope: {
+      toggleRightMenu:       "=",
+      focusedFeature:        "=",
       featureDetails:        "=", //TODO: jfl - i think this can get destroyed
-      mountCollection:       "=", //TODO: jfl - i think this can get destroyed
-      obstructionCollection: "=", //TODO: jfl - i think this can get destroyed
       planRadius:            "=", //TODO: jfl - i think this can get destroyed
       featureType:           "=", 
     },
     link: function edlOlMapLink(scope, ele, attrs) {
-      /* Leftside controls. See init() for instantiation */
+      /* button controls. See init() for instantiation */
       var Ol = OlService;
 
       var controllerbox = angular.element('<div></div>');
@@ -22,16 +22,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       var drawbutton = angular.element('<i class="icon ion-edit"></i>');
       var obstructionbutton = angular.element('<i class="icon ion-disc"></i>');
       var deletebutton = angular.element('<i class="icon ion-ios7-trash"></i>');
-      var fillbutton = angular.element('<i class="icon ion-grid"></i>');
+      var togglebutton = angular.element('<i class="icon ion-ios7-settings-strong"></i>');
       var previewbutton = angular.element('<i class="icon ion-ios7-play"></i>');
-      controllerbox.append(selectbutton);
-      controllerbox.append(drawbutton);
-      controllerbox.append(obstructionbutton);
-      controllerbox.append(deletebutton);
-      controllerbox.append(fillbutton);
-      controllerbox.append(previewbutton);
-      var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, fillbutton, previewbutton];
-      
+
+      var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, togglebutton, previewbutton];
+
+      buttons.forEach(function(val){
+        controllerbox.append(val);
+      });
+
       var selectThisButton = function selectThisButton (selected) {
         Ol.setPreviewMode(false);
 
@@ -46,11 +45,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
        *  options look like this: 
        *  {
        *    buttonText: {string}, 
-       *    topButton: {boolean},
-       *    bottomButton: {boolean}, 
        *    callback: {function}, 
        *    target:   {should be your map?}, 
-       *    container: {DOM element into which button gets appended}, 
        *  } 
        */  
 
@@ -253,8 +249,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           map.addInteraction(modifyInteraction);
         };
 
-
-
         var handleDeleteButton = function handleDeleteButton(e) {
             if (e) {
                 e.preventDefault();
@@ -276,37 +270,22 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
                 layer.removeFeature(feature);
             }
 
-            if (Ol.modifyInteraction != null) {
+            if (Ol.modifyInteraction !== null) {
                 // this may help solve the problem of latent objects
                 Ol.modifyInteraction.getFeatures().clear();
                 Ol.selectInteraction.getFeatures().clear();
             }
         };
         
-        var handleFillButton = function handleFillButton (e) {
+        var handleToggleButton = function handleToggleButton (e) {
           if (e) {
             e.preventDefault();
             
           }
           // get selected feature
           var feature = Ol.getSelectedFeature()[0];
-          if (feature != null) {
-              // if selected feature has panels, delete them
-              var id = feature.getId();
-              var panellayer = Ol.layers.panel;
-              var existing = panellayer.getFeatureById(id);
-              if (existing) {
-                  Ol.removeFeatureById(id, panellayer);
-              }
-              var msg = Ol.fillMessageForSingleMount(feature);
-              // create api message with Process Features
-              var api = PanelFillService.processFeatures(msg.m, msg.o);
-
-              ApiService.uploadMounts(api) //TODO: change from sample
-                .then(function (data) {
-                    PanelFillService.addPanelsFromApi(data, id);
-                });
-          }
+          // toggle the menu out with that feature
+          scope.toggleRightMenu(feature);
         };
         
         var handlePreviewButton = function handlePreviewButton (e) {
@@ -320,41 +299,37 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           OlService.setPreviewMode(true);
         };
 
-        /* Map controller button options */ 
-        var top_button_options = {
-          callback:     handleDrawButton,
-          target:       drawbutton,
+        /* controller button options */
+        var button_options = {
+          top_button: {
+            callback:     handleDrawButton,
+            target:       drawbutton,
+          },
+          bottom_button: {
+            callback:     handleObstructionButton,
+            target:       obstructionbutton,
+          },
+          select_button: {
+            callback:     handleSelectButton,
+            target:       selectbutton,
+          },
+          delete_button: {
+            callback:     handleDeleteButton,
+            target:       deletebutton,
+          },
+          toggle_button: {
+            callback:     handleToggleButton,
+            target:       togglebutton,
+          },
+          preview_button: {
+            callback:     handlePreviewButton,
+            target:       previewbutton,
+          },
         };
-        
-        var bottom_button_options = {
-          callback:     handleObstructionButton,
-          target:       obstructionbutton,
-        };
-        var select_button_options = {
-          callback:     handleSelectButton,
-          target:       selectbutton,
-        };        
 
-        var delete_button_options = {
-          callback:     handleDeleteButton,
-          target:       deletebutton,
-        };
-        
-        var fill_button_options = {
-          callback:     handleFillButton,
-          target:       fillbutton,
-        };
-        var preview_button_options = {
-          callback:     handlePreviewButton,
-          target:       previewbutton,
-        };
-
-        var OLmountDrawbutton       = new DrawControlButton(top_button_options);
-        var OLobstructionDrawbutton = new DrawControlButton(bottom_button_options);
-        var OLselectButton          = new DrawControlButton(select_button_options);
-        var OLdeleteButton          = new DrawControlButton(delete_button_options);
-        var OLfillButton            = new DrawControlButton(fill_button_options);
-        var OLpreviewButton         = new DrawControlButton(preview_button_options);
+        angular.forEach(button_options, function(val, key) {
+          new DrawControlButton(val);
+        });
 
         var gutterLineFinder = Ol.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
@@ -362,9 +337,13 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           scope.$emit('controlbutton', {featureType: 'mount'});
         });
 
-        selectInteraction.getFeatures().on('change:length', function () {
-            var length = selectInteraction.getFeatures().getArray().length;
-            scope.$emit('selected', length);
+        selectInteraction.getFeatures().on('change:length', function (event) {
+          var feature = event.target.getArray()[0];
+          scope.selectedFeature = selectInteraction.getFeatures().getArray();
+          scope.focusedFeature = feature;
+          scope.$apply(); // apply changed scope features.
+          var length = scope.selectedFeature.length;
+          scope.$emit('selected', length);
         });
 
         var afterObstruction =  function (event) {
@@ -372,14 +351,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           var featureId = obstructions.getFeatures().length;
           
           Ol.setIdsOfFeaturearray([feature], featureId);
-
-
+          
+          // TODO: this shouldn't get checked every obstruction. 
           $rootScope.planRadius = $rootScope.planRadius || 50;
           feature.set('radius', $rootScope.planRadius );
           feature.set('type', 'obstruction' );
 
+          // clear any selected features, select the feature we just made
+          Ol.selectInteraction.getFeatures().clear();
           Ol.selectInteraction.getFeatures().push(feature); 
-          handleSelectButton();
         };
         drawObstruction.on('drawend', afterObstruction);
 
