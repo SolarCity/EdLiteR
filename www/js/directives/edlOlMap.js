@@ -3,14 +3,14 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
     restrict: "A",
     transclude: false,
     scope: {
+      toggleRightMenu:       "=",
+      focusedFeature:        "=",
       featureDetails:        "=", //TODO: jfl - i think this can get destroyed
-      mountCollection:       "=", //TODO: jfl - i think this can get destroyed
-      obstructionCollection: "=", //TODO: jfl - i think this can get destroyed
       planRadius:            "=", //TODO: jfl - i think this can get destroyed
       featureType:           "=", 
     },
     link: function edlOlMapLink(scope, ele, attrs) {
-      /* Leftside controls. See init() for instantiation */
+      /* button controls. See init() for instantiation */
       var Ol = OlService;
 
       var controllerbox = angular.element('<div></div>');
@@ -45,11 +45,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
        *  options look like this: 
        *  {
        *    buttonText: {string}, 
-       *    topButton: {boolean},
-       *    bottomButton: {boolean}, 
        *    callback: {function}, 
        *    target:   {should be your map?}, 
-       *    container: {DOM element into which button gets appended}, 
        *  } 
        */  
 
@@ -287,23 +284,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           }
           // get selected feature
           var feature = Ol.getSelectedFeature()[0];
-          if (feature !== null) {
-              // if selected feature has panels, delete them
-              var id = feature.getId();
-              var panellayer = Ol.layers.panel;
-              var existing = panellayer.getFeatureById(id);
-              if (existing) {
-                  Ol.removeFeatureById(id, panellayer);
-              }
-              var msg = Ol.fillMessageForSingleMount(feature);
-              // create api message with Process Features
-              var api = PanelFillService.processFeatures(msg.m, msg.o);
-
-              ApiService.uploadMounts(api) //TODO: change from sample
-                .then(function (data) {
-                  PanelFillService.addPanelsFromApi(data, id);
-              });
-          }
+          // toggle the menu out with that feature
+          scope.toggleRightMenu(feature);
         };
         
         var handlePreviewButton = function handlePreviewButton (e) {
@@ -355,9 +337,13 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           scope.$emit('controlbutton', {featureType: 'mount'});
         });
 
-        selectInteraction.getFeatures().on('change:length', function () {
-            var length = selectInteraction.getFeatures().getArray().length;
-            scope.$emit('selected', length);
+        selectInteraction.getFeatures().on('change:length', function (event) {
+          var feature = event.target.getArray()[0];
+          scope.selectedFeature = selectInteraction.getFeatures().getArray();
+          scope.focusedFeature = feature;
+          scope.$apply(); // apply changed scope features.
+          var length = scope.selectedFeature.length;
+          scope.$emit('selected', length);
         });
 
         var afterObstruction =  function (event) {
