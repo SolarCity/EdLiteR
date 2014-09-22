@@ -4,7 +4,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
     transclude: false,
     scope: {
       toggleRightMenu:       "=",
-      focusedFeature:        "=",
+      focusedFeature:        "=", //NOTE: this gives us the selected feature throughout the app :) 
       featureDetails:        "=", //TODO: jfl - i think this can get destroyed
       planRadius:            "=", //TODO: jfl - i think this can get destroyed
       featureType:           "=", 

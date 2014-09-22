@@ -69,7 +69,6 @@ function DetailCtrl_($scope, $rootScope, $stateParams, $state, OlService, Featur
 	};
 
   vm.fillPanel = function fillPanel(feature) {
-  	console.log(vm.selectedFeatureByEdl);
 	  if (feature !== null) {
 	      // if selected feature has panels, delete them
 	      var id = feature.getId();

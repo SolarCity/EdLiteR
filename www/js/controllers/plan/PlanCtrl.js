@@ -17,7 +17,6 @@ function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, Feature
 
   vm.toggleDetailView = function(feature) {
     if (!feature) alert('no feature selected');
-    console.log(vm.focusedFeature);
     // request update of values in detail control
     $scope.selectedFeatureId   = feature.getId();
     $scope.selectedFeatureType = feature.getGeometryName();
@@ -25,7 +24,6 @@ function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, Feature
     var f = {
       id   : $scope.selectedFeatureId,
       type : $scope.selectedFeatureType,
-      
     };
     
     var layer = layers[f.type];

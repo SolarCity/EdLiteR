@@ -1,5 +1,5 @@
 <ion-content>
-    <button ng-disabled="detailForm.$invalid" ng-if="selectedFeatureType==='mount'" class="button button-small button-balanced" ng-click="detail.fillPanel(plan.feature)">FILL</button>
+    <button ng-disabled="detailForm.$invalid" ng-if="selectedFeatureType==='mount'" class="button button-small button-balanced" ng-click="detail.fillPanel(plan.focusedFeature)">FILL</button>
   <form name="detailForm">
       <label ng-if="selectedFeatureType==='obstruction'">
           {{detail.getOrUpdateRadius()}}
