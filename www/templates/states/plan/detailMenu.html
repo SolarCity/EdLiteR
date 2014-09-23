@@ -1,25 +1,22 @@
 <ion-content>
-    <button ng-disabled="detailForm.$invalid" ng-if="selectedFeatureType==='mount'" class="button button-small button-balanced" ng-click="detail.fillPanel(plan.focusedFeature)">FILL</button>
+  <button ng-disabled="detailForm.$invalid" ng-if="focus.getGeometryName()==='mount'" class="button button-small button-balanced" ng-click="detail.fillPanel(focus)">FILL</button>
   <form name="detailForm">
-      <label ng-if="selectedFeatureType==='obstruction'">
-          {{detail.getOrUpdateRadius()}}
+      <label ng-if="focus.getGeometryName()==='obstruction'">
           <div class="item range range-positive">
               <input type="range"
-                     name="radius"
                      id="obstructionRangeInput"
                      min="5"
                      max="200"
-                     ng-change="detail.getOrUpdateRadius(detail.featureRadius)"
-                     ng-model="detail.featureRadius"
+                     ng-change="focus.set('radius', plan.radius)"
+                     ng-model="plan.radius"
                      >
           </div>
       </label>
-      <label ng-if="selectedFeatureType==='mount'">
+      <label ng-if="focus.getGeometryName()==='mount'">
           <span class="input-label">Slope</span>
           <div class="item item-input-inset">
               <label class="item-input-wrapper">
                   <input type="number"
-                         name="pitch"
                          id="mountPitchInput"
                          placeholder="Slope"
                          required="true"
@@ -27,8 +24,8 @@
                          ng-maxlength="2"
                          min="0"
                          max="89"
-                         ng-change="detail.getOrUpdatePitch(detail.featurePitch)"
-                         ng-model="detail.featurePitch"
+                         ng-change="focus.set('pitch',plan.pitch)"
+                         ng-model="plan.pitch"
                          
                          >
               </label>

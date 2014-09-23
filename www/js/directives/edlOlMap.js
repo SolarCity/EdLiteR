@@ -4,10 +4,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
     transclude: false,
     scope: {
       toggleRightMenu:       "=",
+      radius:                "=",
+      pitch:                 "=",
       focusedFeature:        "=", //NOTE: this gives us the selected feature throughout the app :) 
-      featureDetails:        "=", //TODO: jfl - i think this can get destroyed
-      planRadius:            "=", //TODO: jfl - i think this can get destroyed
-      featureType:           "=", 
     },
     link: function edlOlMapLink(scope, ele, attrs) {
       /* button controls. See init() for instantiation */
@@ -210,9 +209,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
 
           // add mount draw interaction
           map.addInteraction(drawMount);
-
-          // notify controllbutton listener to update plan.featureType
-          scope.$emit('controlbutton', {featureType: 'mount'});
         };
 
         var handleObstructionButton = function handleObstructionButton(e) {
@@ -229,9 +225,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
 
           // add obstruction draw interaction
           map.addInteraction(drawObstruction);
-
-          // notify controllbutton listener to update plan.featureType
-          scope.$emit('controlbutton', {featureType: 'obstruction'}); 
         };
 
         var handleSelectButton = function handleSelectButton (e) {
@@ -271,7 +264,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
             }
 
             if (Ol.modifyInteraction !== null) {
-                // this may help solve the problem of latent objects
+                // this doesn't seem to solve the problem of latent objects
                 Ol.modifyInteraction.getFeatures().clear();
                 Ol.selectInteraction.getFeatures().clear();
             }
@@ -333,33 +326,27 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
 
         var gutterLineFinder = Ol.gutterLineFinder;
         drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
-        drawMount.on('drawend', function(){
-          scope.$emit('controlbutton', {featureType: 'mount'});
-        });
 
         selectInteraction.getFeatures().on('change:length', function (event) {
-          var feature = event.target.getArray()[0];
-          scope.selectedFeature = selectInteraction.getFeatures().getArray();
-          scope.focusedFeature = feature;
+          scope.focusedFeature = event.target.getArray()[0];
           scope.$apply(); // apply changed scope features.
-          var length = scope.selectedFeature.length;
-          scope.$emit('selected', length);
         });
 
         var afterObstruction =  function (event) {
           var feature = event.feature;
           var featureId = obstructions.getFeatures().length;
+
+          feature.setId(featureId);
           
-          Ol.setIdsOfFeaturearray([feature], featureId);
-          
-          // TODO: this shouldn't get checked every obstruction. 
-          $rootScope.planRadius = $rootScope.planRadius || 50;
-          feature.set('radius', $rootScope.planRadius );
+          // set default radius if we don't have one already          
+          scope.radius = scope.radius || 50;
+
+          feature.set('radius', scope.radius);
           feature.set('type', 'obstruction' );
 
           // clear any selected features, select the feature we just made
-          Ol.selectInteraction.getFeatures().clear();
-          Ol.selectInteraction.getFeatures().push(feature); 
+          // Ol.selectInteraction.getFeatures().clear();
+          // Ol.selectInteraction.getFeatures().push(feature);
         };
         drawObstruction.on('drawend', afterObstruction);
 
