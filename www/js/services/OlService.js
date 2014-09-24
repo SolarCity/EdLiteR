@@ -72,20 +72,22 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     return result;
   };
 
+  /* layers */
   OlService.mounts = new ol.source.Vector({
     features: new ol.Collection([])
   });
-
+  OlService.gutters = new ol.source.Vector({
+    features: new ol.Collection([])
+  });
   OlService.panels = new ol.source.Vector({
     features: new ol.Collection([]),
   });
-  
   OlService.obstructions = new ol.source.Vector({
     features: new ol.Collection([])
   });
-
   OlService.layers = {
     mount: OlService.mounts,
+    gutter: OlService.gutters,
     obstruction: OlService.obstructions, 
     panel: OlService.panels,
   };
@@ -144,7 +146,8 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     var gutterLineWkt;
     var wkt = OlService.wkt;
 
-    var mounts = OlService.mounts; //HACK: make this a parameter? 
+    var mounts  = OlService.mounts; //HACK: make this a parameter?
+    var gutters = OlService.gutters; //HACK: make this a parameter?
 
     // get & split the WKT (well-known text) for our feature
     featureWkt = wkt.writeFeature(feature).split(' ');
@@ -177,7 +180,7 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     var featureArray = [feature, gutterFeature];
     OlService.setIdsOfFeaturearray(featureArray, OlService.mounts.getFeatures().length);
 
-    mounts.addFeature(gutterFeature);
+    gutters.addFeature(gutterFeature);
 
   };
 
