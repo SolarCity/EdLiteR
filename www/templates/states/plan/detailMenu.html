@@ -1,46 +1,21 @@
 <ion-content>
   <button ng-disabled="detailForm.$invalid" ng-if="focus.getGeometryName()==='mount'" class="button button-small button-balanced" ng-click="detail.fillPanel(focus)">FILL</button>
   <form name="detailForm">
-      <label ng-if="focus.getGeometryName()==='obstruction'">
-          <div class="item range range-positive">
-              <input type="range"
-                     id="obstructionRangeInput"
-                     min="5"
-                     max="200"
-                     ng-change="focus.set('radius', plan.radius)"
-                     ng-model="plan.radius"
-                     >
-          </div>
-      </label>
-      <label ng-if="focus.getGeometryName()==='mount'">
-          <span class="input-label">Slope</span>
-          <div class="item item-input-inset">
-              <label class="item-input-wrapper">
-                  <input type="number"
-                         id="mountPitchInput"
-                         placeholder="Slope"
-                         required="true"
-                         ng-minlength="1"
-                         ng-maxlength="2"
-                         min="0"
-                         max="89"
-                         ng-change="focus.set('pitch',plan.pitch)"
-                         ng-model="plan.pitch"
-                         
-                         >
-              </label>
-          </div>
-      </label>
+    <edl-radius-button ng-if="focus.getGeometryName()==='obstruction'"></edl-radius-button>
+    <edl-slope-detail  ng-if="focus.getGeometryName()==='mount'"></edl-slope-detail>
     <label class="item item-radio" ng-repeat="property in plan.featureAttrs">
-      <span class="input-label">{{property.name}}</span>
+    <span class="input-label">{{property.name}}</span>
+    <div class="row">
       <ion-radio  type="radio" 
-
+                  class="col"
                   name="{{property.value}}"
                   ng-repeat="option in property.options"
                   ng-model="property.chosenValue"
       						value="{{option.value}}"
+
               >{{option.text}}<br>
         </ion-radio>
+      </div>
     </label>
   </form>
 </ion-content>

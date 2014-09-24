@@ -44,13 +44,6 @@ function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, Feature
 
   };
 
-  // detail and feature listen for this event fired on controlbutton
-  function controlbutton(e, args){
-    e.preventDefault();
-    $scope.$broadcast('update details', args); 
-  }
-  // $scope.$on( 'controlbutton', controlbutton);
-
   vm.featureCorners = function() {
     var mountPoints = {}; // we'll send this to the api
     var wkt = OlService.wkt; // used for turning features to strings
