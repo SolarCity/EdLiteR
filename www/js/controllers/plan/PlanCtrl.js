@@ -12,7 +12,10 @@ function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, Feature
   });
 
   vm.toggleDetailView = function(feature) {
-    if (!feature) alert('no feature selected');
+    if (!feature) {
+      alert('no feature selected');
+      return;
+    }
 
     vm.feature = feature ;
     vm.featureAttrs = vm.getOrMakeFeatureAttrs(feature);

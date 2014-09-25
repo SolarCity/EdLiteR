@@ -12,6 +12,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       /* button controls. See init() for instantiation */
       var Ol = OlService;
 
+
       var controllerbox = angular.element('<div></div>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
       controllerbox.addClass('buttoncontrols');
@@ -30,13 +31,13 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         controllerbox.append(val);
       });
 
-      var selectThisButton = function selectThisButton (selected) {
+      var styleThisButton = function styleThisButton (selected) {
         Ol.setPreviewMode(false);
 
-        buttons.forEach(function(b){
+        angular.forEach(buttons, function(b){
           b.removeClass('button-assertive');
         });
-        selected.addClass('button-assertive');
+        if (selected) selected.addClass('button-assertive');
       };
       
       /*
@@ -120,6 +121,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         });
         mountLayer.set('name', 'mountLayer');
 
+        // layer for gutters
+        var gutters = Ol.gutters;
+        var gutterLayer = new ol.layer.Vector({
+          source: gutters,
+          projection: pixelProjection,
+          style:  StyleService.defaultStyleFunction,
+        });
+        gutterLayer.set('name', 'gutterLayer');
+
         // layer for obstructions
         var obstructions = Ol.obstructions;
         var obstructionLayer = new ol.layer.Vector({
@@ -141,7 +151,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         Ol.panelLayer = panelLayer;
         
         Ol.hideLayers = new ol.layer.Group({
-          layers: new ol.Collection([mountLayer, obstructionLayer])
+          layers: new ol.Collection([mountLayer, obstructionLayer, gutterLayer])
         });
 
         /* Mount interactions */
@@ -162,7 +172,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         });
                 
         var selectInteraction = new ol.interaction.Select({
-          features: [mounts.getFeatures(), obstructions.getFeatures()],
+          layers: [obstructionLayer, mountLayer],
           style: StyleService.highlightStyleFunction,
         });
         Ol.selectInteraction = selectInteraction;
@@ -171,10 +181,11 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           features: selectInteraction.getFeatures(),
           style: StyleService.highlightStyleFunction,
         });
+        Ol.modifyInteraction = modifyInteraction;
 
           /* Map Options */
         var mapOptions = {
-            layers: [mapCapture, mountLayer, obstructionLayer, panelLayer],
+            layers: [mapCapture, mountLayer, obstructionLayer, panelLayer, gutterLayer],
             controls: ol.control.defaults({
                 zoom:false,
               attributionOptions: ({
@@ -193,66 +204,62 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         var map = MapService.setOmap(mapOptions);
         
         /* left controls callbacks */
-        var handleDrawButton = function handleDrawButton(e){
+        function addAndRemoveInteractions(arrayToAdd, arrayToRemove){
+          selectInteraction.getFeatures().clear();
+          angular.forEach(arrayToRemove, function (interaction) {
+            map.removeInteraction(interaction);
+          });
+          angular.forEach(arrayToAdd, function (interaction){
+            map.addInteraction(interaction);
+          });
+        }
 
+        var handleMountButton = function handleMountButton(e){
           if (e) {
             e.preventDefault();
-            
           }
-          // change button styling
-          selectThisButton(drawbutton);
+          styleThisButton(drawbutton);
 
-          // remove Obstruction interactions
-          map.removeInteraction(drawObstruction);
-          map.removeInteraction(selectInteraction);
-          map.removeInteraction(modifyInteraction);
-
-          // add mount draw interaction
-          map.addInteraction(drawMount);
+          var removeUs = [drawObstruction, modifyInteraction];
+          var addUs    = [drawMount, selectInteraction];
+          addAndRemoveInteractions(addUs, removeUs, map);
         };
 
         var handleObstructionButton = function handleObstructionButton(e) {
           if (e) {
             e.preventDefault();
           }
-          // change button styling
-          selectThisButton(obstructionbutton);
+          styleThisButton(obstructionbutton);
 
-          // remove interactions
-          map.removeInteraction(drawMount);
-          map.removeInteraction(selectInteraction);
-          map.removeInteraction(modifyInteraction);
-
-          // add obstruction draw interaction
-          map.addInteraction(drawObstruction);
+          var removeUs = [drawMount, selectInteraction, modifyInteraction];
+          var addUs    = [drawObstruction, selectInteraction];
+          addAndRemoveInteractions(addUs, removeUs, map);
         };
 
         var handleSelectButton = function handleSelectButton (e) {
           if (e) {
             e.preventDefault();
           }
-          selectThisButton(selectbutton);
-
-          // remove Draw interactions
-          map.removeInteraction(drawMount);
-          map.removeInteraction(drawObstruction);
-
-          // add select and modify interactions
-          map.addInteraction(selectInteraction);
-          map.addInteraction(modifyInteraction);
+          styleThisButton(selectbutton);
+          var removeUs = [drawMount, drawObstruction, selectInteraction, modifyInteraction];
+          var addUs    = [selectInteraction, modifyInteraction];
+          addAndRemoveInteractions(addUs, removeUs, map);
         };
 
         var handleDeleteButton = function handleDeleteButton(e) {
             if (e) {
                 e.preventDefault();
-
             }
+
             var layer;
-            var feature = Ol.getSelectedFeature().pop();
+            var feature = Ol.getSelectedFeature()[0];
+
             if (!!feature && feature.getGeometryName() === 'mount') {
                 layer = Ol.layers.mount;
                 Ol.removeFeatureById(feature.getId(), layer);
                 layer = Ol.layers.panel;
+                Ol.removeFeatureById(feature.getId(), layer);
+                layer = Ol.layers.gutter;
                 Ol.removeFeatureById(feature.getId(), layer);
             } else if (!!feature && feature.getGeometryName() === 'panel') {
                 layer = Ol.layers[feature.getGeometryName()];
@@ -263,17 +270,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
                 layer.removeFeature(feature);
             }
 
-            if (Ol.modifyInteraction !== null) {
-                // this doesn't seem to solve the problem of latent objects
-                Ol.modifyInteraction.getFeatures().clear();
-                Ol.selectInteraction.getFeatures().clear();
+            if (Ol.selectInteraction.getFeatures().getArray().length !== 0) {
+              Ol.selectInteraction.getFeatures().clear(); //HACK: eliminate residual touch/mouse points
             }
+            handleSelectButton();
         };
         
         var handleToggleButton = function handleToggleButton (e) {
           if (e) {
             e.preventDefault();
-            
           }
           // get selected feature
           var feature = Ol.getSelectedFeature()[0];
@@ -283,19 +288,21 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         
         var handlePreviewButton = function handlePreviewButton (e) {
           e.preventDefault();
-
-          //tzb - removing selecting interaction so preview mode works properly even if an MP is selected
-          map.removeInteraction(selectInteraction);
-
-          // change button styling
-          selectThisButton(previewbutton);
-          OlService.setPreviewMode(true);
+          var removeAll = [drawMount, drawObstruction, selectInteraction, modifyInteraction];
+          if (Ol._previewing) {
+            OlService.setPreviewMode(false);
+            handleSelectButton();
+          } else {
+            styleThisButton(previewbutton);
+            OlService.setPreviewMode(true);
+            addAndRemoveInteractions([], removeAll, map);
+          }
         };
 
         /* controller button options */
         var button_options = {
           top_button: {
-            callback:     handleDrawButton,
+            callback:     handleMountButton,
             target:       drawbutton,
           },
           bottom_button: {
@@ -324,8 +331,20 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           new DrawControlButton(val);
         });
 
-        var gutterLineFinder = Ol.gutterLineFinder;
-        drawMount.on('drawend', gutterLineFinder, scope.featureDetails);
+        function mountDrawStart(){
+          var removeUs = [modifyInteraction, selectInteraction];
+          addAndRemoveInteractions([], removeUs, map);
+        }
+        function mountDrawEnd(event){
+          var feature = event.feature;
+          var removeUs = [];
+          var addUs    = [selectInteraction, modifyInteraction];
+          addAndRemoveInteractions(addUs, removeUs, map);
+          selectInteraction.getFeatures().push(feature);
+          Ol.gutterLineFinder(event);
+        }
+        drawMount.on('drawend', mountDrawEnd, scope.featureDetails);
+        drawMount.on('drawstart', mountDrawStart, scope.featureDetails);
 
         selectInteraction.getFeatures().on('change:length', function (event) {
           scope.focusedFeature = event.target.getArray()[0];
@@ -345,8 +364,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           feature.set('type', 'obstruction' );
 
           // clear any selected features, select the feature we just made
-          // Ol.selectInteraction.getFeatures().clear();
-          // Ol.selectInteraction.getFeatures().push(feature);
+          Ol.selectInteraction.getFeatures().clear();
+          Ol.selectInteraction.getFeatures().push(feature);
         };
         drawObstruction.on('drawend', afterObstruction);
 

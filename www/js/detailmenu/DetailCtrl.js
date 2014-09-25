@@ -1,8 +1,6 @@
-function DetailCtrl_($scope, $rootScope, $stateParams, $state, OlService, FeatureOptionService, MapService, StyleService, ApiService, PanelFillService) {
+function DetailCtrl_($ionicSideMenuDelegate, OlService, ApiService, PanelFillService) {
 	var vm = this;
 	var Ol = OlService;
-
-	vm.featureProperties = {};
 
   vm.fillPanel = function fillPanel(feature) {
 	  if (feature !== null) {
@@ -16,14 +14,13 @@ function DetailCtrl_($scope, $rootScope, $stateParams, $state, OlService, Featur
 	      var msg = Ol.fillMessageForSingleMount(feature);
 	      // create api message with Process Features
 	      var api = PanelFillService.processFeatures(msg.m, msg.o);
-
+	      $ionicSideMenuDelegate.toggleRight();
 	      ApiService.uploadMounts(api) //TODO: change from sample
 	        .then(function (data) {
 	          PanelFillService.addPanelsFromApi(data, id);
 	      });
 	  }
 	};
-
 }
 
 controllers.controller("DetailCtrl", DetailCtrl_);

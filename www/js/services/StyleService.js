@@ -63,7 +63,7 @@ function StyleService_ ($q) {
               }),
               stroke: new ol.style.Stroke({
                 color: 'red',
-                width: 12
+                width: 4
               }),
               image: new ol.style.Circle({
                 radius: 7,
@@ -92,7 +92,7 @@ function StyleService_ ($q) {
     styles['obstruction'] = function(rad, res) {
       return [new ol.style.Style({
               image: new ol.style.Circle({
-                radius: rad / (res*4.2) ,
+                radius: rad / (res*4.2),
                 fill: new ol.style.Fill({
                   color: c.greenGutter
                 })
@@ -102,7 +102,7 @@ function StyleService_ ($q) {
 
     return function(feature, resolution) {
       var radius = feature.get('radius');
-      if (feature.get('type')==='obstruction') {
+      if (feature.getGeometryName()==='obstruction') {
         return styles[feature.getGeometryName()](radius, resolution);
       }
       return styles[feature.getGeometryName()];
@@ -123,7 +123,7 @@ function StyleService_ ($q) {
               }),
             
               image: new ol.style.Circle({
-                radius: 7,
+                radius: 20,
                 fill: new ol.style.Fill({
                   color: c.orangeBorder,
                 })
