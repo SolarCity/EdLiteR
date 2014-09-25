@@ -5,68 +5,19 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
   // well known text format utility
   wkt = OlService.wkt;
 
-  /* 
-   * functions we use
-   */
+	 /* 
+	 * external functions
+	 */
 
-  PanelFillService.addPanelsFromApi = function(data, panelid){
-		var mapEdges = edgesAndRatios();
-	  var responseIterator = function(arrayOfPanels, key){
-	    // iterate over each panel in the array of panels
-	  	var featurestoadd = [];
+  PanelFillService.obstructionDefaultRadius = function() { 
+    var conv = PanelFillService.edgesAndRatios();
 
-	    arrayOfPanels.forEach(function(points_for_panel, key, obj){
-	      // turn each array of points into a WKT
-	      var feature = PanelFillService.panelFromJson(points_for_panel, mapEdges);
-	      featurestoadd.push(feature);
-	    	OlService.setIdsOfFeaturearray([feature], panelid);
-	    });
-	
-	    OlService.panels.addFeatures(featurestoadd);  
-	  };
-  	
-  	angular.forEach(data, responseIterator);
+    var one_feet_degree_latitude_at_35degrees = 305775.35603412613; 
+    var radius = (1/one_feet_degree_latitude_at_35degrees ) * conv.px_per_n; 
+    return radius + 20; //HACK: this need to be double checked, i think it's broken.
   };
 
-  PanelFillService.processFeatures = function(mounts, obstructions ){
-
-  	var msg = {};
-  	msg.m = [];
-  	var pitch;
-  	for (var idx in mounts) {
-  		var p = [];
-  		idx = parseInt(idx);
-  		for (var point in mounts[idx]){ 
-  			p.push(PanelFillService.pointToLatLng(mounts[idx][point], idx, mounts));
-  		}
-  		pitch = parseInt(OlService.getSelectedFeature()[0].get('pitch')); //TODO: this only works for for single selection
-  		msg.m.push({
-					id: idx, 
-					pitch: pitch,
-					points: p,
-					portrait: OlService.getSelectedFeature()[0].get('edl').panelOrientation === "portrait" ? true: false,
-				});
-  	}
-  	
-  	msg.o = [];
-  	for (var ix in obstructions) {
-  		var o = [];
-  		for (var center in obstructions[ix]){ 
-  			o.push(PanelFillService.pointToLatLng(obstructions[ix][center], ix, obstructions));
-  		}
-  		msg.o.push({
-					radius: parseInt(OlService.obstructions.getFeatures()[ix].get('radius')),
-					height: 0,
-					center: {
-						lon: o[0][0],
-						lat: o[0][1],
-					},
-				});
-  	}
-		return msg;
-  };
-
-  function edgesAndRatios(){
+  PanelFillService.edgesAndRatios = function(){ //TODO: refactor to angular provider
 		var north_edge, south_edge, east_edge, west_edge, pixelHeight, pixelWidth;
 		north_edge = 0;
 		west_edge  = 0;
@@ -114,12 +65,69 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 			pxHeight: pixelHeight,
 		};
 
-  }
+  };
+
+  PanelFillService.addPanelsFromApi = function(data, panelid){
+		var mapEdges = PanelFillService.edgesAndRatios();
+	  var responseIterator = function(arrayOfPanels, key){
+	    // iterate over each panel in the array of panels
+	  	var featurestoadd = [];
+
+	    arrayOfPanels.forEach(function(points_for_panel, key, obj){
+	      // turn each array of points into a WKT
+	      var feature = PanelFillService.panelFromJson(points_for_panel, mapEdges);
+	      featurestoadd.push(feature);
+	    	OlService.setIdsOfFeaturearray([feature], panelid);
+	    });
+	
+	    OlService.panels.addFeatures(featurestoadd);  
+	  };
+  	
+  	angular.forEach(data, responseIterator);
+  };
+
+  PanelFillService.processFeatures = function(mounts, obstructions ){
+  	var msg = {};
+  	msg.m = [];
+  	var pitch;
+  	for (var idx in mounts) {
+  		var p = [];
+  		idx = parseInt(idx);
+  		for (var point in mounts[idx]){ 
+  			p.push(PanelFillService.pointToLatLng(mounts[idx][point], idx, mounts));
+  		}
+  		pitch = parseInt(OlService.getSelectedFeature()[0].get('pitch')); //TODO: this only works for for single selection
+  		msg.m.push({
+					id: idx, 
+					pitch: pitch,
+					points: p,
+					portrait: OlService.getSelectedFeature()[0].get('edl').panelOrientation.chosenValue === "portrait" ? "true": "false",
+				});
+  	}
+  	
+  	msg.o = [];
+  	for (var ix in obstructions) {
+  		var o = [];
+  		for (var center in obstructions[ix]){ 
+  			o.push(PanelFillService.pointToLatLng(obstructions[ix][center], ix, obstructions));
+  		}
+  		msg.o.push({
+					radius: parseInt(OlService.obstructions.getFeatures()[ix].get('radius')),
+					height: 0,
+					center: {
+						lon: o[0][0],
+						lat: o[0][1],
+					},
+				});
+  	}
+		return msg;
+  };
+
 
 	PanelFillService.pointToLatLng = function(point_string) {
 		//TODO: is it a problem that browser zoom impacts these numbers?
 
-		var mapEdges = edgesAndRatios();
+		var mapEdges = PanelFillService.edgesAndRatios();
 
 		var pt_xy	= point_string.split(' ');
 
