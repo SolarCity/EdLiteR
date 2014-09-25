@@ -32,7 +32,7 @@ function edlSlopeDetail($ionicGesture) {
               'ng-repeat="button in bar"',
               'ng-model="plan.pitch"',
               'ng-value="button.slope"',
-              'ng-change="focus.set(\'pitch\',plan.pitch)"',
+              'ng-change="focus.set(\'pitch\',button.slope)"',
           '>',
             '{{button.slope}}',
           '</ion-radio>',
