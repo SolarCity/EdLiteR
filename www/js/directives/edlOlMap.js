@@ -369,16 +369,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         };
         drawObstruction.on('drawend', afterObstruction);
 
-        // initialize buttons
-        selectbutton.addClass('button-assertive');
-
-        $('#attributeButton').addClass('button-stable');
-
-        // initialize interactions
-        map.addInteraction(modifyInteraction);
+        handleSelectButton();
       }
     },
   };
-
 }
 directives.directive('edlOlMap', edlOlMap);
