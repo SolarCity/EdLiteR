@@ -14,7 +14,7 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 
     var one_feet_degree_latitude_at_35degrees = 305775.35603412613; 
     var radius = (1/one_feet_degree_latitude_at_35degrees ) * conv.px_per_n; 
-    return radius + 20; //HACK: this need to be double checked, i think it's broken.
+    return radius * 2; //HACK: this need to be double checked, i think it's broken.
   };
 
   PanelFillService.edgesAndRatios = function(){ //TODO: refactor to angular provider
