@@ -331,10 +331,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           new DrawControlButton(val);
         });
 
-
         function mountDrawStart(){
           var removeUs = [modifyInteraction, selectInteraction];
-          // var addUs    = [drawObstruction, selectInteraction];
           addAndRemoveInteractions([], removeUs, map);
         }
         function mountDrawEnd(event){
