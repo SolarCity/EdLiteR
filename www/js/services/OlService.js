@@ -2,17 +2,11 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   // this factory is a singleton & provides layers, styles, etc for the edl-ol-map ... 
   // 
 
-  //TODO: get all the OlMap stuff from MapService into this Service instead.
   var OlService = {};
-
-  // TODO: give styles for the type of thing selected... (maybe)
-  // var selectedStyleFunction = function function_name (argument) {
-    
-  // };
 
   OlService.recentFeature = {}; 
 
-  // dev 
+  // HACK: dev 
   var mapDiv = {};
   mapDiv.clientHeight = 725; //HACK: why is this hardcoded? 
   OlService.mapDiv = mapDiv;
@@ -91,21 +85,21 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     obstruction: OlService.obstructions, 
     panel: OlService.panels,
   };
-  OlService.hideLayersForPreview = false;
+  OlService._previewing = false;
 
   OlService.setPreviewMode = function setPreviewMode(status) {
+    OlService._previewing = status;
 
     OlService.hideLayers.getLayers().getArray().forEach(function(f){
       f.setVisible(!status);
     });
-    OlService.hideLayersForPreview = status;
+
     if (status){ 
       OlService.panelLayer.setOpacity(1);
     } else {
       OlService.panelLayer.setOpacity(0.6);
     }
   };
-
 
 
   OlService.fillMessageForSingleMount = function(mount){
@@ -139,15 +133,21 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
   OlService.wkt = new ol.format.WKT();
 
   OlService.gutterLineFinder = function gutterLineFinder(event) {
-    var feature = event.feature;
+    var feature = event.feature || event.target;
+    var mounts  = OlService.mounts; //HACK: make this a parameter?
+    var gutters = OlService.gutters; //HACK: make this a parameter?
+    
+    var featureId = mounts.getFeatures().length;
+    if (feature.getId()) {
+      featureId = feature.getId();
+      OlService.removeFeatureById( featureId, OlService.gutters);
+    }
     var mountfeature = feature.getGeometry();
 
     var featureWkt;
     var gutterLineWkt;
     var wkt = OlService.wkt;
 
-    var mounts  = OlService.mounts; //HACK: make this a parameter?
-    var gutters = OlService.gutters; //HACK: make this a parameter?
 
     // get & split the WKT (well-known text) for our feature
     featureWkt = wkt.writeFeature(feature).split(' ');
@@ -178,10 +178,11 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
 
     // put the features in the source
     var featureArray = [feature, gutterFeature];
-    OlService.setIdsOfFeaturearray(featureArray, OlService.mounts.getFeatures().length);
-
+    OlService.setIdsOfFeaturearray(featureArray, featureId);
     gutters.addFeature(gutterFeature);
 
+    // if feature is modified later, be sure to redraw the gutterline
+    feature.once('change', OlService.gutterLineFinder);
   };
 
   return OlService;
