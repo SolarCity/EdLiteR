@@ -66,10 +66,7 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 		return msg;
   };
 
-	PanelFillService.pointToLatLng = function(point_string, featIdx, featCollection) {
-		//TODO: is it a problem that browser zoom impacts these numbers?
-		var pt_xy	= point_string.split(' ');
-
+  function edgesAndRatios(){
 		var north_edge, south_edge, east_edge, west_edge, pixelHeight, pixelWidth;
 		north_edge = 0;
 		west_edge  = 0;
@@ -105,13 +102,33 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 		var px_per_e = pixelWidth  / e_mapsize;
 		var px_per_n = pixelHeight / n_mapsize;
 		var px_per_en = [px_per_e, px_per_n];
+		console.log('attempt');
+		return {
+
+			n: north_edge,
+			s: south_edge,
+			e: east_edge,
+			w: west_edge,
+			px_per_e: px_per_e,
+			px_per_n: px_per_n,
+		};
+
+  }
+
+	PanelFillService.pointToLatLng = function(point_string) {
+		//TODO: is it a problem that browser zoom impacts these numbers?
+
+		var edges = edgesAndRatios();
+
+		var pt_xy	= point_string.split(' ');
+
 
 		function north_pt(pt_y) {
-			return south_edge + pt_y / px_per_n;
+			return edges.s + pt_y / edges.px_per_n;
 		}
 
 		function east_pt(pt_x) {
-			return west_edge + pt_x / px_per_e;
+			return edges.w + pt_x / edges.px_per_e;
 		}
 
 		function point_machine(pt_xy){
