@@ -18,12 +18,12 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
 
-      var selectbutton = angular.element('<i class="icon ion-ios7-search"></i>');
-      var drawbutton = angular.element('<i class="icon ion-edit"></i>');
-      var obstructionbutton = angular.element('<i class="icon ion-disc"></i>');
-      var deletebutton = angular.element('<i class="icon ion-ios7-trash"></i>');
-      var togglebutton = angular.element('<i class="icon ion-ios7-settings-strong"></i>');
-      var previewbutton = angular.element('<i class="icon ion-ios7-play"></i>');
+      var selectbutton = angular.element('<i><object type="image/svg+xml" data="img/select.svg"></object></i>');
+      var drawbutton = angular.element('<i><object type="image/svg+xml" data="img/draw.svg"></object></i>');
+      var obstructionbutton = angular.element('<i><object type="image/svg+xml" data="img/obstcal.svg"></object></i>');
+      var deletebutton = angular.element('<i><object type="image/svg+xml" data="img/trash.svg"></object></i>');
+      var togglebutton = angular.element('<i><object type="image/svg+xml" data="img/propoty.svg"></object></i>');
+      var previewbutton = angular.element('<i><object type="image/svg+xml" data="img/preview.svg"></object></i>');
 
       var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, togglebutton, previewbutton];
 
@@ -55,7 +55,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
 
         var map = options.map;
         var anchor = options.target;
-        anchor.addClass('button button-stable');
+        anchor.addClass('button button-stable edl-control-button');
+        // anchor.addClass('button button-stable');
         if (options.buttonText) anchor.text(options.buttonText);
 
         ionic.on('tap', options.callback, anchor[0]);
