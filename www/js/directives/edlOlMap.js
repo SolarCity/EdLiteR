@@ -18,17 +18,21 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
 
-      var selectbutton = angular.element('<i><object type="image/svg+xml" data="img/select.svg"></object></i>');
-      var drawbutton = angular.element('<i><object type="image/svg+xml" data="img/draw.svg"></object></i>');
+      var selectbutton      = angular.element('<i><object type="image/svg+xml" data="img/select.svg"></object></i>');
+      var drawbutton        = angular.element('<i><object type="image/svg+xml" data="img/draw.svg"></object></i>');
       var obstructionbutton = angular.element('<i><object type="image/svg+xml" data="img/obstcal.svg"></object></i>');
-      var deletebutton = angular.element('<i><object type="image/svg+xml" data="img/trash.svg"></object></i>');
-      var togglebutton = angular.element('<i><object type="image/svg+xml" data="img/propoty.svg"></object></i>');
-      var previewbutton = angular.element('<i><object type="image/svg+xml" data="img/preview.svg"></object></i>');
+      var deletebutton      = angular.element('<i><object type="image/svg+xml" data="img/trash.svg"></object></i>');
+      var togglebutton      = angular.element('<i><object type="image/svg+xml" data="img/propoty.svg"></object></i>');
+      var previewbutton     = angular.element('<i><object type="image/svg+xml" data="img/preview.svg"></object></i>');
 
       var buttons = [selectbutton, drawbutton, obstructionbutton, deletebutton, togglebutton, previewbutton];
+      var conditional_buttons = [previewbutton, togglebutton, deletebutton];
 
-      buttons.forEach(function(val){
+      angular.forEach(buttons, function(val){
         controllerbox.append(val);
+      });
+      angular.forEach(conditional_buttons, function(b){
+        b.addClass('disabled');
       });
 
       var styleThisButton = function styleThisButton (selected) {
@@ -39,7 +43,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         });
         if (selected) selected.addClass('button-assertive');
       };
-      
+
       var DrawControlButton = function DrawControlButton(opt_options){
         var options = opt_options || {};
 
@@ -338,6 +342,13 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         selectInteraction.getFeatures().on('change:length', function (event) {
           scope.focusedFeature = event.target.getArray()[0];
           scope.$apply(); // apply changed scope features.
+          angular.forEach(conditional_buttons, function(b){
+            if (scope.focusedFeature) {
+              b.removeClass('disabled');
+            } else {
+              b.addClass('disabled');
+            }
+          });
         });
 
         var afterObstruction =  function (event) {
