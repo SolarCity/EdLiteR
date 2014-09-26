@@ -52,7 +52,7 @@ edl-map {
   text-align: center;
 }
 .edl-control-button  {
-  width: 15%;
+  /*width: 15%;*/
   /*width: 100px;*/
   /*height: 100px;*/
 }
