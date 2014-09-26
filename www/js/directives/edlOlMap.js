@@ -18,12 +18,12 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
 
-      var selectbutton = angular.element('<object type="image/svg+xml" data="img/select.svg"></object>');
-      var drawbutton = angular.element('<object type="image/svg+xml" data="img/draw.svg"></object>');
-      var obstructionbutton = angular.element('<object type="image/svg+xml" data="img/obstcal.svg"></object>');
-      var deletebutton = angular.element('<object type="image/svg+xml" data="img/trash.svg"></object>');
-      var togglebutton = angular.element('<object type="image/svg+xml" data="img/propoty.svg"></object>');
-      var previewbutton = angular.element('<object type="image/svg+xml" data="img/preview.svg"></object>');
+      var selectbutton = angular.element('<i><object type="image/svg+xml" data="img/select.svg"></object></i>');
+      var drawbutton = angular.element('<i><object type="image/svg+xml" data="img/draw.svg"></object></i>');
+      var obstructionbutton = angular.element('<i><object type="image/svg+xml" data="img/obstcal.svg"></object></i>');
+      var deletebutton = angular.element('<i><object type="image/svg+xml" data="img/trash.svg"></object></i>');
+      var togglebutton = angular.element('<i><object type="image/svg+xml" data="img/propoty.svg"></object></i>');
+      var previewbutton = angular.element('<i><object type="image/svg+xml" data="img/preview.svg"></object></i>');
 
       var buttons = [selectbutton, drawbutton, obstructionbutton, deletebutton, togglebutton, previewbutton];
 
