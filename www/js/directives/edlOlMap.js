@@ -18,14 +18,14 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       controllerbox.addClass('buttoncontrols');
       controllerbox.attr('id', 'edl-control-box');
 
-      var selectbutton = angular.element('<i class="icon ion-ios7-search"></i>');
-      var drawbutton = angular.element('<i class="icon ion-edit"></i>');
-      var obstructionbutton = angular.element('<i class="icon ion-disc"></i>');
-      var deletebutton = angular.element('<i class="icon ion-ios7-trash"></i>');
-      var togglebutton = angular.element('<i class="icon ion-ios7-settings-strong"></i>');
-      var previewbutton = angular.element('<i class="icon ion-ios7-play"></i>');
+      var selectbutton = angular.element('<object type="image/svg+xml" data="img/select.svg"></object>');
+      var drawbutton = angular.element('<object type="image/svg+xml" data="img/draw.svg"></object>');
+      var obstructionbutton = angular.element('<object type="image/svg+xml" data="img/obstcal.svg"></object>');
+      var deletebutton = angular.element('<object type="image/svg+xml" data="img/trash.svg"></object>');
+      var togglebutton = angular.element('<object type="image/svg+xml" data="img/propoty.svg"></object>');
+      var previewbutton = angular.element('<object type="image/svg+xml" data="img/preview.svg"></object>');
 
-      var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, togglebutton, previewbutton];
+      var buttons = [selectbutton, drawbutton, obstructionbutton, deletebutton, togglebutton, previewbutton];
 
       buttons.forEach(function(val){
         controllerbox.append(val);
@@ -40,24 +40,13 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         if (selected) selected.addClass('button-assertive');
       };
       
-      /*
-       *  ControllButton constructor
-       *  options look like this: 
-       *  {
-       *    buttonText: {string}, 
-       *    callback: {function}, 
-       *    target:   {should be your map?}, 
-       *  } 
-       */  
-
       var DrawControlButton = function DrawControlButton(opt_options){
         var options = opt_options || {};
 
         var map = options.map;
         var anchor = options.target;
-        anchor.addClass('button button-stable');
+        anchor.addClass('button button-stable edl-control-button');
         if (options.buttonText) anchor.text(options.buttonText);
-
         ionic.on('tap', options.callback, anchor[0]);
         return new ol.control.Control({
           element: anchor[0],
