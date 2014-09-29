@@ -78,11 +78,11 @@
   <!-- this is your app, named in app.js -->
   <body ng-app="edliter">
     <ion-nav-bar class="bar-positive">
-        <ion-nav-back-button class="button-clear">
-            <ion-nav-button class="button button-large button-energized button-clear">
-                <i class="ion-arrow-left-c"></i>
+        <ion-nav-buttons side="left">
+            <ion-nav-button class="button button-large button-energized button-clear" ui-sref="home">
+                <i class="icon ion-home"></i>
             </ion-nav-button>
-        </ion-nav-back-button>
+        </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view animation="slide-left-right"></ion-nav-view>
   </body>

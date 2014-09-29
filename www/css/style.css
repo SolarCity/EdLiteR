@@ -18,6 +18,8 @@ div.fill {
   height: 100%;
 }
 
+/* edl map styling */
+
 edl-map {
   top: 0;
   left: 0;
@@ -46,21 +48,26 @@ edl-map {
 .buttoncontrols { /* TODO: styling */
   z-index: 20000;
   position: absolute;
-  data-tap-disabled: true;
   bottom: 0%;
   width: 100%;
   text-align: center;
-}
-.edl-control-button  {
-  /*width: 15%;*/
-  /*width: 100px;*/
-  /*height: 100px;*/
 }
 
 .button.edl-control-button {
   display: inline-block;
   padding: 0rem;
 }
+
+.button.edl-navbar-button {
+  width: inherit;
+  z-index: 20000;
+}
+
+.edl-button {
+  height: 100%;
+}
+
+/* Google Map Control Styling */
 
 .controls {
   margin-top: 16px;
@@ -101,6 +108,9 @@ form.ng-invalid {
   background: red;
 }
 
+
+
+/* EDL angle icon styling */
 
 edl-pitch-button {
   width: 100%;
