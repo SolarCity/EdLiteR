@@ -58,8 +58,9 @@ edl-map {
   padding: 0rem;
 }
 
-.button.edl-navbar-button {
-  width: inherit;
+.icon.edl-navbar-button {
+  /*width: inherit;*/
+  height: 2em;
   z-index: 20000;
 }
 
