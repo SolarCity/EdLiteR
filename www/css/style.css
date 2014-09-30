@@ -55,10 +55,6 @@ edl-map {
   background-color: #00a6b7;
 }
 
-.buttoncontrols{
-  padding: 0;
-}
-
 .edl-control-button > .icon.edl-icons {
   position: absolute;
   color: white;
