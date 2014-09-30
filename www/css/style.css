@@ -45,7 +45,7 @@ edl-map {
   height: 100%;
 }
 
-.buttoncontrols.bar.row {
+.buttoncontrols.button-bar {
   position: absolute;
   padding: 0;
   border: 0;
@@ -55,7 +55,7 @@ edl-map {
   background-color: #00a6b7;
 }
 
-.buttoncontrols .col{
+.buttoncontrols{
   padding: 0;
 }
 
@@ -64,9 +64,9 @@ edl-map {
   background-color: #00a6b7;
   max-height: 100%;
   top: 0 ;
-  bottom: 0;
-  padding: 0;
-  right: 0;
+  padding: 0 45% 0 45%;
+  height: 100%;
+  left: 0;
 }
 
 .button.edl-button  {
@@ -75,19 +75,20 @@ edl-map {
   border-left :0px;
   border-bottom :0px;
   max-height: 100%;
+
 }
 
 .edl-button-assertive {
   border-color:  #fb7f3d !important;
 }
 
-.bar > .button + .button:last-child {
+/*.button-bar > .button + .button:last-child {
   position: relative;
   top: auto;
   bottom: auto;
   right: auto;
 }
-
+*/
 .edl-navbar-button {
   height: 2em;
   z-index: 20000;
