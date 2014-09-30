@@ -7,6 +7,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       handlePreviewButton:   "=",
       radius:                "=",
       pitch:                 "=",
+      previewPanels:         "=",
       focusedFeature:        "=", //NOTE: this gives us the selected feature throughout the app :)
     },
     link: function edlOlMapLink(scope, ele, attrs) {
@@ -16,15 +17,25 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       /* button controls. See init() for instantiation */
       var controllerbox = angular.element('<div></div>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
-      controllerbox.addClass('buttoncontrols');
+      controllerbox.addClass('buttoncontrols bar row');
       controllerbox.attr('id', 'edl-control-box');
 
-      var selectbutton      = angular.element('<i><object type="image/svg+xml" data="img/select.svg"></object></i>');
-      var drawbutton        = angular.element('<i><object type="image/svg+xml" data="img/draw.svg"></object></i>');
-      var obstructionbutton = angular.element('<i><object type="image/svg+xml" data="img/obstcal.svg"></object></i>');
-      var deletebutton      = angular.element('<i><object type="image/svg+xml" data="img/trash.svg"></object></i>');
-      var togglebutton      = angular.element('<i><object type="image/svg+xml" data="img/propoty.svg"></object></i>');
-      var previewbutton        = $('#edl-preview-button').addClass('edl-button button');
+      function controlButton(svgSourceFile, disableable){
+        var disableclass = disableable ? 'ng-class="{disabled: !plan.focus}"' : ' ';
+        return angular.element([
+            '<object class="button button-icon icon col edl-button" ' + disableclass,
+              ' type="image/svg+xml" data="img/' + svgSourceFile + '"> ',
+            '</object>',
+          ].join('')
+        );
+      }
+
+      var selectbutton      = controlButton('select.svg',  false);
+      var drawbutton        = controlButton('draw.svg',    false);
+      var obstructionbutton = controlButton('obstcal.svg', false);
+      var deletebutton      = controlButton('trash.svg',   true);
+      var togglebutton      = controlButton('propoty.svg', true);
+      var previewbutton        = $('#edl-preview-button');
 
       var buttons = [selectbutton, drawbutton, obstructionbutton, deletebutton, togglebutton];
       var conditional_buttons = [ togglebutton, deletebutton];
@@ -39,21 +50,22 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       var styleThisButton = function styleThisButton (selected) {
         if (selected !== previewbutton) {
           Ol.setPreviewMode(false);
-          previewbutton.removeClass('button-assertive');
         } else {
           Ol.setPreviewMode(!OlService._previewing);
         }
         angular.forEach(buttons, function(b){
           b.removeClass('button-assertive');
         });
-        if (selected) selected.addClass('button-assertive');
+        // if (selected) selected.addClass('button-assertive');
+        if (selected) selected.addClass('edl-button-assertive');
       };
 
       var DrawControlButton = function DrawControlButton(opt_options){
         var options = opt_options || {};
         var map = options.map;
         var anchor = options.target;
-        anchor.addClass('button button-stable edl-control-button');
+        anchor.addClass('edl-control-button');
+        // anchor.addClass('button button-stable edl-control-button');
         if (options.buttonText) anchor.text(options.buttonText);
         ionic.on('tap', options.callback, anchor[0]);
         return new ol.control.Control({
@@ -146,7 +158,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         });
         panelLayer.set('name', 'panelLayer');
         Ol.panelLayer = panelLayer;
-        
+        /* pay attention to when there are panels present so the preview button can be styled: 
+            this gives us scope.previewPanels -> plan.previewPanels
+            there's an ng-class on the previewbutton looking for plan.previewPanels
+        */
+        Ol.panels.on('change', function panels(event) {
+          var features = event.target.getFeatures();
+          scope.previewPanels = features;
+        });
+
         Ol.hideLayers = new ol.layer.Group({
           layers: new ol.Collection([mountLayer, obstructionLayer, gutterLayer])
         });
@@ -288,7 +308,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           if (Ol._previewing) {
             OlService.setPreviewMode(false);
             previewbutton.removeClass('button-assertive');
-            previewbutton.addClass('disabled');
             handleSelectButton();
           } else {
             styleThisButton(previewbutton);
@@ -347,10 +366,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           scope.focusedFeature = event.target.getArray()[0];
           angular.forEach(conditional_buttons, function(b){
             if (scope.focusedFeature) {
-              previewbutton.removeClass('disabled');
               b.removeClass('disabled');
             } else {
-              b.addClass('disabled');
+              b.removeClass('disabled');
             }
           });
         });

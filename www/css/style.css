@@ -45,28 +45,40 @@ edl-map {
   height: 100%;
 }
 
-.buttoncontrols { /* TODO: styling */
-  z-index: 20000;
+.buttoncontrols {
   position: absolute;
+  padding: 0;
   bottom: 0%;
-  width: 100%;
-  text-align: center;
+  max-height: 20%;
+  min-height: 10%;
+  background-color: #00a6b7;
 }
 
-.button.edl-control-button {
-  display: inline-block;
-  padding: 0rem;
+.edl-button  {
+  border-top: 10px solid #00a6b7;
+  max-height: 100%;
 }
 
-.icon.edl-navbar-button {
-  /*width: inherit;*/
+.edl-button-assertive {
+  border-top: 10px solid #fb7f3d;
+}
+
+.edl-button > * {
+  max-height: 100%;
+}
+
+.bar > .button + .button:last-child {
+  position: relative;
+  top: auto;
+  bottom: auto;
+  right: auto;
+}
+
+.edl-navbar-button {
   height: 2em;
   z-index: 20000;
 }
 
-.edl-button {
-  height: 100%;
-}
 
 /* Google Map Control Styling */
 

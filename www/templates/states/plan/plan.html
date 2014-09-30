@@ -1,26 +1,21 @@
 <ion-side-menus>
 
-    <ion-nav-buttons side="right">
-        <i id="edl-preview-button" ng-click="plan.handlePreviewButton()">
-            <object class="bar bar-header edl-navbar-button button button-clear" type="image/svg+xml" data="img/preview.svg">
-            </object>
-        </i>
+    <ion-nav-buttons side="right" >
+            <button id="edl-preview-button" class="button button-clear" ng-class="{disabled: !plan.previewPanels}"  ng-click="plan.handlePreviewButton()">
+                <object class="icon button-icon edl-navbar-button" type="image/svg+xml" data="img/preview.svg"></object>
+            </button>
     </ion-nav-buttons>
 
     <ion-side-menu-content drag-content="false">
-
-
         <ion-nav-view animation="no-animation" name="planContent"></ion-nav-view>
     </ion-side-menu-content>
 
     <ion-side-menu side="right" width="detailpanelwidth">
-        <ion-nav-view name="detailMenu">
-        </ion-nav-view>
+        <ion-nav-view name="detailMenu"></ion-nav-view>
     </ion-side-menu>
 
     <ion-side-menu side="left">
-        <ion-nav-view name="helpMenu">
-        </ion-nav-view>
+        <ion-nav-view name="helpMenu"></ion-nav-view>
     </ion-side-menu>
 
 </ion-side-menus>
