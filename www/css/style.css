@@ -45,9 +45,10 @@ edl-map {
   height: 100%;
 }
 
-.buttoncontrols {
+.buttoncontrols.bar.row {
   position: absolute;
   padding: 0;
+  border: 0;
   bottom: 0%;
   max-height: 20%;
   min-height: 10%;
