@@ -139,6 +139,12 @@ form.ng-invalid {
 
 /* EDL angle icon styling */
 
+/* detail menu */ 
+.row.detailmenu {
+  position: absolute;
+  overflow: auto;
+}
+
 edl-pitch-button {
   width: 100%;
   height: 100%;
