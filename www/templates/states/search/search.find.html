@@ -1,11 +1,9 @@
 <ion-view title="Search" >
-	<ion-nav-buttons side="left">
-		<ion-nav-button class="button button-large button-energized button-clear" ui-sref="home">
-      <i class="icon ion-home"></i>
-    </ion-nav-button>
-  </ion-nav-buttons>
 	<ion-nav-buttons side="right">
-		<button class="button button-large button-energized" ng-controller="SearchCtrl as search" ng-click="search.saveMapToDataUrl()">This is it</button>
+		<button class="button button-clear" ng-controller="SearchCtrl as search" ng-click="search.saveMapToDataUrl()">
+			<object class="icon button-icon edl-navbar-button" type="image/svg+xml" data="img/camera.svg">	
+			</object>
+		</button>
 	</ion-nav-buttons>
 	<ion-content >
 		<div id="gmap" class="fill" edl-google-map></div>

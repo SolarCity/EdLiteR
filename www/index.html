@@ -69,6 +69,7 @@
     <script src="js/directives/edlOlMap.js"></script>
     <script src="js/directives/edlRadiusButton.js"></script>
     <script src="js/directives/edlSlopeDetail.js"></script>
+    <script src="js/directives/edlPitchButton.js"></script>
 
 
     <!-- cordova script (this will be a 404 during development) -->
@@ -76,12 +77,12 @@
   </head>
   <!-- this is your app, named in app.js -->
   <body ng-app="edliter">
-    <ion-nav-bar class="bar-positive">
-        <ion-nav-back-button class="button-clear">
-            <ion-nav-button class="button button-large button-energized button-clear">
-                <i class="ion-arrow-left-c"></i>
+    <ion-nav-bar class="bar-light">
+        <ion-nav-buttons side="left">
+            <ion-nav-button class="button button-clear" ui-sref="home">
+                <object class="icon button-icon edl-navbar-button" type="image/svg+xml" data="img/home.svg"></object>
             </ion-nav-button>
-        </ion-nav-back-button>
+        </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view animation="slide-left-right"></ion-nav-view>
   </body>

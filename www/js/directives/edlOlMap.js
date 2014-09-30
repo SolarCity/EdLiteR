@@ -4,60 +4,69 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
     transclude: false,
     scope: {
       toggleRightMenu:       "=",
+      handlePreviewButton:   "=",
       radius:                "=",
       pitch:                 "=",
-      focusedFeature:        "=", //NOTE: this gives us the selected feature throughout the app :) 
+      previewPanels:         "=",
+      focusedFeature:        "=", //NOTE: this gives us the selected feature throughout the app :)
     },
     link: function edlOlMapLink(scope, ele, attrs) {
-      /* button controls. See init() for instantiation */
       var Ol = OlService;
 
 
+      /* button controls. See init() for instantiation */
       var controllerbox = angular.element('<div></div>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
-      controllerbox.addClass('buttoncontrols');
+      controllerbox.addClass('buttoncontrols bar row');
       controllerbox.attr('id', 'edl-control-box');
 
-      var selectbutton = angular.element('<i class="icon ion-ios7-search"></i>');
-      var drawbutton = angular.element('<i class="icon ion-edit"></i>');
-      var obstructionbutton = angular.element('<i class="icon ion-disc"></i>');
-      var deletebutton = angular.element('<i class="icon ion-ios7-trash"></i>');
-      var togglebutton = angular.element('<i class="icon ion-ios7-settings-strong"></i>');
-      var previewbutton = angular.element('<i class="icon ion-ios7-play"></i>');
+      function controlButton(svgSourceFile, disableable){
+        var disableclass = disableable ? 'ng-class="{disabled: !focusedFeature}"' : ' ';
+        return angular.element([
+          '<button class="button edl-button col" ' + disableclass + '>',
+            '<object class="icon edl-icon"',
+              ' type="image/svg+xml" data="img/' + svgSourceFile + '" ' +  disableclass + '> ',
+            '</object>',
+          '</button>'
+          ].join('')
+        );
+      }
 
-      var buttons = [drawbutton, selectbutton, obstructionbutton, deletebutton, togglebutton, previewbutton];
+      var selectbutton      = controlButton('select.svg',  false);
+      var drawbutton        = controlButton('draw.svg',    false);
+      var obstructionbutton = controlButton('obstcal.svg', false);
+      var deletebutton      = controlButton('trash.svg',   true);
+      var togglebutton      = controlButton('propoty.svg', true);
+      var previewbutton        = $('#edl-preview-button');
 
-      buttons.forEach(function(val){
+      var buttons = [selectbutton, drawbutton, obstructionbutton, deletebutton, togglebutton];
+      var conditional_buttons = [ togglebutton, deletebutton];
+
+      angular.forEach(buttons, function(val){
         controllerbox.append(val);
+      });
+      angular.forEach(conditional_buttons, function(b){
+        b.addClass('disabled');
       });
 
       var styleThisButton = function styleThisButton (selected) {
-        Ol.setPreviewMode(false);
-
+        if (selected !== previewbutton) {
+          Ol.setPreviewMode(false);
+        } else {
+          Ol.setPreviewMode(!OlService._previewing);
+        }
         angular.forEach(buttons, function(b){
-          b.removeClass('button-assertive');
+          b.removeClass('edl-button-assertive');
         });
-        if (selected) selected.addClass('button-assertive');
+        if (selected) selected.addClass('edl-button-assertive');
       };
-      
-      /*
-       *  ControllButton constructor
-       *  options look like this: 
-       *  {
-       *    buttonText: {string}, 
-       *    callback: {function}, 
-       *    target:   {should be your map?}, 
-       *  } 
-       */  
 
       var DrawControlButton = function DrawControlButton(opt_options){
         var options = opt_options || {};
-
         var map = options.map;
         var anchor = options.target;
-        anchor.addClass('button button-stable');
+        anchor.addClass('edl-control-button');
         if (options.buttonText) anchor.text(options.buttonText);
-
         ionic.on('tap', options.callback, anchor[0]);
         return new ol.control.Control({
           element: anchor[0],
@@ -149,7 +158,15 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         });
         panelLayer.set('name', 'panelLayer');
         Ol.panelLayer = panelLayer;
-        
+        /* pay attention to when there are panels present so the preview button can be styled: 
+            this gives us scope.previewPanels -> plan.previewPanels
+            there's an ng-class on the previewbutton looking for plan.previewPanels
+        */
+        Ol.panels.on('change', function panels(event) {
+          var features = event.target.getFeatures();
+          scope.previewPanels = features;
+        });
+
         Ol.hideLayers = new ol.layer.Group({
           layers: new ol.Collection([mountLayer, obstructionLayer, gutterLayer])
         });
@@ -285,27 +302,27 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           // toggle the menu out with that feature
           scope.toggleRightMenu(feature);
         };
-        
+
         var handlePreviewButton = function handlePreviewButton (e) {
-          e.preventDefault();
           var removeAll = [drawMount, drawObstruction, selectInteraction, modifyInteraction];
           if (Ol._previewing) {
             OlService.setPreviewMode(false);
+            previewbutton.removeClass('edl-button-assertive');
             handleSelectButton();
           } else {
-            styleThisButton(previewbutton);
             OlService.setPreviewMode(true);
-            addAndRemoveInteractions([], removeAll, map);
+            addAndRemoveInteractions([], removeAll);
           }
         };
+        scope.handlePreviewButton = handlePreviewButton;
 
         /* controller button options */
         var button_options = {
-          top_button: {
+          mount_button: {
             callback:     handleMountButton,
             target:       drawbutton,
           },
-          bottom_button: {
+          obstruction_button: {
             callback:     handleObstructionButton,
             target:       obstructionbutton,
           },
@@ -321,11 +338,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
             callback:     handleToggleButton,
             target:       togglebutton,
           },
-          preview_button: {
-            callback:     handlePreviewButton,
-            target:       previewbutton,
-          },
         };
+
+        ionic.on('tapstart', handlePreviewButton, previewbutton[0]);
 
         angular.forEach(button_options, function(val, key) {
           new DrawControlButton(val);
@@ -348,7 +363,13 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
 
         selectInteraction.getFeatures().on('change:length', function (event) {
           scope.focusedFeature = event.target.getArray()[0];
-          scope.$apply(); // apply changed scope features.
+          angular.forEach(conditional_buttons, function(b){
+            if (scope.focusedFeature) {
+              b.removeClass('disabled');
+            } else {
+              b.addClass('disabled');
+            }
+          });
         });
 
         var afterObstruction =  function (event) {
