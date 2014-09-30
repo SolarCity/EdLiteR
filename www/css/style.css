@@ -51,7 +51,7 @@ edl-map {
   border: 0;
   bottom: 0%;
   max-height: 20%;
-  min-height: 10%;
+  min-height: 12%;
   background-color: #00a6b7;
 }
 
@@ -59,12 +59,12 @@ edl-map {
   padding: 0;
 }
 
-.icon.edl-icon {
+.edl-control-button > .icon.edl-icons {
   position: absolute;
+  color: white;
   background-color: #00a6b7;
-  max-height: 100%;
-  top: 0 ;
-  padding: 0 45% 0 45%;
+  top: 0;
+  width: 100%;
   height: 100%;
   left: 0;
 }
@@ -75,10 +75,11 @@ edl-map {
   border-left :0px;
   border-bottom :0px;
   max-height: 100%;
-
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
-.edl-button-assertive {
+.button.edl-button-assertive {
   border-color:  #fb7f3d !important;
 }
 
@@ -94,7 +95,10 @@ edl-map {
   z-index: 20000;
 }
 
-
+object.icon > g {
+  stroke: white;
+  fill: white;
+}
 /* Google Map Control Styling */
 
 .controls {
