@@ -20,26 +20,25 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       controllerbox.addClass('buttoncontrols button-bar');
       controllerbox.attr('id', 'edl-control-box');
 
-      function controlButton(svgSourceFile, disableable){
+      function controlButton(iconname, disableable){
         var disableclass = disableable ? 'ng-class="{disabled: !focusedFeature}"' : ' ';
         return angular.element([
-          '<button class="button edl-button " ' + disableclass + '>',
-            '<object class="icon edl-icon"',
-              ' type="image/svg+xml" data="img/' + svgSourceFile + '" ' +  disableclass + '> ',
-            '</object>',
+          '<button class="button edl-button " >',
+            '<i class="icon button-icon edl-icons edl-' + iconname + '" ' + disableclass + '>',
+            '</i>',
           '</button>'
           ].join('')
         );
       }
 
-      var selectbutton      = controlButton('select.svg',  false);
-      var drawbutton        = controlButton('draw.svg',    false);
-      var obstructionbutton = controlButton('obstcal.svg', false);
-      var deletebutton      = controlButton('trash.svg',   true);
-      var togglebutton      = controlButton('propoty.svg', true);
+      var selectbutton      = controlButton('select',  false);
+      var drawbutton        = controlButton('draw',    false);
+      var obstructionbutton = controlButton('obstruction', false);
+      var deletebutton      = controlButton('trash',   true);
+      var togglebutton      = controlButton('property', true);
       var previewbutton        = $('#edl-preview-button');
 
-      var buttons = [selectbutton, drawbutton, obstructionbutton, deletebutton, togglebutton];
+      var buttons = [drawbutton, obstructionbutton, selectbutton, deletebutton, togglebutton];
       var conditional_buttons = [ togglebutton, deletebutton];
 
       angular.forEach(buttons, function(val){
