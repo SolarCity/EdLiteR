@@ -45,6 +45,11 @@ edl-map {
   height: 100%;
 }
 
+#edl-control-box > * {
+  background-color: #00a6b7;
+  
+}
+
 .buttoncontrols.button-bar {
   position: absolute;
   padding: 0;
