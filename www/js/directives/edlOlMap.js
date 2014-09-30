@@ -21,11 +21,13 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       controllerbox.attr('id', 'edl-control-box');
 
       function controlButton(svgSourceFile, disableable){
-        var disableclass = disableable ? 'ng-class="{disabled: !plan.focus}"' : ' ';
+        var disableclass = disableable ? 'ng-class="{disabled: !focusedFeature}"' : ' ';
         return angular.element([
-            '<object class="button button-icon icon col edl-button" ' + disableclass,
-              ' type="image/svg+xml" data="img/' + svgSourceFile + '"> ',
+          '<button class="button edl-button col" ' + disableclass + '>',
+            '<object class="icon edl-icon"',
+              ' type="image/svg+xml" data="img/' + svgSourceFile + '" ' +  disableclass + '> ',
             '</object>',
+          '</button>'
           ].join('')
         );
       }
@@ -54,9 +56,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           Ol.setPreviewMode(!OlService._previewing);
         }
         angular.forEach(buttons, function(b){
-          b.removeClass('button-assertive');
+          b.removeClass('edl-button-assertive');
         });
-        // if (selected) selected.addClass('button-assertive');
         if (selected) selected.addClass('edl-button-assertive');
       };
 
@@ -65,7 +66,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         var map = options.map;
         var anchor = options.target;
         anchor.addClass('edl-control-button');
-        // anchor.addClass('button button-stable edl-control-button');
         if (options.buttonText) anchor.text(options.buttonText);
         ionic.on('tap', options.callback, anchor[0]);
         return new ol.control.Control({
@@ -307,10 +307,9 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           var removeAll = [drawMount, drawObstruction, selectInteraction, modifyInteraction];
           if (Ol._previewing) {
             OlService.setPreviewMode(false);
-            previewbutton.removeClass('button-assertive');
+            previewbutton.removeClass('edl-button-assertive');
             handleSelectButton();
           } else {
-            styleThisButton(previewbutton);
             OlService.setPreviewMode(true);
             addAndRemoveInteractions([], removeAll);
           }
@@ -368,7 +367,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
             if (scope.focusedFeature) {
               b.removeClass('disabled');
             } else {
-              b.removeClass('disabled');
+              b.addClass('disabled');
             }
           });
         });

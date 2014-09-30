@@ -54,17 +54,30 @@ edl-map {
   background-color: #00a6b7;
 }
 
-.edl-button  {
+.buttoncontrols .col{
+  padding: 0;
+}
+
+.icon.edl-icon {
+  position: absolute;
+  background-color: #00a6b7;
+  max-height: 100%;
+  top: 0 ;
+  bottom: 0;
+  padding: 0;
+  right: 0;
+}
+
+.button.edl-button  {
   border-top: 10px solid #00a6b7;
+  border-right :0px;
+  border-left :0px;
+  border-bottom :0px;
   max-height: 100%;
 }
 
 .edl-button-assertive {
-  border-top: 10px solid #fb7f3d;
-}
-
-.edl-button > * {
-  max-height: 100%;
+  border-color:  #fb7f3d !important;
 }
 
 .bar > .button + .button:last-child {
