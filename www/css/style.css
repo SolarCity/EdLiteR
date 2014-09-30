@@ -88,10 +88,6 @@ edl-map {
   z-index: 20000;
 }
 
-object.icon > g {
-  stroke: white;
-  fill: white;
-}
 /* Google Map Control Styling */
 
 .controls {
