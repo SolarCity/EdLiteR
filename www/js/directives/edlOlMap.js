@@ -379,7 +379,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           feature.setId(featureId);
           
           // set default radius if we don't have one already          
-          scope.radius = scope.radius || PanelFillService.obstructionDefaultRadius();
+          scope.radius = scope.radius || 50;
 
           feature.set('radius', scope.radius);
           feature.set('type', 'obstruction' );
@@ -390,9 +390,16 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         };
         drawObstruction.on('drawend', afterObstruction);
 
-        handleSelectButton();
+        // initialize buttons
+        selectbutton.addClass('button-assertive');
+
+        $('#attributeButton').addClass('button-stable');
+
+        // initialize interactions
+        map.addInteraction(modifyInteraction);
       }
     },
   };
+
 }
 directives.directive('edlOlMap', edlOlMap);
