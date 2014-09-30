@@ -71,7 +71,7 @@ edl-map {
 
 .button.edl-button  {
   border-top: 10px solid #00a6b7;
-  border-right :0px;
+  border-right :0gpx;
   border-left :0px;
   border-bottom :0px;
   max-height: 100%;
@@ -83,13 +83,6 @@ edl-map {
   border-color:  #fb7f3d !important;
 }
 
-/*.button-bar > .button + .button:last-child {
-  position: relative;
-  top: auto;
-  bottom: auto;
-  right: auto;
-}
-*/
 .edl-navbar-button {
   height: 2em;
   z-index: 20000;
