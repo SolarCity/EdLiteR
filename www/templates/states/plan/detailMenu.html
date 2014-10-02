@@ -1,23 +1,28 @@
-<ion-content>
-  <button ng-disabled="detailForm.$invalid" ng-if="focus.getGeometryName()==='mount'" class="button button-small button-balanced" ng-click="detail.fillPanel(focus)">FILL</button>
-  <form name="detailForm">
-    <edl-radius-button ng-if="focus.getGeometryName()==='obstruction'"></edl-radius-button>
-    <edl-slope-detail  ng-if="focus.getGeometryName()==='mount'"></edl-slope-detail>
-    <label class="item item-radio" ng-repeat="property in plan.featureAttrs">
-    <span class="input-label">{{property.name}}</span>
-    <div class="row">
-      <ion-radio  type="radio" 
-                  class="col"
-                  name="{{property.value}}"
-                  ng-repeat="option in property.options"
-                  ng-model="property.chosenValue"
-      						value="{{option.value}}"
-
-              >{{option.text}}<br>
-        </ion-radio>
+  <div class="bar bar-header bar-light" >
+      <div class="bar bar-header bar-light">
+        <div class="buttons pull-left">
+          <button ng-disabled="detailForm.$invalid" ng-if="focus.getGeometryName()==='mount'" class="button button-clear button-positive" ng-click="detail.fillPanel(focus)">FILL</button>
+        </div>
+      <div class="buttons pull-right">
+        <button class="button button-clear button-assertive button-icon edl-icons edl-close menu-close"></button>
       </div>
-    </label>
-  </form>
-</ion-content>
-
-<div class="item item-divider">
+  </div>
+</div>
+<form class="edl-form" name="detailForm">
+  <edl-radius-button ng-if="focus.getGeometryName()==='obstruction'"></edl-radius-button>
+  <edl-slope-detail  ng-if="focus.getGeometryName()==='mount'"></edl-slope-detail>
+  <label class="item item-radio" ng-repeat="property in plan.featureAttrs">
+  <span class="input-label">{{property.name}}</span>
+  <div class="row">
+    <ion-radio  type="radio" 
+                class="col"
+                name="{{property.value}}"
+                ng-repeat="option in property.options"
+                ng-model="property.chosenValue"
+    						value="{{option.value}}"
+                required="true"
+            >{{option.text}}<br>
+      </ion-radio>
+    </div>
+  </label>
+</form>
