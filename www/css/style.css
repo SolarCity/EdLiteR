@@ -54,6 +54,13 @@ edl-map {
   
 }
 
+.bar > .button + .edl-icons.button:last-child {
+  position: relative;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
 .buttoncontrols.button-bar {
   position: absolute;
   padding: 0;
@@ -82,6 +89,7 @@ edl-map {
   max-height: 100%;
   padding-left: 0px;
   padding-right: 0px;
+  color: white;
 }
 
 .button.edl-button-assertive {
