@@ -110,14 +110,14 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
                                              // is to set this mapCapture inside of the OLService
                                              // instead of in this map. 
           source: new ol.source.ImageStatic({
-            url: imgUrl,
+            // url: imgUrl,
+            url: 'http://maps.googleapis.com/maps/api/staticmap?center='+ MapService.getCenter().lat()+','+ MapService.getCenter().lng() +'&zoom=20&size='+ $window.innerWidth +'x'+ $window.innerHeight +'&maptype=satellite&scale=1',
             imageSize: [Ol.extent[2], Ol.extent[3]],
             projection: pixelProjection,
             imageExtent: pixelProjection.getExtent()
           }),
         });
         mapCapture.set('name', 'mapCapture');
-
         // layer for mounts
         var mounts = Ol.mounts;
         var mountLayer = new ol.layer.Vector({

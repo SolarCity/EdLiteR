@@ -126,8 +126,9 @@ function StyleService_ ($q) {
     // create a separate style function to work with changing radius of obstructions: 
     styles['obstruction'] = function(rad, res) {
       return [new ol.style.Style({
+              stroke: c.defaultPanelStroke,
               image: new ol.style.Circle({
-                radius: rad / (res*4.2),
+                radius: rad / (res*4.2) || 0,
                 fill: new ol.style.Fill({
                   color: c.defaultObstruction
                 })
@@ -185,6 +186,7 @@ function StyleService_ ($q) {
     // create a separate style function to work with changing radius of obstructions: 
     styles['obstruction'] = function(rad, res) {
       return [new ol.style.Style({
+              stroke: c.highlightPanelStroke,
               image: new ol.style.Circle({
                 radius: rad / (res*4.2),
                 fill: new ol.style.Fill({
