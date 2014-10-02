@@ -19,7 +19,7 @@ angular.module('states.plan',[]).config( function StatesPlan($stateProvider) {
       'helpMenu' :{
         templateUrl: 'templates/states/plan/helpMenu.html', 
         controller: "HelpCtrl as help",
-        }
+      }
     },
   })
 ;});

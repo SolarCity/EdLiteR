@@ -17,15 +17,13 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       /* button controls. See init() for instantiation */
       var controllerbox = angular.element('<div></div>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
-      controllerbox.addClass('buttoncontrols button-bar');
+      controllerbox.addClass('buttoncontrols bar button-bar');
       controllerbox.attr('id', 'edl-control-box');
 
       function controlButton(iconname, disableable){
         var disableclass = disableable ? 'ng-class="{disabled: !focusedFeature}"' : ' ';
         return angular.element([
-          '<button class="button edl-button " >',
-            '<i class="icon button-icon edl-icons edl-' + iconname + '" ' + disableclass + '>',
-            '</i>',
+          '<button class="button edl-button button-icon edl-icons edl-' + iconname + '" ' + disableclass + '>',
           '</button>'
           ].join('')
         );

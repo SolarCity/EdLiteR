@@ -1,13 +1,15 @@
 <ion-side-menus>
-
-    <ion-nav-buttons side="right" >
-            <button id="edl-preview-button" class="button button-clear" ng-class="{disabled: !plan.previewPanels}"  ng-click="plan.handlePreviewButton()">
-                <!-- <object class="icon button-icon edl-navbar-button" type="image/svg+xml" data="img/preview.svg"></object> -->
-                <i class="icon edl-icons edl-preview"></i>
-            </button>
-    </ion-nav-buttons>
-
     <ion-side-menu-content drag-content="false">
+        <div class="bar bar-header bar-light">
+            <div class="buttons pull-left">
+                <button class="button button-clear button-icon edl-icons edl-home" ui-sref="home"></button>
+            </div>
+            <h1 class="title">EdLiteR</h1>            
+            <div class="buttons pull-right">
+                <button id="edl-preview-button" class="button button-clear button-icon edl-icons edl-preview button-positive" ng-class="{disabled: !plan.previewPanels}"  ng-click="plan.handlePreviewButton()">
+                </button>
+            </div>
+        </div>
         <ion-nav-view animation="no-animation" name="planContent"></ion-nav-view>
     </ion-side-menu-content>
 

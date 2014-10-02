@@ -13,6 +13,10 @@
     perspective-origin: 0% 0%;
 }
 
+ion-side-menu {
+  padding-top:7%;
+}
+
 div.fill {
   width: 100%;
   height: 100%;
@@ -50,6 +54,13 @@ edl-map {
   
 }
 
+.bar > .button + .edl-icons.button:last-child {
+  position: relative;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
 .buttoncontrols.button-bar {
   position: absolute;
   padding: 0;
@@ -78,6 +89,7 @@ edl-map {
   max-height: 100%;
   padding-left: 0px;
   padding-right: 0px;
+  color: white;
 }
 
 .button.edl-button-assertive {
@@ -92,7 +104,7 @@ edl-map {
 /* Google Map Control Styling */
 
 .controls {
-  margin-top: 16px;
+  margin-top: 3rem;
   display: inline-block;
   text-align: center;
   border: 1px solid transparent;
@@ -111,11 +123,11 @@ edl-map {
 }
 
 #pac-input {
-  width: 60%;
+  width: 80%;
   background-color: #fff;
   padding: 0 11px 0 13px;
-  width: 400px;
-  clear: both;
+  margin-left: 10%;
+  margin-right: 10%;
   font-family: Roboto;
   font-size: 15px;
   font-weight: 300;
