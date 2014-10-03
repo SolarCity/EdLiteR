@@ -61,6 +61,14 @@ edl-map {
   width: 255px;
 }
 
+input[type="range"]::-webkit-slider-thumb:after {
+    /* create a larger (but hidden) hit area */
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    padding: 50px;
+    content: ' '; }
+
 #obstruction-range-input{
   margin-left: 20px;
   -webkit-transform: rotate(-90deg);
