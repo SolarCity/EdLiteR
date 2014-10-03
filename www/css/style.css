@@ -56,10 +56,15 @@ edl-map {
   height: 100%;
 }
 
-#obstructionRangeInput{
-    width: 20px;
-    height: 300px;
-    -webkit-appearance: slider-vertical;
+#obstruction-range-label > div{
+  height: 570px;
+  width: 255px;
+}
+
+#obstruction-range-input{
+  margin-left: 20px;
+  -webkit-transform: rotate(-90deg);
+  -webkit-transform-origin: 0%;
 }
 
 .scroll {
