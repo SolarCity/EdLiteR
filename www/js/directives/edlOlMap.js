@@ -110,8 +110,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
                                              // is to set this mapCapture inside of the OLService
                                              // instead of in this map. 
           source: new ol.source.ImageStatic({
-            // url: imgUrl,
-            url: 'http://maps.googleapis.com/maps/api/staticmap?center='+ MapService.getCenter().lat()+','+ MapService.getCenter().lng() +'&zoom=20&size='+ $window.innerWidth +'x'+ $window.innerHeight +'&maptype=satellite&scale=1',
+            // url: imgUrl, //commented this line because HTML2Canvas was causing us troubles. instead use the link below to our internal API
+            url: 'http://scexchange.solarcity.com/scfilefactory/TestGrab.aspx?center='+ MapService.getCenter().lat()+','+ MapService.getCenter().lng() +'&zoom=20&size='+ $window.innerWidth +'x'+ $window.innerHeight +'&maptype=satellite&scale=1&client=gme-solarcity',
             imageSize: [Ol.extent[2], Ol.extent[3]],
             projection: pixelProjection,
             imageExtent: pixelProjection.getExtent()
