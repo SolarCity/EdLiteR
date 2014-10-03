@@ -1,3 +1,4 @@
+<ion-content>
   <div class="bar bar-header bar-light" >
       <div class="bar bar-header bar-light">
         <div class="buttons pull-left">
@@ -19,10 +20,11 @@
                 name="{{property.value}}"
                 ng-repeat="option in property.options"
                 ng-model="property.chosenValue"
-    						value="{{option.value}}"
+                value="{{option.value}}"
                 required="true"
             >{{option.text}}<br>
       </ion-radio>
     </div>
   </label>
 </form>
+</ion-content>
