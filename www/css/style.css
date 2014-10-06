@@ -34,6 +34,24 @@ div.fill {
   height: 100%;
 }
 
+label[checked="checked"] > .item-content i.ion-ios7-circle-filled {
+  display:inline;
+  color: orange;
+}
+
+label[checked="checked"] > .item-content i.ion-ios7-circle-outline {
+  display: none;
+}
+
+label > .item-content i.ion-ios7-circle-filled {
+  display:none;
+}
+
+label > .item-content i.ion-ios7-circle-outline {
+  display: inline;
+}
+
+
 
 ul.issues, li {
     list-style: square;
@@ -60,6 +78,22 @@ edl-map {
     width: 20px;
     height: 300px;
     -webkit-appearance: slider-vertical;
+}
+
+.edl-form {
+  padding-top: 40px;
+}
+
+.edl-form .col {
+  height: 2rem;
+}
+
+.edl-form .item-radio .item-content {
+  padding: 0;
+}
+
+.edl-form .item-radio input:checked ~ .item-content  {
+  /*background-color: red;*/
 }
 
 .scroll {
