@@ -1,5 +1,10 @@
 EdLiteR
 =======
+
+here's what's necessary to host from the installation directory on the server
+```` nohup forever start server/server.js ````
+
+
 This is a mobile application built from a template that uses the [Ionic Framework](http://ionicframework.com/), as well as [Angular UI Router](http://angular-ui.github.io/ui-router/), [Angular-UI-Bootstrap](http://angular-ui.github.io/), [Express JS](http://expressjs.com/). 
 
 What's missing: 

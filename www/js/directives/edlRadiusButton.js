@@ -1,11 +1,14 @@
 function edlRadiusButton($ionicGesture) {
   return {
     restrict: "E",
+    link: function edlRadiusButtonLink(scope, elem, attr){
+      elem.on('touchmove', function(e){e.preventDevault();});
+    },
     template: [
-      '<label ">',
-        '<div class="item range range-positive">',
+      '<label id="obstruction-range-label">',
+        '<div class="range range-assertive">',
           '<input type="range"',
-            'id="obstructionRangeInput"',
+            'id="obstruction-range-input"',
             'min="5"',
             'max="200"',
             'ng-change="focus.set(\'radius\', plan.radius)"',
