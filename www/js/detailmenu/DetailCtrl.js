@@ -26,6 +26,36 @@ function DetailCtrl_($ionicSideMenuDelegate, OlService, MapService, ApiService, 
 
     }
   };
+
+  vm.mountPlanePopup = function(mountplane, panels){
+    var map = MapService.getOmap();
+
+    if (mountplane.get('panelCount')) {
+      map.removeOverlay(mountplane.get('popup'));
+    }
+    mountplane.set('panelCount', panels.length);
+    // var id = mountplane.getId();
+    var coord = mountplane.getGeometry().getFirstCoordinate();
+    var element = angular.element([
+        '<div ng-controller="PlanCtrl" id="popover">',
+          '<div class="popover-content">Panel Count! ' + mountplane.get('panelCount') + '</div>',
+          '<div class="popover-content">Savings </div>',
+        '</div>',
+      ].join(' '));
+
+    var overlay = new ol.Overlay({
+      element: element,
+
+    });
+
+    mountplane.set('popup', overlay);
+    map.addOverlay(overlay);
+    overlay.setPosition(coord);
+    mountplane.once('change', function(){
+      map.removeOverlay(overlay);
+    });
+
+  };
 }
 
 controllers.controller("DetailCtrl", DetailCtrl_);
