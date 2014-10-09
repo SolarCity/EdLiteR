@@ -352,6 +352,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           var removeUs = [];
           var addUs    = [selectInteraction, modifyInteraction];
           addAndRemoveInteractions(addUs, removeUs, map);
+          feature.setId(Ol.idSeed++);
           selectInteraction.getFeatures().push(feature);
           Ol.gutterLineFinder(event);
         }

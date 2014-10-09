@@ -34,7 +34,6 @@ function DetailCtrl_($ionicSideMenuDelegate, OlService, MapService, ApiService, 
       map.removeOverlay(mountplane.get('popup'));
     }
     mountplane.set('panelCount', panels.length);
-    // var id = mountplane.getId();
     var coord = mountplane.getGeometry().getFirstCoordinate();
     var element = angular.element([
         '<div ng-controller="PlanCtrl" id="popover">',
@@ -45,16 +44,11 @@ function DetailCtrl_($ionicSideMenuDelegate, OlService, MapService, ApiService, 
 
     var overlay = new ol.Overlay({
       element: element,
-
+      positioning: 'top-center',
     });
 
     mountplane.set('popup', overlay);
-    map.addOverlay(overlay);
     overlay.setPosition(coord);
-    mountplane.once('change', function(){
-      map.removeOverlay(overlay);
-    });
-
   };
 }
 
