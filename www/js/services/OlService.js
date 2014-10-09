@@ -40,16 +40,20 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     }
   };
 
-  OlService.removeFeatureById = function(id, layer){
+  OlService.removeFeatureById = function(id, source){
     var removeus = [];
     function findforremove(f) {
-      if (f.getId() === id) {
+      var f_id = f.getId();
+      if (f_id === id && f.getGeometryName()==="mount" && f.get('popup')) {
+        MapService.getOmap().removeOverlay(f.get('popup'));
+      }
+      if (f_id === id) {
         removeus.push(f);
       }
     }
-    layer.forEachFeature(findforremove);
+    source.forEachFeature(findforremove);
     for (var a in removeus) {
-      layer.removeFeature(removeus[a]);
+      source.removeFeature(removeus[a]);
     }
   };
 
@@ -66,7 +70,7 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     return result;
   };
 
-  /* layers */
+  /* sources */
   OlService.mounts = new ol.source.Vector({
     features: new ol.Collection([])
   });
