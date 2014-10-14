@@ -67,11 +67,11 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 
   };
 
-  PanelFillService.addPanelsFromApi = function(data, panelid){
+  PanelFillService.makePanelsWithApiResponse = function(data, panelid){
 		var mapEdges = PanelFillService.edgesAndRatios();
+	  var featurestoadd = [];
 	  var responseIterator = function(arrayOfPanels, key){
 	    // iterate over each panel in the array of panels
-	  	var featurestoadd = [];
 
 	    arrayOfPanels.forEach(function(points_for_panel, key, obj){
 	      // turn each array of points into a WKT
@@ -79,11 +79,9 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 	      featurestoadd.push(feature);
 	    	OlService.setIdsOfFeaturearray([feature], panelid);
 	    });
-	
-	    OlService.panels.addFeatures(featurestoadd);  
 	  };
-  	
   	angular.forEach(data, responseIterator);
+		return featurestoadd;
   };
 
   PanelFillService.processFeatures = function(mounts, obstructions ){
@@ -130,7 +128,6 @@ function PanelFillService_ ($q, $window, OlService, MapService, ApiService) {
 		var mapEdges = PanelFillService.edgesAndRatios();
 
 		var pt_xy	= point_string.split(' ');
-
 
 		function north_pt(pt_y) {
 			return mapEdges.s + pt_y / mapEdges.px_per_n;

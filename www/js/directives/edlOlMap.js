@@ -13,7 +13,6 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
     link: function edlOlMapLink(scope, ele, attrs) {
       var Ol = OlService;
 
-
       /* button controls. See init() for instantiation */
       var controllerbox = angular.element('<div></div>');
       var leftsidecontrolbox = new ol.control.Control({element: controllerbox[0]});
@@ -34,7 +33,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       var obstructionbutton = controlButton('obstruction', false);
       var deletebutton      = controlButton('trash',   true);
       var togglebutton      = controlButton('property', true);
-      var previewbutton        = $('#edl-preview-button');
+      var previewbutton     = $('#edl-preview-button');
 
       var buttons = [drawbutton, obstructionbutton, selectbutton, deletebutton, togglebutton];
       var conditional_buttons = [ togglebutton, deletebutton];
@@ -275,7 +274,8 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
                 Ol.removeFeatureById(feature.getId(), layer);
                 layer = Ol.layers.gutter;
                 Ol.removeFeatureById(feature.getId(), layer);
-            } else if (!!feature && feature.getGeometryName() === 'panel') {
+            }
+            else if (!!feature && feature.getGeometryName() === 'panel') {
                 layer = Ol.layers[feature.getGeometryName()];
                 layer.removeFeature(feature);
             }
@@ -352,6 +352,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
           var removeUs = [];
           var addUs    = [selectInteraction, modifyInteraction];
           addAndRemoveInteractions(addUs, removeUs, map);
+          feature.setId(Ol.idSeed++);
           selectInteraction.getFeatures().push(feature);
           Ol.gutterLineFinder(event);
         }
