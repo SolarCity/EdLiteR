@@ -150,7 +150,7 @@ function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, 
     var gutters = OlService.gutters; //HACK: make this a parameter?
     
     var featureId = feature.getId();
-    if (featureId) {
+    if (featureId !== undefined) {
 
       OlService.removeFeatureById( featureId, OlService.gutters);
     }
