@@ -204,6 +204,44 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       };
     
       var map = MapService.setOmap(mapOptions);
+      map.on('dblclick', function(evt) {
+        // if you're currently drawing, ignore the click
+        var drawing = null;
+        var mapInteractions = map.getInteractions();
+        mapInteractions.forEach(function(interaction, index, collection){
+          if (interaction === drawObstruction || interaction === drawMount) {
+            drawing = true;
+          }
+        });
+        if (drawing) return;
+
+        // otherwise, identify the feature as a mounting plane or obstruction
+        var feature = map.forEachFeatureAtPixel(evt.pixel,
+          function featurefilter(feature, layer) {
+            if (feature === Ol.getSelectedFeature()[0]) return feature;
+            var layertype;
+            if (layer !== null) {
+              layertype = layer.get('name');
+            } else {
+             return;
+            }
+            if (layertype === 'mountLayer' || layertype === 'obstructionLayer' ) {
+              return feature;
+            }
+          }
+        );
+
+        if (feature) {
+          evt.preventDefault();
+          // empty the currently selected interaction of all features
+          selectInteraction.getFeatures().clear();
+          // send the doubleClicked feature to the selected interaction
+          selectInteraction.getFeatures().push(feature);
+          // toggle the detailmenu
+          scope.toggleRightMenu(feature);
+        }
+      });
+
       
       /* left controls callbacks */
       function addAndRemoveInteractions(arrayToAdd, arrayToRemove){
@@ -378,6 +416,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       drawObstruction.on('drawend', afterObstruction);
 
       handleSelectButton();
+
     },
   };
 
