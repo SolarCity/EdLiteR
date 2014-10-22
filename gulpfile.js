@@ -25,6 +25,18 @@ gulp.task('sass', function(done) {
     .on('end', done);
 });
 
+gulp.task('concat', function(stuff){
+  gulp.src([
+    'www/js/*.js',
+    'www/js/states/*.js',
+    'www/js/services/*.js',
+    'www/js/controllers/*.js',
+    'www/js/directives/*.js',
+    ])
+    .pipe(concat('all.js'))
+    .pipe(gulp.dest('./www/js'))
+})
+
 gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
 });
