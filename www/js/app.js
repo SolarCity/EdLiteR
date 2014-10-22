@@ -1,6 +1,5 @@
 angular.module('edliter', [
   'ui.router',
-  'ui.router',
   'ui.bootstrap',
   'ngTouch',
   'states',

@@ -136,7 +136,7 @@ input[type="range"]::-webkit-slider-thumb:after {
 }
 
 .buttoncontrols.button-bar {
-  position: absolute;
+  position: fixed;
   padding: 0;
   border: 0;
   bottom: 0%;

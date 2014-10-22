@@ -15,14 +15,11 @@ var onlyScripts = require('../lib/scriptFilter')
 
 gulp.task('default', ['concat', 'watch']);
 
-
-
 var tasks = fs.readdirSync('./gulp/tasks/').filter(onlyScripts)
 
 tasks.forEach(function(name) {
   require('./tasks/' + name)
 })
-
 
 gulp.task('install', ['git-check'], function() {
   return bower.commands.install()
