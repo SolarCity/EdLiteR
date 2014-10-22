@@ -1,6 +1,7 @@
 ignore
-www/lib/*
-www/js/all.js
+www/lib/**/*
+
+/www/js/all.js
 node_modules
 app/config/config.js
 bower_components
