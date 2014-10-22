@@ -1,31 +1,21 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var bower = require('bower');
-var concat = require('gulp-concat');
-var sass = require('gulp-sass');
-var minifyCss = require('gulp-minify-css');
-var rename = require('gulp-rename');
-var sh = require('shelljs');
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//
+// gulpfile.js
+// 
+// gulp is an async build system
+//
+// however certain aspects of this build use run-sequence
+// to execute synchronously and sequentially to avoid
+// creating loops in the various watchers and reloaders
+//
+// modularized following @greypants' ingenious approach
+// [https://github.com/greypants/gulp-starter][]
+//
+// nodemon: loads and reloads server when code changes
+// Browserify: constructs and maintains client-side js file
+// BrowserSync: keeps styles and scripts fresh during dev
+//
+//
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-gulp.task('default', ['concat']);
-
-gulp.task('concat', function(stuff){
-  gulp.src([
-    'www/js/*.js',
-    'www/js/states/*.js',
-    'www/js/services/*.js',
-    'www/js/controllers/*.js',
-    'www/js/directives/*.js',
-    ])
-    .pipe(concat('all.js'))
-    .pipe(gulp.dest('./www/js'))
-})
-
-
-
-gulp.task('install', ['git-check'], function() {
-  return bower.commands.install()
-    .on('log', function(data) {
-      gutil.log('bower', gutil.colors.cyan(data.id), data.message);
-    });
-});
+require('./gulp')
