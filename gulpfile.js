@@ -21,6 +21,8 @@ gulp.task('concat', function(stuff){
     .pipe(gulp.dest('./www/js'))
 })
 
+
+
 gulp.task('install', ['git-check'], function() {
   return bower.commands.install()
     .on('log', function(data) {
