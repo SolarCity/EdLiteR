@@ -60,10 +60,10 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       var DrawControlButton = function DrawControlButton(opt_options){
         var options = opt_options || {};
         var map = options.map;
-        var anchor = options.target;
+        var anchor = $(options.target);
         anchor.addClass('edl-control-button');
         if (options.buttonText) anchor.text(options.buttonText);
-        ionic.on('tap', options.callback, anchor[0]);
+        anchor.on('click', options.callback);
         return new ol.control.Control({
           element: anchor[0],
         });
@@ -364,7 +364,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
         },
       };
 
-      ionic.on('tapstart', handlePreviewButton, previewbutton[0]);
+      scope.$on('tapstart', handlePreviewButton, previewbutton[0]);
 
       angular.forEach(button_options, function(val, key) {
         new DrawControlButton(val);

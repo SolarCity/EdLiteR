@@ -1,4 +1,4 @@
-function OlService_ ($q, $state, $window, $ionicSideMenuDelegate, StyleService, MapService) {
+function OlService_ ($q, $state, $window, StyleService, MapService) {
   // this factory is a singleton & provides layers, styles, etc for the edl-ol-map ... 
   // 
 

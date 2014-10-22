@@ -1,5 +1,4 @@
-<ion-side-menus>
-    <ion-side-menu-content drag-content="false">
+
         <div class="bar bar-header bar-light">
             <div class="buttons pull-left">
                 <button class="button button-clear button-icon edl-icons edl-home" ui-sref="home"></button>
@@ -10,15 +9,12 @@
                 </button>
             </div>
         </div>
-        <ion-nav-view animation="no-animation" name="planContent"></ion-nav-view>
-    </ion-side-menu-content>
+        
 
-    <ion-side-menu side="right" width="detailpanelwidth">
-        <ion-nav-view name="detailMenu"></ion-nav-view>
-    </ion-side-menu>
+        <ui-view name="planContent"></ui-view>
 
-    <ion-side-menu side="left">
-        <ion-nav-view name="helpMenu"></ion-nav-view>
-    </ion-side-menu>
+        <ui-view name="helpMenu"></ui-view>
 
-</ion-side-menus>
+<div id="right_side" width="detailpanelwidth">
+    <ui-view name="detailMenu"></ui-view>
+</div>

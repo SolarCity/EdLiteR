@@ -1,4 +1,4 @@
-function edlGoogleMap($timeout, $document, $window, $ionicGesture, MapService) {
+function edlGoogleMap($timeout, $document, $window, MapService) {
   return {
     restrict: "A",
     transclude: true,

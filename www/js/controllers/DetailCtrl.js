@@ -1,4 +1,4 @@
-function DetailCtrl_($ionicSideMenuDelegate, OlService, MapService, ApiService, PanelFillService) {
+function DetailCtrl_(OlService, MapService, ApiService, PanelFillService) {
   var vm = this;
   var Ol = OlService;
 
@@ -15,14 +15,13 @@ function DetailCtrl_($ionicSideMenuDelegate, OlService, MapService, ApiService, 
         var msg = Ol.fillMessageForSingleMount(feature);
         // create api message with Process Features
         var api = PanelFillService.processFeatures(msg.m, msg.o);
-        $ionicSideMenuDelegate.toggleRight();
+        
         ApiService.uploadMounts(api) //TODO: change from sample
           .then(function (data) {
             panelstoadd = PanelFillService.makePanelsWithApiResponse(data, id);
             OlService.panels.addFeatures(panelstoadd);
             vm.mountPlanePopup(feature, panelstoadd);
         });
-
 
     }
   };

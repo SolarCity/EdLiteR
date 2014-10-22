@@ -1,4 +1,4 @@
-function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, FeatureOptionService, OlService, MapService, PanelFillService, ApiService) {
+function PlanCtrl_($scope, $rootScope, $timeout, FeatureOptionService, OlService, MapService, PanelFillService, ApiService) {
   var vm = this;
   vm.featureAttrs = {};
 
@@ -24,11 +24,10 @@ function PlanCtrl_($scope, $rootScope, $timeout, $ionicSideMenuDelegate, Feature
       275 : 50;
       
     $scope.$apply();
-    $ionicSideMenuDelegate.toggleRight();
   };
 
   vm.toggleHelpView = function (e, args) {
-    $ionicSideMenuDelegate.toggleLeft();
+    // used to open left menu
   };
 
   var layers = {};

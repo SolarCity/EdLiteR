@@ -1,4 +1,4 @@
-function edlRadiusButton($ionicGesture) {
+function edlRadiusButton() {
   return {
     restrict: "E",
     link: function edlRadiusButtonLink(scope, elem, attr){

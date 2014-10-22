@@ -1,4 +1,4 @@
-function edlSlopeDetail($ionicGesture) {
+function edlSlopeDetail() {
   return {
     restrict: "E",
     transclude: true,
