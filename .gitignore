@@ -1,5 +1,5 @@
 ignore
-www/lib
+www/lib/*
 www/js/all.js
 node_modules
 app/config/config.js
