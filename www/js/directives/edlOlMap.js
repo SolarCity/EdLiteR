@@ -22,7 +22,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       function controlButton(iconname, disableable){
         var disableclass = disableable ? 'ng-class="{disabled: !focusedFeature}"' : ' ';
         return angular.element([
-          '<button class="button edl-button button-icon edl-icons edl-' + iconname + '" ' + disableclass + '>',
+          '<button class="button edl-button edl-icons edl-' + iconname + '" ' + disableclass + '>',
           '</button>'
           ].join('')
         );
@@ -33,7 +33,7 @@ function edlOlMap($stateParams, $rootScope, $state, $window, $timeout, ApiServic
       var obstructionbutton = controlButton('obstruction', false);
       var deletebutton      = controlButton('trash',   true);
       var togglebutton      = controlButton('property', true);
-      var previewbutton     = $('#edl-preview-button');
+      var previewbutton     = angular.element('#edl-preview-button');
 
       var buttons = [drawbutton, obstructionbutton, selectbutton, deletebutton, togglebutton];
       var conditional_buttons = [ togglebutton, deletebutton];

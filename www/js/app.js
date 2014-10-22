@@ -1,5 +1,5 @@
 angular.module('edliter', [
-  'ionic',
+  'ui.router',
   'ui.bootstrap',
   'states',
   'app.controllers',
