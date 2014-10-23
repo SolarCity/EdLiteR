@@ -9,10 +9,9 @@ function edlGoogleMap($timeout, $document, $window, MapService) {
 
     },
     link: function edlGoogleMapLink(scope, ele, attrs) {
-      
       var mapOptions = MapService.g.mapOptions;
-      $timeout(timer_init, 1); //HACK: biggest hack evar. 
-      function timer_init() {
+      // $timeout(timer_init, 1); //HACK: biggest hack evar. 
+      // function timer_init() {
         var map =  MapService.setGmap(ele[0], mapOptions);
 
         // create an Autocompleting search box on the map
@@ -78,7 +77,7 @@ function edlGoogleMap($timeout, $document, $window, MapService) {
           
           service.textSearch(request, callback);
         }
-      } /* end init */
+      // } /* end init */
     }
   };
 }
