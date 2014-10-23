@@ -22,4 +22,3 @@ gulp.task('vendors', function(){
         .on('error', handleErrors)
         .pipe(gulp.dest(publicLib))
 })
-

@@ -10,7 +10,7 @@ var scripts = [
 ]
 
 gulp.task('scripts', function(stuff){
-  gulp.src(scripts)
+  return gulp.src(scripts)
     .pipe(concat('all.js'))
     .pipe(gulp.dest('./public/js'))
 })

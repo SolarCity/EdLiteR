@@ -1,6 +1,6 @@
 var gulp = require('gulp')
-var runSeq = require('run-sequence')
+var runSeq = require('run-sequence').use(gulp)
 
-gulp.task('default', function(){
-  runSeq('build', 'watch', 'browserSync')
+gulp.task('default', ['clean', 'build', 'browserSync'], function(){
+
 })

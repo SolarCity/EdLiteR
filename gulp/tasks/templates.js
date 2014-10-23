@@ -7,11 +7,10 @@ var scripts = [
 ]
 
 gulp.task('templates', function(){
-  gulp.src(scripts)
-  	.pipe(changed('./public/templates'))
-    .pipe(gulp.dest('./public/templates'));
   gulp.src('src/index.html')
   	.pipe(changed('./public'))
   	.pipe(gulp.dest('./public'));
+  return gulp.src(scripts)
+  	.pipe(changed('./public/templates'))
+    .pipe(gulp.dest('./public/templates'));
 })
-

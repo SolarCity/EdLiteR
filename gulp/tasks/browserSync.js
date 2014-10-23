@@ -6,8 +6,8 @@ var INITIAL_SERVER_BOOT_DELAY = 1000;
 gulp.task('browserSync', ['demon'], function() {
   setTimeout(function(){
     browserSync.init(null, {
-      proxy: 'http://localhost:7777',
-      files: ['./dist/**/*.*'],
+      proxy: 'http://localhost:8100',
+      files: ['./public/**/*.*'],
       port: 7778,
       injectChanges: true,
       browser: ['google chrome']
