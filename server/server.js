@@ -8,7 +8,7 @@ var app = express();
 var port =  process.env.PORT || 8100; // set port with $PORT environment variable
 
 app.listen(port);
-app.use(express.static(__dirname + '/../www'));
+app.use(express.static(__dirname + '/../public'));
 
 // require('./routes/appRoutes.js')(app);
 // require('./routes/pathRoutes.js')(app);

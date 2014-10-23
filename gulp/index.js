@@ -13,7 +13,7 @@ var minifyCss = require('gulp-minify-css');
 // other requires
 var onlyScripts = require('../lib/scriptFilter')
 
-gulp.task('default', ['concat', 'watch']);
+gulp.task('default', ['build', 'watch']);
 
 var tasks = fs.readdirSync('./gulp/tasks/').filter(onlyScripts)
 
